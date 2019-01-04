@@ -1,0 +1,12 @@
+logs
+slurm-pipeline.done
+slurm-pipeline.running
+slurm-pipeline.error
+status.json
+01-stats/*.count
+02-map/*-unmapped.fastq.gz
+03-diamond/*.json.bz2
+04-panel/out
+04-panel/summary-proteins
+04-panel/summary-virus
+05-sample-count/*.count

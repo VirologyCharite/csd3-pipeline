@@ -1,0 +1,61 @@
+# This is the Makefile that should be installed at the top level of the
+# processing. I.e., in the directory where all the sample directories
+# are. It has targets that pull information out from across all samples
+# once they are all individually finished.
+
+.PHONY: all, html, html-refseq, html-rvdb, tar, tar-refseq, tar-rvdb, clean, clean-refseq, clean-rvdb
+
+REFSEQ_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/ncbi/viral-refseq/viral-protein-20180717/viral.protein.fasta
+RVDB_DB :=   /rds/project/djs200/rds-djs200-acorg/bt/root/share/rvdb/U-RVDBv14.0-prot.fasta
+
+SAMPLE=$(shell echo $$(basename $$(dirname $$(dirname $$(pwd)))) | cut -f1,2 -d_)
+
+x:
+	echo $(SAMPLE)
+
+all:
+	@echo "There is no default make target. Try make html or make tar."
+
+html: html-refseq html-rvdb
+
+html-refseq:
+	ls */04-panel-refseq/summary-proteins | \
+        proteins-to-pathogens.py \
+            --format fastq \
+            --html \
+            --sampleName $(SAMPLE) \
+            --pathogenType viral \
+            --proteinFastaFilename $(REFSEQ_DB) \
+            --pathogenPanelFilename virus-refseq.png \
+            --sampleIndexFilename samples-refseq.index \
+            --pathogenIndexFilename pathogens-refseq.index \
+            > index-refseq.html
+
+html-rvdb:
+	ls */04-panel-rvdb/summary-proteins | \
+        proteins-to-pathogens.py \
+            --format fastq \
+            --html \
+            --sampleName $(SAMPLE) \
+            --pathogenType viral \
+            --proteinFastaFilename $(RVDB_DB) \
+            --pathogenPanelFilename virus-rvdb.png \
+            --sampleIndexFilename samples-rvdb.index \
+            --pathogenIndexFilename pathogens-rvdb.index \
+            > index-rvdb.html
+
+tar: tar-refseq tar-rvdb
+
+tar-refseq:
+	tar cfj results-refseq.tar.bz2 */04-panel-refseq/out index-refseq.html virus-refseq.png {samples,pathogens}-refseq.index
+
+tar-rvdb:
+	tar cfj results-rvdb.tar.bz2 */04-panel-rvdb/out index-rvdb.html virus-rvdb.png {samples,pathogens}-rvdb.index
+
+clean: clean-refseq clean-rvdb
+
+clean-refseq:
+	rm -f */04-panel-refseq/out/pathogen-*.fast* index-refseq.html virus-refseq.png {samples,pathogens}-refseq.index
+
+clean-rvdb:
+	rm -f */04-panel-rvdb/out/pathogen-*.fast* index-rvdb.html virus-rvdb.png {samples,pathogens}-rvdb.index
