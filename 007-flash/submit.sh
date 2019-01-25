@@ -4,7 +4,7 @@
 #SBATCH -A ACORG-SL2-CPU
 #SBATCH -o slurm-%A.out
 #SBATCH -p skylake
-#SBATCH --time=00:15:00
+#SBATCH --time=01:00:00
 
 task=$1
 
