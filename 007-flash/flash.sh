@@ -9,6 +9,7 @@ task2=$(mateFile $task)
 
 fastq=../005-trim/$task.trim.fastq.gz
 fastq2=../005-trim/$task2.trim.fastq.gz
+singletons=../005-trim/$task.singleton.fastq.gz
 
 log=$logDir/$task.log
 outUncompressed=$task.fastq
@@ -59,6 +60,11 @@ function doFlash()
 
     echo "  Compressing combined FASTQ into $out at $(date)." >> $log
     gzip $outUncompressed
+
+    if [ -f $singletons ]
+    then
+        cat $singletons >> $out
+    fi
 }
 
 if [ $SP_SIMULATE = "1" ]

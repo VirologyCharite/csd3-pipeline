@@ -13,6 +13,7 @@ fastq2=$dataDir/$task2.fastq.gz
 log=$logDir/$task.log
 out=$task.trim.fastq.gz
 out2=$task2.trim.fastq.gz
+out3=$task.singleton.fastq.gz
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
@@ -25,7 +26,7 @@ function doTrim()
     rm -f $out $out2
 
     AdapterRemoval --file1 $fastq --file2 $fastq2 --output1 $out --output2 $out2 \
-                   --gzip --trimns --minlength 30 \
+                   --singleton $out3 --gzip --trimns --minlength 30 \
                    --trimqualities --minquality 2 --settings $task.settings \
                    --discarded $task.discarded.gz > $task.out 2>&1
 }
