@@ -13,7 +13,7 @@ fastq2=$dataDir/$task2.fastq.gz
 log=$logDir/$task.log
 out=$task.trim.fastq.gz
 out2=$task2.trim.fastq.gz
-out3=$task.singleton.fastq.gz
+out3=$task.singletons.fastq.gz
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
