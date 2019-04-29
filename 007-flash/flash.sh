@@ -9,6 +9,7 @@ task2=$(mateFile $task)
 
 fastq=../005-trim/$task.trim.fastq.gz
 fastq2=../005-trim/$task2.trim.fastq.gz
+singletons=../005-trim/$task.singletons.fastq.gz
 
 log=$logDir/$task.log
 outUncompressed=$task.fastq
@@ -59,6 +60,13 @@ function doFlash()
 
     echo "  Compressing combined FASTQ into $out at $(date)." >> $log
     gzip $outUncompressed
+
+    # Add useful reads for which the mate pair has been discarded by
+    # AdapterRemoval to the fastq.gz output, if there are any such reads.
+    if [ -f $singletons ]
+    then
+        cat $singletons >> $out
+    fi
 }
 
 if [ $SP_SIMULATE = "1" ]
