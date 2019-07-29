@@ -25,7 +25,7 @@ function panel()
 {
     echo "  noninteractive-alignment-panel.py started at $(date)" >> $log
 
-    dbFastaFile=$root/share/ncbi/viral-refseq/viral-protein-20180717/viral.protein.fasta
+    dbFastaFile=$root/share/ncbi/viral-refseq/viral-protein-20161124/viral.protein.fasta
 
     if [ ! -f $dbFastaFile ]
     then
@@ -40,7 +40,7 @@ function panel()
     do
         echo "  Task (i.e., sequencing run) $task" >> $log
 
-        JSON=../03-diamond-refseq/$task.json.bz2
+        JSON=../03-diamond-rvdb/$task.json.bz2
         test -f $JSON || {
             echo "JSON file $JSON does not exist." >> $log
             exit 1
@@ -77,7 +77,7 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --scoreCutoff 45 \
-      --titleRegex "$ENCEPHELITIS_REGEX" > summary-proteins
+      --titleRegex "$ENCEPHALITIS_REGEX" > summary-proteins
     echo "  noninteractive-alignment-panel.py stopped at $(date)" >> $log
 
     echo "  proteins-to-pathogens.py started at $(date)" >> $log

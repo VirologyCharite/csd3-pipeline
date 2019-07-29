@@ -1,5 +1,5 @@
 .PHONY: all, html, tar
-.PHONY: clean-refseq clean-rvdb clean-refseq-encephelitis clean-rvdb-encephelitis clean
+.PHONY: clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis clean
 .PHONY: html-refseq, html-rvdb, tar-refseq, tar-rvdb
 .PHONY: html-refseq-encephalitis, html-rvdb-encephalitis, tar-refseq-encephalitis, tar-rvdb-encephalitis
 
@@ -94,18 +94,18 @@ clean-rvdb:
                virus-rvdb.png \
                index-rvdb.html
 
-clean-refseq-encephelitis:
+clean-refseq-encephalitis:
 	rm -f \
-               results-refseq-encephelitis.tar.bz2 \
-               {samples,pathogens}-refseq-encephelitis.index \
-               virus-refseq-encephelitis.png \
-               index-refseq-encephelitis.html
+               results-refseq-encephalitis.tar.bz2 \
+               {samples,pathogens}-refseq-encephalitis.index \
+               virus-refseq-encephalitis.png \
+               index-refseq-encephalitis.html
 
-clean-rvdb-encephelitis:
+clean-rvdb-encephalitis:
 	rm -f \
-               results-rvdb-encephelitis.tar.bz2 \
-               {samples,pathogens}-rvdb-encephelitis.index \
-               virus-rvdb-encephelitis.png \
-               index-rvdb-encephelitis.html
+               results-rvdb-encephalitis.tar.bz2 \
+               {samples,pathogens}-rvdb-encephalitis.index \
+               virus-rvdb-encephalitis.png \
+               index-rvdb-encephalitis.html
 
-clean: clean-refseq clean-rvdb clean-refseq-encephelitis clean-rvdb-encephelitis
+clean: clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis
