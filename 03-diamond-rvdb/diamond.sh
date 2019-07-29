@@ -6,7 +6,7 @@ task=$1
 log=$logDir/$task.log
 fastq=../02-map/$task-unmapped.fastq.gz
 out=$task.json.bz2
-dbfile=$root/share/rvdb/diamond-dbs/U-RVDBv14.0-prot.dmnd
+dbfile=$root/share/rvdb/diamond-dbs/U-RVDBv16.0-prot.dmnd
 
 logStepStart $log
 logTaskToSlurmOutput $task $log

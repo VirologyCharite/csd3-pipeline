@@ -1,13 +1,14 @@
-.PHONY: all, run, force, status, cancel, unfinished, clean-refseq clean-rvdb clean
-.PHONY: html, html-refseq, html-rvdb, tar, tar-refseq, tar-rvdb
+.PHONY: all, html, tar
+.PHONY: clean-refseq clean-rvdb clean-refseq-encephelitis clean-rvdb-encephelitis clean
+.PHONY: html-refseq, html-rvdb, tar-refseq, tar-rvdb
+.PHONY: html-refseq-encephalitis, html-rvdb-encephalitis, tar-refseq-encephalitis, tar-rvdb-encephalitis
 
-REFSEQ_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/ncbi/viral-refseq/viral-protein-20180717/viral.protein.fasta
-RVDB_DB :=   /rds/project/djs200/rds-djs200-acorg/bt/root/share/rvdb/U-RVDBv14.0-prot.fasta
+REFSEQ_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/ncbi/viral-refseq/viral-protein-20190729/viral.protein.fasta
 
 all:
 	@echo "There is no default make target. Use 'make run' to run the SLURM pipeline, or make html, or make tar."
 
-html: html-refseq html-rvdb
+html: html-refseq html-rvdb html-refseq-encephalitis html-rvdb-encephalitis
 
 html-refseq:
 	find 1* -name summary-proteins | \
@@ -37,13 +38,47 @@ html-rvdb:
             --pathogenIndexFilename pathogens-rvdb.index \
             > index-rvdb.html
 
-tar: tar-refseq tar-rvdb
+html-refseq-encephalitis:
+	find 1* -name summary-proteins | \
+        grep 04-panel-refseq-encephalitis | \
+        proteins-to-pathogens.py \
+            --format fastq \
+            --html \
+            --sampleNameRegex '^[0-9]{6}/([0-9]{6}_[0-9]{2})' \
+            --pathogenType viral \
+            --proteinFastaFilename $(REFSEQ_DB) \
+            --pathogenPanelFilename virus-refseq-encephalitis.png \
+            --sampleIndexFilename samples-refseq-encephalitis.index \
+            --pathogenIndexFilename pathogens-refseq-encephalitis.index \
+            > index-refseq-encephalitis.html
+
+html-rvdb-encephalitis:
+	find 1* -name summary-proteins | \
+        grep 04-panel-rvdb-encephalitis | \
+        proteins-to-pathogens.py \
+            --format fastq \
+            --html \
+            --sampleNameRegex '^[0-9]{6}/([0-9]{6}_[0-9]{2})' \
+            --pathogenType viral \
+            --proteinFastaFilename $(REFSEQ_DB) \
+            --pathogenPanelFilename virus-rvdb-encephalitis.png \
+            --sampleIndexFilename samples-rvdb-encephalitis.index \
+            --pathogenIndexFilename pathogens-rvdb-encephalitis.index \
+            > index-rvdb-encephalitis.html
+
+tar: tar-refseq tar-rvdb tar-refseq-encephalitis tar-rvdb-encephalitis
 
 tar-refseq:
 	tar cfj results-refseq.tar.bz2 */*/pipelines/standard/04-panel-refseq/out index-refseq.html virus-refseq.png {samples,pathogens}-refseq.index
 
 tar-rvdb:
 	tar cfj results-rvdb.tar.bz2   */*/pipelines/standard/04-panel-rvdb/out   index-rvdb.html virus-rvdb.png {samples,pathogens}-rvdb.index
+
+tar-refseq-encephalitis:
+	tar cfj results-refseq-encephalitis.tar.bz2 */*/pipelines/standard/04-panel-refseq-encephalitis/out index-refseq-encephalitis.html virus-refseq-encephalitis.png {samples,pathogens}-refseq-encephalitis.index
+
+tar-rvdb-encephalitis:
+	tar cfj results-rvdb-encephalitis.tar.bz2   */*/pipelines/standard/04-panel-rvdb-encephalitis/out   index-rvdb-encephalitis.html virus-rvdb-encephalitis.png {samples,pathogens}-rvdb-encephalitis.index
 
 clean-refseq:
 	rm -f \
@@ -59,4 +94,18 @@ clean-rvdb:
                virus-rvdb.png \
                index-rvdb.html
 
-clean: clean-refseq clean-rvdb
+clean-refseq-encephelitis:
+	rm -f \
+               results-refseq-encephelitis.tar.bz2 \
+               {samples,pathogens}-refseq-encephelitis.index \
+               virus-refseq-encephelitis.png \
+               index-refseq-encephelitis.html
+
+clean-rvdb-encephelitis:
+	rm -f \
+               results-rvdb-encephelitis.tar.bz2 \
+               {samples,pathogens}-rvdb-encephelitis.index \
+               virus-rvdb-encephelitis.png \
+               index-rvdb-encephelitis.html
+
+clean: clean-refseq clean-rvdb clean-refseq-encephelitis clean-rvdb-encephelitis

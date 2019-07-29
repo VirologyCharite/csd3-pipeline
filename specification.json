@@ -63,8 +63,22 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "panel-refseq-encephalitis",
+            "dependencies": ["diamond-refseq"],
+            "collect": true,
+            "cwd": "04-panel-refseq-encephalitis",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-rvdb-encephalitis",
+            "dependencies": ["diamond-rvdb"],
+            "collect": true,
+            "cwd": "04-panel-rvdb-encephalitis",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "stop",
-            "dependencies": ["panel-refseq", "panel-rvdb"],
+            "dependencies": ["panel-refseq", "panel-rvdb", "panel-refseq-encephalitis", "panel-rvdb-encephalitis"],
             "collect": true,
             "cwd": "06-stop",
             "script": "./sbatch.sh"

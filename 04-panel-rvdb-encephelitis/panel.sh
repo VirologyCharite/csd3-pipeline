@@ -77,7 +77,7 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --scoreCutoff 45 \
-      --negativeTitleRegex phage > summary-proteins
+      --titleRegex "$ENCEPHELITIS_REGEX" > summary-proteins
     echo "  noninteractive-alignment-panel.py stopped at $(date)" >> $log
 
     echo "  proteins-to-pathogens.py started at $(date)" >> $log
