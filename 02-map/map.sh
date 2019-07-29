@@ -49,8 +49,7 @@ function map()
     # Extract the unmapped reads. Leave one core for the gzip.
     echo "  extract unmapped reads started at $(date)" >> $log
     samtools fastq --threads $((nproc - 1)) -f 4 $bam | gzip > $out
-    # Leave the BAM file around.
-    # rm $bam
+    rm $bam
     echo "  extract unmapped reads stopped at $(date)" >> $log
 }
 
