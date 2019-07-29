@@ -9,10 +9,22 @@ set -Eeuo pipefail
 # pipeline scripts in each directory.
 
 case $# in
-	0) echo "Usage: $(basename $0) dir1 [dir2...]"; exit 1;;
+    0) echo "Usage: $(basename $0) dir1 [dir2...]"; exit 1;;
 esac
 
 cwd=$(/bin/pwd)
+
+# First make sure all top-level directories exist (otherwise the mkdir -p
+# below will create the top-level dir that will hold the pipelines dir,
+# which is probably an error.
+for dir in "$@"
+do
+    if [ ! -d $dir ]
+    then
+        echo "Target directory '$dir' does not exist! Exiting." >&2
+        exit 1
+    fi
+done
 
 for dir in "$@"
 do
