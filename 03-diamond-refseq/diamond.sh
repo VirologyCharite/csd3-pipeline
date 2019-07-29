@@ -43,7 +43,7 @@ then
     echo "  This is not a simulation." >> $log
     if [ $SP_SKIP = "1" ]
     then
-        echo "  DIAMOND is being skipped on this run." >> $log
+        echo "  DIAMOND refseq is being skipped on this run." >> $log
         skip
     elif [ -f $out ]
     then

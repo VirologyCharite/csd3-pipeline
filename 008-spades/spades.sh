@@ -39,7 +39,7 @@ else
     echo "  This is not a simulation." >> $log
     if [ $SP_SKIP = "1" ]
     then
-        echo "  Flash is being skipped on this run." >> $log
+        echo "  Spades is being skipped on this run." >> $log
     elif [ -f $out ]
     then
         if [ $SP_FORCE = "1" ]

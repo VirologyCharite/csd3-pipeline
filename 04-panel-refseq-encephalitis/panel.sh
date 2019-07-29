@@ -93,7 +93,7 @@ else
     echo "  This is not a simulation." >> $log
     if [ $SP_SKIP = "1" ]
     then
-        echo "  Panel is being skipped on this run." >> $log
+        echo "  Panel refseq encephalitis is being skipped on this run." >> $log
         skip
     elif [ -f $out ]
     then
