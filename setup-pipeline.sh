@@ -30,12 +30,12 @@ for dir in "$@"
 do
     echo "Setting up $dir"
 
-    if [ ! -d $dir/pipelines/standard ]
+    if [ -d $dir/pipelines/standard ]
     then
+        echo "  pipelines/standard sub-directory already exists"
+    else
         echo "  Making pipelines/standard sub-directory"
         mkdir -p $dir/pipelines/standard
-    else
-        echo "  pipelines/standard sub-directory already exists"
     fi
 
     echo "  Copying pipeline files"
