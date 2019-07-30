@@ -32,6 +32,7 @@ doneFile=../slurm-pipeline.done
 runningFile=../slurm-pipeline.running
 errorFile=../slurm-pipeline.error
 sampleLogFile=$logDir/sample.log
+blacklistFile=../blacklist
 
 # A simple way to set defaults for our SP_* variables, without causing
 # problems when e.g., using test, if set -ue is active (causing scripts to

@@ -68,6 +68,7 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --scoreCutoff 45 \
+      --blacklistFile $blacklistFile \
       --titleRegex "$ENCEPHALITIS_REGEX" > summary-proteins
     echo "  noninteractive-alignment-panel.py stopped at $(date)" >> $log
 

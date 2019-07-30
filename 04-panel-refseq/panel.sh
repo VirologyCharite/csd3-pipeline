@@ -68,6 +68,7 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --scoreCutoff 45 \
+      --blacklistFile $blacklistFile \
       --negativeTitleRegex phage > summary-proteins
     echo "  noninteractive-alignment-panel.py stopped at $(date)" >> $log
 
