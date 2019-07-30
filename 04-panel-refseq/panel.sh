@@ -25,15 +25,6 @@ function panel()
 {
     echo "  noninteractive-alignment-panel.py started at $(date)" >> $log
 
-    dbFastaFile=$root/share/ncbi/viral-refseq/viral-protein-20180717/viral.protein.fasta
-
-    if [ ! -f $dbFastaFile ]
-    then
-        echo "  DIAMOND database FASTA file $dbfile does not exist!" >> $log
-        logStepStop $log
-        exit 1
-    fi
-
     allJSON=
     allFASTQ=
     for task in $tasks
