@@ -40,4 +40,5 @@ do
 
     echo "  Copying pipeline files"
     tar -C csd3-pipeline -c -f - . | tar -C $dir/pipelines/standard -x -f -
+    rm -rf $dir/pipelines/standard/.git
 done
