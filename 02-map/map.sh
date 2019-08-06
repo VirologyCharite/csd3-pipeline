@@ -6,20 +6,17 @@ set -Eeuo pipefail
 
 task=$1
 log=$logDir/$task.log
-bwadb=$root/share/bwa-indices/homo-sapiens
+bwaDatabaseRoot="$root/share/bwa-indices"
+# The following databases are the human genome, human mRNA, human
+# mitochondrion, ribosomal RNA, and long non-coding (human) RNA.
+bwaDatabaseNames="homo-sapiens 20190806-GRCh38_latest_rna human-mitochondrion rRNA lncRNA"
 fastq=../007-flash/$task.fastq.gz
-out=$task-unmapped.fastq.gz
+outUncompressed=$task-unmapped.fastq
+out=$outUncompressed.gz
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
 checkFastq $fastq $log
-
-if [ ! -f $bwadb.bwt ]
-then
-    echo "  BWA database file '$bwadb.bwt' does not exist." >> $log
-    logStepStop $log
-    exit 1
-fi
 
 function skip()
 {
@@ -30,27 +27,42 @@ function skip()
 function map()
 {
     local sam=$task.sam
-    local bam=$task.bam
     nproc=$(nproc --all)
 
-    rmFileAndLink $out $sam $bam
+    rmFileAndLink $out $outUncompressed $sam
 
-    # Map FASTQ to human genome.
-    echo "  bwa mem started at $(date)" >> $log
-    bwa mem -t $nproc $bwadb $fastq > $sam
-    echo "  bwa mem stopped at $(date)" >> $log
+    for bwaDatabaseName in $bwaDatabaseNames
+    do
+        bwaDatabase=$bwaDatabaseRoot/$bwaDatabaseName
 
-    # Convert SAM to BAM.
-    echo "  samtools sam -> bam conversion started at $(date)" >> $log
-    samtools view --threads $nproc -bS $sam > $bam
-    rm $sam
-    echo "  samtools sam -> bam conversion stopped at $(date)" >> $log
+        if [ ! -f $bwaDatabase.bwt ]
+        then
+            echo "  BWA database file '$bwaDatabase.bwt' does not exist." >> $log
+            logStepStop $log
+            exit 1
+        fi
 
-    # Extract the unmapped reads. Leave one core for the gzip.
-    echo "  extract unmapped reads started at $(date)" >> $log
-    samtools fastq --threads $((nproc - 1)) -f 4 $bam | gzip > $out
-    rm $bam
-    echo "  extract unmapped reads stopped at $(date)" >> $log
+        # Map FASTQ to database.
+        echo "  bwa mem (against $bwaDatabaseName) started at $(date)" >> $log
+        bwa mem -t $nproc $bwaDatabase $fastq > $sam
+        echo "  bwa mem (against $bwaDatabaseName) stopped at $(date)" >> $log
+
+        # Extract the unmapped reads.
+        echo "  extract unmapped reads started at $(date)" >> $log
+        samtools fastq --threads $(nproc) -f 4 $sam > $outUncompressed
+        rm $sam
+        echo "  extract unmapped reads stopped at $(date)" >> $log
+
+        # The following only has an effect on the first time through the
+        # loop (because initially the fastq variable is set to
+        # ../007-flash/$task.fastq.gz). Be careful, this loop is slightly
+        # non-obvious. First time through the loop we read the ../007-flash
+        # FASTQ file and write ./$task.fastq. Thereafter we repeatedly read
+        # and write ./$task.fastq (due to the assignment in the next line).
+        fastq=$outUncompressed
+    done
+
+    gzip $outUncompressed
 }
 
 
