@@ -37,15 +37,15 @@
             "script": "./sbatch.sh"
         },
         {
-            "name": "diamond-refseq",
-            "dependencies": ["map"],
-            "cwd": "03-diamond-refseq",
-            "script": "./sbatch.sh"
-        },
-        {
             "name": "diamond-okiav",
             "dependencies": ["map"],
             "cwd": "03-diamond-okiav",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "diamond-refseq",
+            "dependencies": ["map"],
+            "cwd": "03-diamond-refseq",
             "script": "./sbatch.sh"
         },
         {
