@@ -108,7 +108,10 @@ html-rvdb-encephalitis:
             --pathogenDataDir pathogen-data-rvdb-encephalitis \
             > index-rvdb-encephalitis.html
 
-tar: tar-refseq tar-rvdb tar-refseq-encephalitis tar-rvdb-encephalitis
+tar: tar-okiav tar-refseq tar-rvdb tar-refseq-encephalitis tar-rvdb-encephalitis
+
+tar-okiav:
+	tar cfj results-okiav.tar.bz2 */pipelines/standard/04-panel-okiav/out index-okiav.html virus-okiav.png {samples,pathogens}-okiav.index pathogen-data-okiav
 
 tar-refseq:
 	tar cfj results-refseq.tar.bz2 */pipelines/standard/04-panel-refseq/out index-refseq.html virus-refseq.png {samples,pathogens}-refseq.index pathogen-data-refseq
@@ -121,6 +124,14 @@ tar-refseq-encephalitis:
 
 tar-rvdb-encephalitis:
 	tar cfj results-rvdb-encephalitis.tar.bz2   */pipelines/standard/04-panel-rvdb-encephalitis/out   index-rvdb-encephalitis.html virus-rvdb-encephalitis.png {samples,pathogens}-rvdb-encephalitis.index pathogen-data-rvdb-encephalitis
+
+clean-okiav:
+	rm -fr \
+               results-okiav.tar.bz2 \
+               {samples,pathogens}-okiav.index \
+               pathogen-data-okiav \
+               virus-okiav.png \
+               index-okiav.html
 
 clean-refseq:
 	rm -fr \
@@ -154,4 +165,4 @@ clean-rvdb-encephalitis:
                virus-rvdb-encephalitis.png \
                index-rvdb-encephalitis.html
 
-clean: clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis
+clean: clean-okiav clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis
