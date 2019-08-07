@@ -43,7 +43,7 @@ echo ${SP_SIMULATE:=0} ${SP_SKIP:=0} ${SP_FORCE:=0} \
 
 # Regex matching encephalitis-causing viruses. From a list Julia Schneider
 # sent me (Terry) on Jan 19, 2019.
-ENCEPHALITIS_REGEX="$(cat encephalitis-regex.txt)"
+ENCEPHALITIS_REGEX="$(cat ../encephalitis-regex.txt)"
 
 function mateFile()
 {
