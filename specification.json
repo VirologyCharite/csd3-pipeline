@@ -43,9 +43,22 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "diamond-okiav",
+            "dependencies": ["map"],
+            "cwd": "03-diamond-okiav",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "diamond-rvdb",
             "dependencies": ["map"],
             "cwd": "03-diamond-rvdb",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-okiav",
+            "dependencies": ["diamond-okiav"],
+            "collect": true,
+            "cwd": "04-panel-okiav",
             "script": "./sbatch.sh"
         },
         {
@@ -78,7 +91,7 @@
         },
         {
             "name": "stop",
-            "dependencies": ["panel-refseq", "panel-rvdb", "panel-refseq-encephalitis", "panel-rvdb-encephalitis"],
+            "dependencies": ["panel-okiav", "panel-refseq", "panel-rvdb", "panel-refseq-encephalitis", "panel-rvdb-encephalitis"],
             "collect": true,
             "cwd": "06-stop",
             "script": "./sbatch.sh"
