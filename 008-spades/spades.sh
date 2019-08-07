@@ -20,6 +20,14 @@ logTaskToSlurmOutput $task $log
 checkFastq $fastq1 $log
 checkFastq $fastq2 $log
 
+function skip()
+{
+    if [ ! -f $out ]
+    then
+        cat $fastqContigs $fastq1 $fastq2 > $out
+    fi
+}
+
 function doSpades()
 {
     # Remove the output file and any other pre-existing spades output files
@@ -40,6 +48,7 @@ else
     if [ $SP_SKIP = "1" ]
     then
         echo "  Spades is being skipped on this run." >> $log
+        skip
     elif [ -f $out ]
     then
         if [ $SP_FORCE = "1" ]
