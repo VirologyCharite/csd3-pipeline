@@ -6,7 +6,7 @@ task=$1
 log=$logDir/$task.log
 fastq=../02-map/$task-unmapped.fastq.gz
 out=$task.json.bz2
-dbfile=$root/share/okiav/diamond-dbs/20190729-okiav.dmnd
+dbfile=$root/share/okiav-protein-database/diamond-dbs/20190729-okiav-rdrp-database.dmnd
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
