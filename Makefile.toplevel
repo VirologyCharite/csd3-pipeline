@@ -7,7 +7,7 @@
 # put into the summary HTML generated below by the various html-*
 # targets. Otherwise the preamble will be empty.
 PREAMBLE_FILE := summary-preamble.html
-PREAMBLE := $(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))
+PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 
 SHARE := /rds/project/djs200/rds-djs200-acorg/bt/root/share
 REFSEQ_DB := $(SHARE)/ncbi/viral-refseq/viral-protein-20190729/viral.protein.fasta
@@ -18,8 +18,7 @@ ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 all:
 	@echo "There is no default make target. Use 'make run' to run the SLURM pipeline, or make html, or make tar."
 
-html: html-refseq html-rvdb html-refseq-encephalitis html-rvdb-encephalitis
-
+html: html-okiav html-refseq html-rvdb html-refseq-encephalitis html-rvdb-encephalitis
 
 html-okiav:
 	find . -name summary-proteins | \
@@ -28,7 +27,7 @@ html-okiav:
             --format fastq \
             --html \
             --title "OKIAV protein database" \
-            --preamble "$(PREAMBLE)" \
+            --preamble $(PREAMBLE) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
             --proteinFastaFilename $(OKIAV_DB) \
@@ -45,7 +44,7 @@ html-refseq:
             --format fastq \
             --html \
             --title "NCBI viral reference protein database" \
-            --preamble "$(PREAMBLE)" \
+            --preamble $(PREAMBLE) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
             --proteinFastaFilename $(REFSEQ_DB) \
@@ -62,7 +61,7 @@ html-rvdb:
             --format fastq \
             --html \
             --title "RVDB unclustered viral reference protein database" \
-            --preamble "$(PREAMBLE)" \
+            --preamble $(PREAMBLE) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
             --proteinFastaFilename $(REFSEQ_DB) \
@@ -79,8 +78,8 @@ html-refseq-encephalitis:
             --format fastq \
             --html \
             --title "NCBI viral reference protein database filtered for encephalitis-causing viruses" \
-            --preamble "$(PREAMBLE)" \
-            --titleRegex "$(ENCEPHALITIS_REGEX)" \
+            --preamble $(PREAMBLE) \
+            --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
             --proteinFastaFilename $(REFSEQ_DB) \
@@ -97,8 +96,8 @@ html-rvdb-encephalitis:
             --format fastq \
             --html \
             --title "RVDB unclustered viral reference protein database filtered for encephalitis-causing viruses" \
-            --preamble "$(PREAMBLE)" \
-            --titleRegex "$(ENCEPHALITIS_REGEX)" \
+            --preamble $(PREAMBLE) \
+            --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
             --proteinFastaFilename $(REFSEQ_DB) \
