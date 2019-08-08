@@ -7,3 +7,6 @@ acc|REFSEQ|YP_008431134.1|REFSEQ|NC_022089|putative capsid protein [Parvovirus N
 acc|GENBANK|AJK30617.1|NEIGHBOR|KM105951|putative 15 kDa protein [Parvovirus NIH-CQV-Co]
 acc|GENBANK|AJK30615.1|NEIGHBOR|KM105951|putative replication protein [Parvovirus NIH-CQV-Co]
 acc|GENBANK|AJK30616.1|NEIGHBOR|KM105951|putative capsid protein [Parvovirus NIH-CQV-Co]
+acc|GENBANK|ASY03258.1|GENBANK|MF141070|RNA-dependent RNA-polymerase [Norway luteo-like virus 4]
+acc|GENBANK|ASY03260.1|GENBANK|MF141071|RNA-dependent RNA-polymerase [Norway luteo-like virus 4]
+acc|GENBANK|ASY03259.1|GENBANK|MF141070|coat protein [Norway luteo-like virus 4]
