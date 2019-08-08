@@ -35,6 +35,7 @@ html-okiav:
             --sampleIndexFilename samples-okiav.index \
             --pathogenIndexFilename pathogens-okiav.index \
             --pathogenDataDir pathogen-data-okiav \
+            --omitVirusLinks \
             > index-okiav.html
 
 html-refseq:
@@ -69,6 +70,7 @@ html-rvdb:
             --sampleIndexFilename samples-rvdb.index \
             --pathogenIndexFilename pathogens-rvdb.index \
             --pathogenDataDir pathogen-data-rvdb \
+            --omitSampleProteinCount \
             > index-rvdb.html
 
 html-refseq-encephalitis:
@@ -105,6 +107,7 @@ html-rvdb-encephalitis:
             --sampleIndexFilename samples-rvdb-encephalitis.index \
             --pathogenIndexFilename pathogens-rvdb-encephalitis.index \
             --pathogenDataDir pathogen-data-rvdb-encephalitis \
+            --omitSampleProteinCount \
             > index-rvdb-encephalitis.html
 
 tar: tar-okiav tar-refseq tar-rvdb tar-refseq-encephalitis tar-rvdb-encephalitis
