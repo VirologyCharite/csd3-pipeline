@@ -24,13 +24,6 @@
             "script": "./sbatch.sh"
         },
         {
-            "name": "spades",
-            "dependencies": ["flash"],
-            "cwd": "008-spades",
-            "script": "./sbatch.sh",
-            "skip": true
-        },
-        {
             "name": "map",
             "dependencies": ["flash"],
             "cwd": "02-map",
