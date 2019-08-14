@@ -48,6 +48,12 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "diamond-terry",
+            "dependencies": ["map"],
+            "cwd": "03-diamond-terry",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "panel-okiav",
             "dependencies": ["diamond-okiav"],
             "collect": true,
@@ -83,8 +89,15 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "panel-terry",
+            "dependencies": ["diamond-terry"],
+            "collect": true,
+            "cwd": "04-panel-terry",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "stop",
-            "dependencies": ["panel-okiav", "panel-refseq", "panel-rvdb", "panel-refseq-encephalitis", "panel-rvdb-encephalitis"],
+            "dependencies": ["panel-okiav", "panel-refseq", "panel-rvdb", "panel-refseq-encephalitis", "panel-rvdb-encephalitis", "panel-terry"],
             "collect": true,
             "cwd": "06-stop",
             "script": "./sbatch.sh"
