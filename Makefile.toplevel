@@ -1,17 +1,18 @@
-.PHONY: all, html, tar
-.PHONY: clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis clean
-.PHONY: html-refseq, html-rvdb, tar-refseq, tar-rvdb
-.PHONY: html-refseq-encephalitis, html-rvdb-encephalitis, tar-refseq-encephalitis, tar-rvdb-encephalitis
+.PHONY: all, html, tar, clean
+.PHONY: html-okiav,  html-refseq,  html-rvdb,  html-refseq-encephalitis,  html-rvdb-encephalitis,  html-terry
+.PHONY: tar-okiav,   tar-refseq,   tar-rvdb,   tar-refseq-encephalitis,   tar-rvdb-encephalitis,   tar-terry
+.PHONY: clean-okiav, clean-refseq, clean-rvdb, clean-refseq-encephalitis, clean-rvdb-encephalitis, clean-terry
 
 # Any text placed into the file named by PREAMBLE_FILE (if present) will be
-# put into the summary HTML generated below by the various html-*
-# targets. Otherwise the preamble will be empty.
+# put into the summary HTML generated below by the various html-* targets.
+# Otherwise, there will be no preamble in the HTML output.
 PREAMBLE_FILE := summary-preamble.html
 PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 
 SHARE := /rds/project/djs200/rds-djs200-acorg/bt/root/share
 REFSEQ_DB := $(SHARE)/ncbi/viral-refseq/viral-protein-20190729/viral.protein.fasta
 OKIAV_DB := $(SHARE)/okiav-protein-database/20190729-okiav-rdrp-database.fasta
+TERRY_DB := $(SHARE)/terry/proteins.fasta
 
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
@@ -110,7 +111,24 @@ html-rvdb-encephalitis:
             --omitSampleProteinCount \
             > index-rvdb-encephalitis.html
 
-tar: tar-okiav tar-refseq tar-rvdb tar-refseq-encephalitis tar-rvdb-encephalitis
+html-terry:
+	find . -name summary-proteins | \
+        grep 04-panel-terry/ | \
+        proteins-to-pathogens.py \
+            --format fastq \
+            --html \
+            --title "Charite protein database (Refseq, RVDB, OKIAV, Chinese sequences)" \
+            --preamble $(PREAMBLE) \
+            --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
+            --pathogenType viral \
+            --proteinFastaFilename $(TERRY_DB) \
+            --pathogenPanelFilename virus-terry.png \
+            --sampleIndexFilename samples-terry.index \
+            --pathogenIndexFilename pathogens-terry.index \
+            --pathogenDataDir pathogen-data-terry \
+            > index-terry.html
+
+tar: tar-okiav tar-refseq tar-rvdb tar-refseq-encephalitis tar-rvdb-encephalitis tar-terry
 
 tar-okiav:
 	tar cfj results-okiav.tar.bz2 */pipelines/standard/04-panel-okiav/out index-okiav.html virus-okiav.png {samples,pathogens}-okiav.index pathogen-data-okiav
@@ -126,6 +144,9 @@ tar-refseq-encephalitis:
 
 tar-rvdb-encephalitis:
 	tar cfj results-rvdb-encephalitis.tar.bz2   */pipelines/standard/04-panel-rvdb-encephalitis/out   index-rvdb-encephalitis.html virus-rvdb-encephalitis.png {samples,pathogens}-rvdb-encephalitis.index pathogen-data-rvdb-encephalitis
+
+tar-terry:
+	tar cfj results-terry.tar.bz2 */pipelines/standard/04-panel-terry/out index-terry.html virus-terry.png {samples,pathogens}-terry.index pathogen-data-terry
 
 clean-okiav:
 	rm -fr \
@@ -167,4 +188,12 @@ clean-rvdb-encephalitis:
                virus-rvdb-encephalitis.png \
                index-rvdb-encephalitis.html
 
-clean: clean-okiav clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis
+clean-terry:
+	rm -fr \
+               results-terry.tar.bz2 \
+               {samples,pathogens}-terry.index \
+               pathogen-data-terry \
+               virus-terry.png \
+               index-terry.html
+
+clean: clean-okiav clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis clean-terry
