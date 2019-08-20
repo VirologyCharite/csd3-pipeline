@@ -6,7 +6,7 @@ task=$1
 log=$logDir/$task.log
 fastq=../02-map/$task-unmapped.fastq.gz
 out=$task.json.bz2
-dbfile=$root/share/terry/diamond-dbs/protein-20190814.dmnd
+dbfile=$root/share/terry/diamond-dbs/20190820-proteins.dmnd
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
