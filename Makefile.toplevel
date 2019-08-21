@@ -12,7 +12,7 @@ PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 SHARE := /rds/project/djs200/rds-djs200-acorg/bt/root/share
 REFSEQ_DB := $(SHARE)/ncbi/viral-refseq/viral-protein-20190729/viral.protein.fasta
 OKIAV_DB := $(SHARE)/okiav-protein-database/20190729-okiav-rdrp-database.fasta
-TERRY_DB := $(SHARE)/terry/proteins.fasta
+TERRY_DB := $(SHARE)/terry/20190820-proteins.fasta
 
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
