@@ -117,7 +117,7 @@ html-terry:
         proteins-to-pathogens.py \
             --format fastq \
             --html \
-            --title "Charite protein database (Refseq, RVDB, OKIAV, Chinese sequences)" \
+            --title "Charite custom database (NCBI Refseq virus genomes plus sequences from three Chinese papers, both filtered for RNA)." \
             --preamble $(PREAMBLE) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
