@@ -30,74 +30,28 @@
             "script": "./sbatch.sh"
         },
         {
-            "name": "diamond-okiav",
+            "name": "diamond-civ",
             "dependencies": ["map"],
-            "cwd": "03-diamond-okiav",
+            "cwd": "03-diamond-civ",
             "script": "./sbatch.sh"
         },
         {
-            "name": "diamond-refseq",
-            "dependencies": ["map"],
-            "cwd": "03-diamond-refseq",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "diamond-rvdb",
-            "dependencies": ["map"],
-            "cwd": "03-diamond-rvdb",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "diamond-terry",
-            "dependencies": ["map"],
-            "cwd": "03-diamond-terry",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "panel-okiav",
-            "dependencies": ["diamond-okiav"],
+            "name": "panel-civ",
+            "dependencies": ["diamond-civ"],
             "collect": true,
-            "cwd": "04-panel-okiav",
+            "cwd": "04-panel-civ",
             "script": "./sbatch.sh"
         },
         {
-            "name": "panel-refseq",
-            "dependencies": ["diamond-refseq"],
+            "name": "panel-civ-encephalitis",
+            "dependencies": ["diamond-civ"],
             "collect": true,
-            "cwd": "04-panel-refseq",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "panel-rvdb",
-            "dependencies": ["diamond-rvdb"],
-            "collect": true,
-            "cwd": "04-panel-rvdb",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "panel-refseq-encephalitis",
-            "dependencies": ["diamond-refseq"],
-            "collect": true,
-            "cwd": "04-panel-refseq-encephalitis",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "panel-rvdb-encephalitis",
-            "dependencies": ["diamond-rvdb"],
-            "collect": true,
-            "cwd": "04-panel-rvdb-encephalitis",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "panel-terry",
-            "dependencies": ["diamond-terry"],
-            "collect": true,
-            "cwd": "04-panel-terry",
+            "cwd": "04-panel-civ-encephalitis",
             "script": "./sbatch.sh"
         },
         {
             "name": "stop",
-            "dependencies": ["panel-okiav", "panel-refseq", "panel-rvdb", "panel-refseq-encephalitis", "panel-rvdb-encephalitis", "panel-terry"],
+            "dependencies": ["panel-civ", "panel-civ-encephalitis"],
             "collect": true,
             "cwd": "06-stop",
             "script": "./sbatch.sh"

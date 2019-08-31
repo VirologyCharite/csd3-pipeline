@@ -1,8 +1,16 @@
 .PHONY: all, run, force, status, cancel, unfinished, clean, clobber
 .PHONY: html, html-refseq, html-rvdb, tar, tar-refseq, tar-rvdb
 
-REFSEQ_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/ncbi/viral-refseq/viral-protein-20180717/viral.protein.fasta
-RVDB_DB :=   /rds/project/djs200/rds-djs200-acorg/bt/root/share/rvdb/U-RVDBv14.0-prot.fasta
+# Any text placed into the file named by PREAMBLE_FILE (if present) will be
+# put into the summary HTML generated below by the html-* targets.
+# If the file is not present, there will be no preamble in the HTML output.
+PREAMBLE_FILE := summary-preamble.html
+PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
+
+# The following must match the proteinGenomeDB variable in common.sh
+PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/20190830-protein-genome.db
+
+ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
 SAMPLE=$(shell echo $$(basename $$(dirname $$(dirname $$(pwd)))) | cut -f1,2 -d_)
 
@@ -24,41 +32,52 @@ cancel:
 unfinished:
 	@slurm-pipeline-status.py --specification status.json --printUnfinished
 
-html: html-refseq html-rvdb
+html: html-civ html-civ-encephalitis
+tar: tar-civ tar-civ-encephalitis
+clean: clean-civ clean-civ-encephalitis
 
-html-refseq:
-	proteins-to-pathogens.py \
-            --format fastq \
+html-civ:
+        proteins-to-pathogens-civ.py \
             --html \
+            --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
+            --format fastq \
+            --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes." \
+            --preamble $(PREAMBLE) \
             --sampleName $(SAMPLE) \
             --pathogenType viral \
-            --proteinFastaFilename $(REFSEQ_DB) \
-            --pathogenPanelFilename virus-refseq.png \
-            --sampleIndexFilename samples-refseq.index \
-            --pathogenIndexFilename pathogens-refseq.index \
-            04-panel-refseq/summary-proteins \
-            > index-refseq.html
+            --pathogenPanelFilename virus-civ.png \
+            --pathogenDataDir pathogen-data-civ \
+            04-panel-civ/summary-proteins \
+            > index-civ.html
 
-html-rvdb:
-	proteins-to-pathogens.py \
-            --format fastq \
+html-civ-encephalitis:
+        proteins-to-pathogens-civ.py \
             --html \
+            --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
+            --format fastq \
+            --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses." \
+            --preamble $(PREAMBLE) \
+            --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleName $(SAMPLE) \
             --pathogenType viral \
-            --proteinFastaFilename $(RVDB_DB) \
-            --pathogenPanelFilename virus-rvdb.png \
-            --sampleIndexFilename samples-rvdb.index \
-            --pathogenIndexFilename pathogens-rvdb.index \
-            04-panel-rvdb/summary-proteins \
-            > index-rvdb.html
+            --pathogenPanelFilename virus-civ-encephalitis.png \
+            --pathogenDataDir pathogen-data-civ-encephalitis \
+            04-panel-civ-encephalitis/summary-proteins \
+            > index-civ-encephalitis.html
 
-tar: tar-refseq tar-rvdb
+tar-civ:
+	tar cfj results-civ.tar.bz2 \
+            04-panel-civ/out \
+            index-civ.html \
+            virus-civ.png \
+            pathogen-data-civ
 
-tar-refseq:
-	tar cfvj results-refseq.tar.bz2 04-panel-refseq/out index-refseq.html virus-refseq.png {samples,pathogens}-refseq.index
-
-tar-rvdb:
-	tar cfvj results-rvdb.tar.bz2 04-panel-rvdb/out index-rvdb.html virus-rvdb.png {samples,pathogens}-rvdb.index
+tar-civ-encephalitis:
+	tar cfj results-civ-encephalitis.tar.bz2 \
+            04-panel-civ-encephalitis/out \
+            index-civ-encephalitis.html \
+            virus-civ-encephalitis.png \
+            pathogen-data-civ-encephalitis
 
 clean:
 	rm -f \

@@ -6,17 +6,10 @@ task=$1
 log=$logDir/$task.log
 fastq=../02-map/$task-unmapped.fastq.gz
 out=$task.json.bz2
-dbfile=$root/share/rvdb/diamond-dbs/U-RVDBv16.0-prot.dmnd
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
 checkFastq $fastq $log
-
-if [ ! -f $dbfile ]
-then
-    echo "  DIAMOND database file $dbfile does not exist!" >> $log
-    exit 1
-fi
 
 function skip()
 {
@@ -31,7 +24,7 @@ function run_diamond()
     diamond blastx \
         --threads $(($(nproc --all) - 2)) \
         --query $fastq \
-        --db $dbfile \
+        --db $diamondDB \
         --outfmt 6 qtitle stitle bitscore evalue qframe qseq qstart qend sseq sstart send slen btop |
     convert-diamond-to-json.py | bzip2 > $out
     echo "  DIAMOND blastx stopped at $(date)" >> $log
@@ -43,7 +36,7 @@ then
     echo "  This is not a simulation." >> $log
     if [ $SP_SKIP = "1" ]
     then
-        echo "  DIAMOND rvdb is being skipped on this run." >> $log
+        echo "  DIAMOND civ is being skipped on this run." >> $log
         skip
     elif [ -f $out ]
     then

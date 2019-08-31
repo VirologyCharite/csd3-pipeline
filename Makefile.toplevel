@@ -1,199 +1,87 @@
 .PHONY: all, html, tar, clean
-.PHONY: html-okiav,  html-refseq,  html-rvdb,  html-refseq-encephalitis,  html-rvdb-encephalitis,  html-terry
-.PHONY: tar-okiav,   tar-refseq,   tar-rvdb,   tar-refseq-encephalitis,   tar-rvdb-encephalitis,   tar-terry
-.PHONY: clean-okiav, clean-refseq, clean-rvdb, clean-refseq-encephalitis, clean-rvdb-encephalitis, clean-terry
+.PHONY: html-civ, html-civ-encephalitis
+.PHONY: tar-civ, tar-civ-encephalitis
+.PHONY: clean-civ, clean-civ-encephalitis
 
 # Any text placed into the file named by PREAMBLE_FILE (if present) will be
-# put into the summary HTML generated below by the various html-* targets.
-# Otherwise, there will be no preamble in the HTML output.
+# put into the summary HTML generated below by the html-* targets.
+# If the file is not present, there will be no preamble in the HTML output.
 PREAMBLE_FILE := summary-preamble.html
 PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 
-SHARE := /rds/project/djs200/rds-djs200-acorg/bt/root/share
-REFSEQ_DB := $(SHARE)/ncbi/viral-refseq/viral-protein-20190729/viral.protein.fasta
-OKIAV_DB := $(SHARE)/okiav-protein-database/20190729-okiav-rdrp-database.fasta
-TERRY_DB := $(SHARE)/terry/20190820-proteins.fasta
+# The following must match the proteinGenomeDB variable in common.sh
+PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/20190830-protein-genome.db
 
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
 all:
-	@echo "There is no default make target. Use 'make run' to run the SLURM pipeline, or make html, or make tar."
+	@echo "There is no default make target. Try make html, or make tar."
 
-html: html-okiav html-refseq html-rvdb html-refseq-encephalitis html-rvdb-encephalitis
+html: html-civ html-civ-encephalitis
+tar: tar-civ tar-civ-encephalitis
+clean: clean-civ clean-civ-encephalitis
 
-html-okiav:
+html-civ:
 	find . -name summary-proteins | \
-        grep 04-panel-okiav/ | \
-        proteins-to-pathogens.py \
-            --format fastq \
+        grep 04-panel-civ/ | \
+        proteins-to-pathogens-civ.py \
             --html \
-            --title "OKIAV protein database" \
+            --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
+            --format fastq \
+            --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes." \
             --preamble $(PREAMBLE) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
-            --proteinFastaFilename $(OKIAV_DB) \
-            --pathogenPanelFilename virus-okiav.png \
-            --sampleIndexFilename samples-okiav.index \
-            --pathogenIndexFilename pathogens-okiav.index \
-            --pathogenDataDir pathogen-data-okiav \
-            --omitVirusLinks \
-            > index-okiav.html
+            --pathogenPanelFilename virus-civ.png \
+            --sampleIndexFilename samples-civ.index \
+            --pathogenDataDir pathogen-data-civ \
+            > index-civ.html
 
-html-refseq:
+html-civ-encephalitis:
 	find . -name summary-proteins | \
-        grep 04-panel-refseq/ | \
-        proteins-to-pathogens.py \
-            --format fastq \
+        grep 04-panel-civ-encephalitis/ | \
+        proteins-to-pathogens-civ.py \
             --html \
-            --title "NCBI viral reference protein database" \
-            --preamble $(PREAMBLE) \
-            --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
-            --pathogenType viral \
-            --proteinFastaFilename $(REFSEQ_DB) \
-            --pathogenPanelFilename virus-refseq.png \
-            --sampleIndexFilename samples-refseq.index \
-            --pathogenIndexFilename pathogens-refseq.index \
-            --pathogenDataDir pathogen-data-refseq \
-            > index-refseq.html
-
-html-rvdb:
-	find . -name summary-proteins | \
-        grep 04-panel-rvdb/ | \
-        proteins-to-pathogens.py \
+            --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
             --format fastq \
-            --html \
-            --title "RVDB unclustered viral reference protein database" \
-            --preamble $(PREAMBLE) \
-            --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
-            --pathogenType viral \
-            --proteinFastaFilename $(REFSEQ_DB) \
-            --pathogenPanelFilename virus-rvdb.png \
-            --sampleIndexFilename samples-rvdb.index \
-            --pathogenIndexFilename pathogens-rvdb.index \
-            --pathogenDataDir pathogen-data-rvdb \
-            --omitSampleProteinCount \
-            > index-rvdb.html
-
-html-refseq-encephalitis:
-	find . -name summary-proteins | \
-        grep 04-panel-refseq-encephalitis/ | \
-        proteins-to-pathogens.py \
-            --format fastq \
-            --html \
-            --title "NCBI viral reference protein database filtered for encephalitis-causing viruses" \
+            --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses." \
             --preamble $(PREAMBLE) \
             --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
             --pathogenType viral \
-            --proteinFastaFilename $(REFSEQ_DB) \
-            --pathogenPanelFilename virus-refseq-encephalitis.png \
-            --sampleIndexFilename samples-refseq-encephalitis.index \
-            --pathogenIndexFilename pathogens-refseq-encephalitis.index \
-            --pathogenDataDir pathogen-data-refseq-encephalitis \
-            > index-refseq-encephalitis.html
+            --pathogenPanelFilename virus-civ-encephalitis.png \
+            --sampleIndexFilename samples-civ-encephalitis.index \
+            --pathogenDataDir pathogen-data-civ-encephalitis \
+            > index-civ-encephalitis.html
 
-html-rvdb-encephalitis:
-	find . -name summary-proteins | \
-        grep 04-panel-rvdb-encephalitis/ | \
-        proteins-to-pathogens.py \
-            --format fastq \
-            --html \
-            --title "RVDB unclustered viral reference protein database filtered for encephalitis-causing viruses" \
-            --preamble $(PREAMBLE) \
-            --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
-            --pathogenType viral \
-            --proteinFastaFilename $(REFSEQ_DB) \
-            --pathogenPanelFilename virus-rvdb-encephalitis.png \
-            --sampleIndexFilename samples-rvdb-encephalitis.index \
-            --pathogenIndexFilename pathogens-rvdb-encephalitis.index \
-            --pathogenDataDir pathogen-data-rvdb-encephalitis \
-            --omitSampleProteinCount \
-            > index-rvdb-encephalitis.html
+tar-civ:
+	tar cfj results-civ.tar.bz2 \
+            */pipelines/standard/04-panel-civ/out \
+            index-civ.html \
+            virus-civ.png \
+            samples-civ.index \
+            pathogen-data-civ
 
-html-terry:
-	find . -name summary-proteins | \
-        grep 04-panel-terry/ | \
-        proteins-to-pathogens.py \
-            --format fastq \
-            --html \
-            --title "Charite custom protein database: NCBI Refseq virus genomes (filtered for RNA), sequences from three Chinese papers (filtered for RNA), and the RdRp protein (or fragment thereof) from the OKIAV genomes." \
-            --preamble $(PREAMBLE) \
-            --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
-            --pathogenType viral \
-            --proteinFastaFilename $(TERRY_DB) \
-            --pathogenPanelFilename virus-terry.png \
-            --sampleIndexFilename samples-terry.index \
-            --pathogenIndexFilename pathogens-terry.index \
-            --pathogenDataDir pathogen-data-terry \
-            > index-terry.html
+tar-civ-encephalitis:
+	tar cfj results-civ-encephalitis.tar.bz2 \
+            */pipelines/standard/04-panel-civ-encephalitis/out \
+            index-civ-encephalitis.html \
+            virus-civ-encephalitis.png \
+            samples-civ-encephalitis.index \
+            pathogen-data-civ-encephalitis
 
-tar: tar-okiav tar-refseq tar-rvdb tar-refseq-encephalitis tar-rvdb-encephalitis tar-terry
-
-tar-okiav:
-	tar cfj results-okiav.tar.bz2 */pipelines/standard/04-panel-okiav/out index-okiav.html virus-okiav.png {samples,pathogens}-okiav.index pathogen-data-okiav
-
-tar-refseq:
-	tar cfj results-refseq.tar.bz2 */pipelines/standard/04-panel-refseq/out index-refseq.html virus-refseq.png {samples,pathogens}-refseq.index pathogen-data-refseq
-
-tar-rvdb:
-	tar cfj results-rvdb.tar.bz2   */pipelines/standard/04-panel-rvdb/out   index-rvdb.html virus-rvdb.png {samples,pathogens}-rvdb.index pathogen-data-rvdb
-
-tar-refseq-encephalitis:
-	tar cfj results-refseq-encephalitis.tar.bz2 */pipelines/standard/04-panel-refseq-encephalitis/out index-refseq-encephalitis.html virus-refseq-encephalitis.png {samples,pathogens}-refseq-encephalitis.index pathogen-data-refseq-encephalitis
-
-tar-rvdb-encephalitis:
-	tar cfj results-rvdb-encephalitis.tar.bz2   */pipelines/standard/04-panel-rvdb-encephalitis/out   index-rvdb-encephalitis.html virus-rvdb-encephalitis.png {samples,pathogens}-rvdb-encephalitis.index pathogen-data-rvdb-encephalitis
-
-tar-terry:
-	tar cfj results-terry.tar.bz2 */pipelines/standard/04-panel-terry/out index-terry.html virus-terry.png {samples,pathogens}-terry.index pathogen-data-terry
-
-clean-okiav:
+clean-civ:
 	rm -fr \
-               results-okiav.tar.bz2 \
-               {samples,pathogens}-okiav.index \
-               pathogen-data-okiav \
-               virus-okiav.png \
-               index-okiav.html
+            results-civ.tar.bz2 \
+            samples-civ.index \
+            pathogen-data-civ \
+            virus-civ.png \
+            index-civ.html
 
-clean-refseq:
+clean-civ-encephalitis:
 	rm -fr \
-               results-refseq.tar.bz2 \
-               {samples,pathogens}-refseq.index \
-               pathogen-data-refseq \
-               virus-refseq.png \
-               index-refseq.html
-
-clean-rvdb:
-	rm -fr \
-               results-rvdb.tar.bz2 \
-               {samples,pathogens}-rvdb.index \
-               pathogen-data-rvdb \
-               virus-rvdb.png \
-               index-rvdb.html
-
-clean-refseq-encephalitis:
-	rm -fr \
-               results-refseq-encephalitis.tar.bz2 \
-               {samples,pathogens}-refseq-encephalitis.index \
-               pathogen-data-refseq-encephalitis \
-               virus-refseq-encephalitis.png \
-               index-refseq-encephalitis.html
-
-clean-rvdb-encephalitis:
-	rm -fr \
-               results-rvdb-encephalitis.tar.bz2 \
-               {samples,pathogens}-rvdb-encephalitis.index \
-               pathogen-data-rvdb-encephalitis \
-               virus-rvdb-encephalitis.png \
-               index-rvdb-encephalitis.html
-
-clean-terry:
-	rm -fr \
-               results-terry.tar.bz2 \
-               {samples,pathogens}-terry.index \
-               pathogen-data-terry \
-               virus-terry.png \
-               index-terry.html
-
-clean: clean-okiav clean-refseq clean-rvdb clean-refseq-encephalitis clean-rvdb-encephalitis clean-terry
+            results-civ-encephalitis.tar.bz2 \
+            samples-civ-encephalitis.index \
+            pathogen-data-civ-encephalitis \
+            virus-civ-encephalitis.png \
+            index-civ-encephalitis.html

@@ -1,11 +1,9 @@
 #!/bin/bash -e
 
-#SBATCH -J dmnd-rvdb
+#SBATCH -J panel-civ
 #SBATCH -A ACORG-SL2-CPU
 #SBATCH -o slurm-%A.out
 #SBATCH -p skylake
-#SBATCH --time=05:00:00
+#SBATCH --time=10:00:00
 
-task=$1
-
-srun -n 1 diamond.sh $task
+srun -n 1 panel.sh "$@"

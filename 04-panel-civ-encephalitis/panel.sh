@@ -23,7 +23,7 @@ function skip()
 
 function panel()
 {
-    echo "  noninteractive-alignment-panel.py started at $(date)" >> $log
+    echo "  alignment-panel-civ.py started at $(date)" >> $log
 
     allJSON=
     allFASTQ=
@@ -31,7 +31,7 @@ function panel()
     do
         echo "  Task (i.e., sequencing run) $task" >> $log
 
-        JSON=../03-diamond-terry/$task.json.bz2
+        JSON=../03-diamond-civ/$task.json.bz2
         test -f $JSON || {
             echo "JSON file $JSON does not exist." >> $log
             exit 1
@@ -61,7 +61,7 @@ function panel()
     fi
     rm -fr $outputDir summary-proteins $out
 
-    noninteractive-alignment-panel.py \
+    alignment-panel-civ.py \
       --json $allJSON \
       --fastq $allFASTQ \
       --matcher diamond \
@@ -69,12 +69,12 @@ function panel()
       --maxTitles 150 \
       --scoreCutoff 45 \
       --blacklistFile $blacklistFile \
-      --negativeTitleRegex phage > summary-proteins
-    echo "  noninteractive-alignment-panel.py stopped at $(date)" >> $log
+      --titleRegex "$ENCEPHALITIS_REGEX" > summary-proteins
+    echo "  alignment-panel-civ.py stopped at $(date)" >> $log
 
-    echo "  proteins-to-pathogens.py started at $(date)" >> $log
-    echo summary-proteins | proteins-to-pathogens.py > $out
-    echo "  proteins-to-pathogens.py stopped at $(date)" >> $log
+    echo "  proteins-to-pathogens-civ.py started at $(date)" >> $log
+    echo summary-proteins | proteins-to-pathogens-civ.py --proteinGenomeDatabase $proteinGenomeDatabase > $out
+    echo "  proteins-to-pathogens-civ.py stopped at $(date)" >> $log
 }
 
 
@@ -85,7 +85,7 @@ else
     echo "  This is not a simulation." >> $log
     if [ $SP_SKIP = "1" ]
     then
-        echo "  Panel terry is being skipped on this run." >> $log
+        echo "  Panel civ encephalitis is being skipped on this run." >> $log
         skip
     elif [ -f $out ]
     then

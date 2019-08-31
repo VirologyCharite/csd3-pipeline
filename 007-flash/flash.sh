@@ -44,14 +44,13 @@ function doFlash()
         # Add a -1 and -2 to the read ids of the uncombined pairs so their
         # reads don't have identical ids. Note that we can't add a
         # character that is illegal in a query id in SAM because it will be
-        # stripped out (e.g., by bwa) and cause problems downstream (I
-        # think DIAMOND keeps a cache of read lengths, so a duplicate read
-        # id with different length sequences causes a real problem!). So we
+        # stripped out (e.g., by bwa) and cause problems downstream. So we
         # cannot add /1 and /2, for example. See section 1.4 of
         # https://samtools.github.io/hts-specs/SAMv1.pdf for the QNAME
         # regex template (currently [!-?A-~]{1,254}).
         echo "  Adding -$i to unmerged reads at $(date)." >> $log
-        filter-fasta.py --quiet --fastq --idLambda 'lambda r: "-'$i' ".join(r.split(None, 1))' < \
+        filter-fasta.py --quiet --fastq \
+                        --idLambda 'lambda r: "-'$i' ".join(r.split(None, 1))' < \
                         out.notCombined_$i.fastq >> $outUncompressed
     done
 
@@ -61,12 +60,9 @@ function doFlash()
     echo "  Compressing combined FASTQ into $out at $(date)." >> $log
     gzip $outUncompressed
 
-    # Add useful reads for which the mate pair has been discarded by
+    # Add useful reads for which the mate pair was discarded by
     # AdapterRemoval to the fastq.gz output, if there are any such reads.
-    if [ -f $singletons ]
-    then
-        cat $singletons >> $out
-    fi
+    test -f $singletons && cat $singletons >> $out
 }
 
 if [ $SP_SIMULATE = "1" ]

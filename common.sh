@@ -34,6 +34,28 @@ errorFile=../slurm-pipeline.error
 sampleLogFile=$logDir/sample.log
 blacklistFile=../blacklist
 
+proteinGenomeDB=$root/share/civ/20190830-protein-genome.db
+diamondDB=$root/share/civ/20190830-rna-proteins.dmnd
+taxonomyDB=$root/share/civ/20190830-taxonomy.db
+
+if [ ! -f $proteinGenomeDB ]
+then
+    echo "  Protein/genome database file $proteinGenomeDB does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $diamondDB ]
+then
+    echo "  DIAMOND database file $diamondDB does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $taxonomyDB ]
+then
+    echo "  Taxonomy database file $taxonomyDB does not exist!" >> $log
+    exit 1
+fi
+
 # A simple way to set defaults for our SP_* variables, without causing
 # problems when e.g., using test, if set -ue is active (causing scripts to
 # exit with status 1 and no explanation).
@@ -41,8 +63,8 @@ echo ${SP_SIMULATE:=0} ${SP_SKIP:=0} ${SP_FORCE:=0} \
      ${SP_DEPENDENCY_ARG:=''} ${SP_NICE_ARG:='--nice'} \
      ${SLURM_JOB_ID:='None'} >/dev/null
 
-# Regex matching encephalitis-causing viruses. From a list Julia Schneider
-# sent me (Terry) on Jan 19, 2019.
+# Regex matching encephalitis-causing viruses. Based on a list Julia
+# Schneider sent me (Terry) on Jan 19, 2019.
 ENCEPHALITIS_REGEX="$(cat ../encephalitis-regex.txt)"
 
 function mateFile()

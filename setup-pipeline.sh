@@ -16,7 +16,7 @@ cwd=$(/bin/pwd)
 
 # First make sure all top-level directories exist (otherwise the mkdir -p
 # below will create the top-level dir that will hold the pipelines dir,
-# which is probably an error.
+# which is probably an error).
 for dir in "$@"
 do
     if [ ! -d $dir ]
@@ -28,16 +28,17 @@ done
 
 for dir in "$@"
 do
-    echo "Setting up $dir"
+    echo "Processing $dir"
 
     if [ -d $dir/pipelines/standard ]
     then
-        echo "  pipelines/standard sub-directory already exists"
+        # echo "  pipelines/standard sub-directory already exists"
+        :
     else
-        echo "  Making pipelines/standard sub-directory"
+        # echo "  Making pipelines/standard sub-directory"
         mkdir -p $dir/pipelines/standard
     fi
 
-    echo "  Copying pipeline files"
+    # echo "  Copying pipeline files"
     tar -C csd3-pipeline --exclude-vcs -c -f - . | tar -C $dir/pipelines/standard -x -f -
 done
