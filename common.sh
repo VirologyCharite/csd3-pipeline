@@ -34,7 +34,7 @@ errorFile=../slurm-pipeline.error
 sampleLogFile=$logDir/sample.log
 blacklistFile=../blacklist
 
-proteinGenomeDB=$root/share/civ/20190830-protein-genome.db
+proteinGenomeDB=$root/share/civ/20190830-genomes-proteins.db
 diamondDB=$root/share/civ/20190830-rna-proteins.dmnd
 taxonomyDB=$root/share/civ/20190830-taxonomy.db
 
