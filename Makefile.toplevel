@@ -12,6 +12,9 @@ PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 # The following must match the proteinGenomeDB variable in common.sh
 PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/20190830-protein-genome.db
 
+# The following must match the taxonomyDB variable in common.sh
+TAXONOMY_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/20190830-taxonomy.db
+
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
 # It's possible that no virus-civ-encephalitis.png is created due to no
@@ -35,6 +38,7 @@ html-civ:
         proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
+            --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
             --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes." \
             --preamble $(PREAMBLE) \

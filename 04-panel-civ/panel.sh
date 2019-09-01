@@ -63,6 +63,7 @@ function panel()
 
     alignment-panel-civ.py \
       --proteinGenomeDatabase $proteinGenomeDB \
+      --taxonomyDatabase $taxonomyDB \
       --json $allJSON \
       --fastq $allFASTQ \
       --matcher diamond \
