@@ -62,7 +62,7 @@ function panel()
     rm -fr $outputDir summary-proteins $out
 
     alignment-panel-civ.py \
-      --proteinGenomeDatabase $proteinGenomeDatabase \
+      --proteinGenomeDatabase $proteinGenomeDB \
       --json $allJSON \
       --fastq $allFASTQ \
       --matcher diamond \
@@ -74,7 +74,7 @@ function panel()
     echo "  alignment-panel-civ.py stopped at $(date)" >> $log
 
     echo "  proteins-to-pathogens-civ.py started at $(date)" >> $log
-    echo summary-proteins | proteins-to-pathogens-civ.py --proteinGenomeDatabase $proteinGenomeDatabase > $out
+    echo summary-proteins | proteins-to-pathogens-civ.py --proteinGenomeDatabase $proteinGenomeDB > $out
     echo "  proteins-to-pathogens-civ.py stopped at $(date)" >> $log
 }
 

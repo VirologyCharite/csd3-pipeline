@@ -62,6 +62,7 @@ function panel()
     rm -fr $outputDir summary-proteins $out
 
     alignment-panel-civ.py \
+      --proteinGenomeDatabase $proteinGenomeDB \
       --json $allJSON \
       --fastq $allFASTQ \
       --matcher diamond \
@@ -69,11 +70,12 @@ function panel()
       --maxTitles 150 \
       --scoreCutoff 45 \
       --blacklistFile $blacklistFile \
-      --titleRegex "$ENCEPHALITIS_REGEX" > summary-proteins
+      --titleRegex "$ENCEPHALITIS_REGEX" \
+      --negativeTitleRegex phage > summary-proteins
     echo "  alignment-panel-civ.py stopped at $(date)" >> $log
 
     echo "  proteins-to-pathogens-civ.py started at $(date)" >> $log
-    echo summary-proteins | proteins-to-pathogens-civ.py --proteinGenomeDatabase $proteinGenomeDatabase > $out
+    echo summary-proteins | proteins-to-pathogens-civ.py --proteinGenomeDatabase $proteinGenomeDB > $out
     echo "  proteins-to-pathogens-civ.py stopped at $(date)" >> $log
 }
 
