@@ -14,6 +14,11 @@ PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/2019
 
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
+# It's possible that no virus-civ-encephalitis.png is created due to no
+# matching encephalitis viruses. So make a variable that contains the
+# encephalitis PNG file name if it exists.
+ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-encephalitis.png && echo virus-civ-encephalitis.png)
+
 all:
 	@echo "There is no default make target. Try make html, or make tar."
 
@@ -66,7 +71,7 @@ tar-civ-encephalitis:
 	tar cfj results-civ-encephalitis.tar.bz2 \
             */pipelines/standard/04-panel-civ-encephalitis/out \
             index-civ-encephalitis.html \
-            virus-civ-encephalitis.png \
+            $(ENCEPHALITIS_PNG_FILE) \
             samples-civ-encephalitis.index \
             pathogen-data-civ-encephalitis
 
