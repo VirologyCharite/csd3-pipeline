@@ -154,7 +154,7 @@ function checkGzipIntegrity()
 
     if [ -f $integrity ]
     then
-        echo "Gzip integrity already tested - skipping check." >> $log
+        echo "  Gzip integrity already tested - skipping check." >> $log
     else
         set +e
         gunzip -t < "$gz" >> $log
@@ -163,10 +163,10 @@ function checkGzipIntegrity()
 
         if [ $status -ne 0 ]
         then
-            echo "Gzip integrity check failed!" >> $log
+            echo "  Gzip integrity check failed!" >> $log
             exit 1
         else
-            echo "Gzip integrity check passed." >> $log
+            echo "  Gzip integrity check passed." >> $log
             touch $integrity
         fi
     fi
