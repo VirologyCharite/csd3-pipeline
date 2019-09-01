@@ -10,7 +10,7 @@ PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 # The following must match the proteinGenomeDB variable in common.sh
 PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/20190830-protein-genome.db
 
-ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
+ENCEPHALITIS_REGEX := "$(shell cat encephalitis-regex.txt)"
 
 SAMPLE=$(shell echo $$(basename $$(dirname $$(dirname $$(pwd)))) | cut -f1,2 -d_)
 
@@ -37,7 +37,7 @@ tar: tar-civ tar-civ-encephalitis
 clean: clean-civ clean-civ-encephalitis
 
 html-civ:
-        proteins-to-pathogens-civ.py \
+	proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
             --format fastq \
@@ -51,7 +51,7 @@ html-civ:
             > index-civ.html
 
 html-civ-encephalitis:
-        proteins-to-pathogens-civ.py \
+	proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
             --format fastq \
