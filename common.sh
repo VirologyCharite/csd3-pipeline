@@ -148,20 +148,27 @@ function checkGzipIntegrity()
 {
     local gz=$1
     local log=$2
+    local integrity=$gz.ok
 
     echo "  Checking gzipped file '$gz' for integrity." >> $log
 
-    set +e
-    gunzip -t < "$gz" >> $log
-    status=$?
-    set -e
-
-    if [ $status -ne 0 ]
+    if [ -f $integrity ]
     then
-        echo "Gzip integrity check failed!" >> $log
-        exit 1
+        echo "Gzip integrity already tested - skipping check." >> $log
     else
-        echo "Gzip integrity check passed." >> $log
+        set +e
+        gunzip -t < "$gz" >> $log
+        status=$?
+        set -e
+
+        if [ $status -ne 0 ]
+        then
+            echo "Gzip integrity check failed!" >> $log
+            exit 1
+        else
+            echo "Gzip integrity check passed." >> $log
+            touch $integrity
+        fi
     fi
 }
 
