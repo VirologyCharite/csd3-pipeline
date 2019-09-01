@@ -19,6 +19,9 @@ ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 # encephalitis PNG file name if it exists.
 ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-encephalitis.png && echo virus-civ-encephalitis.png)
 
+# Similarly, there may be no encephalitis panels.
+ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-encephalitis/out)
+
 all:
 	@echo "There is no default make target. Try make html, or make tar."
 
@@ -69,7 +72,7 @@ tar-civ:
 
 tar-civ-encephalitis:
 	tar cfj results-civ-encephalitis.tar.bz2 \
-            */pipelines/standard/04-panel-civ-encephalitis/out \
+            $(ENCEPHALITIS_PANEL_OUT_DIRS) \
             index-civ-encephalitis.html \
             $(ENCEPHALITIS_PNG_FILE) \
             samples-civ-encephalitis.index \
