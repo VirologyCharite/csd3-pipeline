@@ -55,6 +55,7 @@ html-civ-encephalitis:
         proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
+            --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
             --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses." \
             --preamble $(PREAMBLE) \
