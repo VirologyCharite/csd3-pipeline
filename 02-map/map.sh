@@ -69,13 +69,9 @@ function map()
         fastq=$outUncompressed
     done
 
-    # Remove duplicates by sequence (using MD5 sums of sequences to save
-    # RAM). This should probably be done in a separate pipeline step.
-    echo "  removing duplicate reads by (MD5) sequence started at $(date)" >> $log
-    filter-fasta.py --fastq --removeDuplicates --removeDuplicatesUseMD5 \
-                    < $outUncompressed | gzip -c > $out
-    rm $outUncompressed
-    echo "  removing duplicate reads by (MD5) sequence stopped at $(date)" >> $log
+    echo "  compressing reads started at $(date)" >> $log
+    gzip $outUncompressed
+    echo "  compressing reads stopped at $(date)" >> $log
 }
 
 

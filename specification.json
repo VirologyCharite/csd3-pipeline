@@ -30,8 +30,14 @@
             "script": "./sbatch.sh"
         },
         {
-            "name": "diamond-civ",
+            "name": "dedup",
             "dependencies": ["map"],
+            "cwd": "025-dedup",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "diamond-civ",
+            "dependencies": ["dedup"],
             "cwd": "03-diamond-civ",
             "script": "./sbatch.sh"
         },

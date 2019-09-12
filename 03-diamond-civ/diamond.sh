@@ -4,7 +4,7 @@
 
 task=$1
 log=$logDir/$task.log
-fastq=../02-map/$task-unmapped.fastq.gz
+fastq=../025-dedup/$task.fastq.gz
 out=$task.json.bz2
 
 logStepStart $log
