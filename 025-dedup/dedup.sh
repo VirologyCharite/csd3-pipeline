@@ -26,7 +26,7 @@ function dedup()
     # Remove duplicates by sequence (use MD5 sums of sequences to save RAM).
     echo "  removing duplicate reads by (MD5) sequence started at $(date)" >> $log
     gunzip -c < $fastq | \
-    filter-fasta.py --fastq --removeDuplicates --removeDuplicatesUseMD5 | \
+    filter-fasta.py --fastq --removeDuplicates --removeDuplicatesUseMD5 --quiet | \
     gzip -c > $out
     echo "  removing duplicate reads by (MD5) sequence stopped at $(date)" >> $log
 }
