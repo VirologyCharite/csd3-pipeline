@@ -7,7 +7,7 @@ set -Eeuo pipefail
 task=$1
 log=$logDir/$task.log
 fastq=../02-map/$task-unmapped.fastq.gz
-outUncompressed=$task.fastq.gz
+out=$task.fastq.gz
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
