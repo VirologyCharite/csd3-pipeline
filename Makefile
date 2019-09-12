@@ -7,8 +7,10 @@
 PREAMBLE_FILE := summary-preamble.html
 PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 
+CIV_DATE := 20190910
+
 # The following must match the proteinGenomeDB variable in common.sh
-PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/20190830-protein-genome.db
+PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/$(CIV_DATE)-protein-genome.db
 
 ENCEPHALITIS_REGEX := "$(shell cat encephalitis-regex.txt)"
 
