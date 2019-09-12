@@ -31,16 +31,23 @@ function map()
 
     rmFileAndLink $out $outUncompressed $sam
 
+    # Fail quickly if there is a missing database.
     for bwaDatabaseName in $bwaDatabaseNames
     do
-        bwaDatabase=$bwaDatabaseRoot/$bwaDatabaseName
+        bwaDatabase=$bwaDatabaseRoot/$bwaDatabaseName.bwt
 
-        if [ ! -f $bwaDatabase.bwt ]
+        if [ ! -f $bwaDatabase ]
         then
-            echo "  BWA database file '$bwaDatabase.bwt' does not exist." >> $log
+            echo "  BWA database file '$bwaDatabase' does not exist." >> $log
             logStepStop $log
             exit 1
         fi
+    done
+
+    # Now loop again and do the actual mapping work.
+    for bwaDatabaseName in $bwaDatabaseNames
+    do
+        bwaDatabase=$bwaDatabaseRoot/$bwaDatabaseName
 
         # Map FASTQ to database.
         echo "  bwa mem (against $bwaDatabaseName) started at $(date)" >> $log
@@ -62,7 +69,13 @@ function map()
         fastq=$outUncompressed
     done
 
-    gzip $outUncompressed
+    # Remove duplicates by sequence (using MD5 sums of sequences to save
+    # RAM). This should probably be done in a separate pipeline step.
+    echo "  removing duplicate reads by (MD5) sequence started at $(date)" >> $log
+    filter-fasta.py --fastq --removeDuplicates --removeDuplicatesUseMD5 \
+                    < $outUncompressed | gzip -c > $out
+    rm $outUncompressed
+    echo "  removing duplicate reads by (MD5) sequence stopped at $(date)" >> $log
 }
 
 

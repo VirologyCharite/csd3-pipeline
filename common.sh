@@ -34,9 +34,10 @@ errorFile=../slurm-pipeline.error
 sampleLogFile=$logDir/sample.log
 blacklistFile=../blacklist
 
-proteinGenomeDB=$root/share/civ/20190830-protein-genome.db
-diamondDB=$root/share/civ/20190830-rna-proteins.dmnd
-taxonomyDB=$root/share/civ/20190830-taxonomy.db
+civDate=20190910
+proteinGenomeDB=$root/share/civ/$civDate-protein-genome.db
+diamondDB=$root/share/civ/$civDate-rna-proteins.dmnd
+taxonomyDB=$root/share/civ/$civDate-taxonomy.db
 
 if [ ! -f $proteinGenomeDB ]
 then
