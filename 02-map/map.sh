@@ -8,8 +8,10 @@ task=$1
 log=$logDir/$task.log
 bwaDatabaseRoot="$root/share/bwa-indices"
 # The following databases are the human genome, human mRNA, human
-# mitochondrion, ribosomal RNA, and long non-coding (human) RNA.
-bwaDatabaseNames="homo-sapiens 20190806-GRCh38_latest_rna human-mitochondrion rRNA lncRNA"
+# mitochondrion, ribosomal RNA, long non-coding (human) RNA, and the three
+# Norway luteo-like contaminant sequences sent to Terry by Julia on
+# 2019-08-21.
+bwaDatabaseNames="homo-sapiens 20190806-GRCh38_latest_rna human-mitochondrion rRNA lncRNA luteo"
 fastq=../007-flash/$task.fastq.gz
 outUncompressed=$task-unmapped.fastq
 out=$outUncompressed.gz
