@@ -8,10 +8,10 @@ task=$1
 log=$logDir/$task.log
 bwaDatabaseRoot="$root/share/bwa-indices"
 # The following databases are the human genome, human mRNA, human
-# mitochondrion, ribosomal RNA, long non-coding (human) RNA, and the three
+# mitochondrion, ribosomal RNA, long non-coding (human) RNA, the three
 # Norway luteo-like contaminant sequences sent to Terry by Julia on
-# 2019-08-21.
-bwaDatabaseNames="homo-sapiens 20190806-GRCh38_latest_rna human-mitochondrion rRNA lncRNA luteo"
+# 2019-08-21, and the OKIAV680 (picornavirus) contaminant sequence.
+bwaDatabaseNames="homo-sapiens 20190806-GRCh38_latest_rna human-mitochondrion rRNA lncRNA luteo OKIAV680"
 fastq=../007-flash/$task.fastq.gz
 outUncompressed=$task-unmapped.fastq
 out=$outUncompressed.gz
