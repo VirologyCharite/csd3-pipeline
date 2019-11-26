@@ -31,13 +31,13 @@ function panel()
     do
         echo "  Task (i.e., sequencing run) $task" >> $log
 
-        JSON=../03-diamond-civ/$task.json.bz2
+        JSON=../03-diamond-civ-dna/$task.json.bz2
         test -f $JSON || {
             echo "JSON file $JSON does not exist." >> $log
             exit 1
         }
 
-        FASTQ=../02-map/$task-unmapped.fastq.gz
+        FASTQ=../025-dedup/$task.fastq.gz
         test -f $FASTQ || {
             echo "FASTQ file $FASTQ does not exist." >> $log
             exit 1
@@ -62,22 +62,22 @@ function panel()
     rm -fr $outputDir summary-proteins $out
 
     alignment-panel-civ.py \
-      --proteinGenomeDatabase $proteinGenomeDB \
+      --proteinGenomeDatabase $dnaProteinGenomeDB \
       --json $allJSON \
       --fastq $allFASTQ \
       --matcher diamond \
       --outputDir $outputDir \
       --maxTitles 150 \
+      --minMatchingReads $minMatchingReads \ 
       --scoreCutoff 45 \
       --blacklistFile $blacklistFile \
-      --titleRegex "$ENCEPHALITIS_REGEX" \
       --negativeTitleRegex phage > summary-proteins
     echo "  alignment-panel-civ.py stopped at $(date)" >> $log
 
     echo "  proteins-to-pathogens-civ.py started at $(date)" >> $log
     echo summary-proteins | \
         proteins-to-pathogens-civ.py \
-            --proteinGenomeDatabase $proteinGenomeDB \
+            --proteinGenomeDatabase $dnaProteinGenomeDB \
             --taxonomyDatabase $taxonomyDB \
             > $out
     echo "  proteins-to-pathogens-civ.py stopped at $(date)" >> $log
@@ -91,7 +91,7 @@ else
     echo "  This is not a simulation." >> $log
     if [ $SP_SKIP = "1" ]
     then
-        echo "  Panel civ encephalitis is being skipped on this run." >> $log
+        echo "  Panel civ is being skipped on this run." >> $log
         skip
     elif [ -f $out ]
     then

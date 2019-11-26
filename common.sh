@@ -22,7 +22,8 @@ then
 fi
 
 # The virtualenv activate script uses PS1, which will be unset in a
-# non-interactive shell.
+# non-interactive shell. Temporarily use set +u to make sure we don't exit
+# due to the undefined variable.
 set +u
 . $activate
 set -u
@@ -32,22 +33,39 @@ doneFile=../slurm-pipeline.done
 runningFile=../slurm-pipeline.running
 errorFile=../slurm-pipeline.error
 sampleLogFile=$logDir/sample.log
-blacklistFile=../blacklist
 
-civDate=20190910
-proteinGenomeDB=$root/share/civ/$civDate-protein-genome.db
-diamondDB=$root/share/civ/$civDate-rna-proteins.dmnd
+# Arg values for alignment-panel-civ.py
+blacklistFile=../blacklist
+minMatchingReads=2
+
+civDate=20191126
+dnaProteinGenomeDB=$root/share/civ/$civDate-dna-protein-genome.db
+dnaDiamondDB=$root/share/civ/$civDate-dna-proteins.dmnd
+rnaProteinGenomeDB=$root/share/civ/$civDate-rna-protein-genome.db
+rnaDiamondDB=$root/share/civ/$civDate-rna-proteins.dmnd
 taxonomyDB=$root/share/civ/$civDate-taxonomy.db
 
-if [ ! -f $proteinGenomeDB ]
+if [ ! -f $dnaProteinGenomeDB ]
 then
-    echo "  Protein/genome database file $proteinGenomeDB does not exist!" >> $log
+    echo "  DNA Protein/genome database file $dnaProteinGenomeDB does not exist!" >> $log
     exit 1
 fi
 
-if [ ! -f $diamondDB ]
+if [ ! -f $dnaDiamondDB ]
 then
-    echo "  DIAMOND database file $diamondDB does not exist!" >> $log
+    echo "  DIAMOND DNA database file $dnaDiamondDB does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $rnaProteinGenomeDB ]
+then
+    echo "  RNA Protein/genome database file $rnaProteinGenomeDB does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $rnaDiamondDB ]
+then
+    echo "  DIAMOND RNA database file $rnaDiamondDB does not exist!" >> $log
     exit 1
 fi
 

@@ -20,14 +20,14 @@ function skip()
 
 function run_diamond()
 {
-    echo "  DIAMOND blastx started at $(date)" >> $log
+    echo "  DIAMOND DNA blastx started at $(date)" >> $log
     diamond blastx \
         --threads $(($(nproc --all) - 2)) \
         --query $fastq \
-        --db $diamondDB \
+        --db $dnaDiamondDB \
         --outfmt 6 qtitle stitle bitscore evalue qframe qseq qstart qend sseq sstart send slen btop |
     convert-diamond-to-json.py | bzip2 > $out
-    echo "  DIAMOND blastx stopped at $(date)" >> $log
+    echo "  DIAMOND DNA blastx stopped at $(date)" >> $log
 }
 
 
@@ -36,7 +36,7 @@ then
     echo "  This is not a simulation." >> $log
     if [ $SP_SKIP = "1" ]
     then
-        echo "  DIAMOND civ is being skipped on this run." >> $log
+        echo "  DIAMOND DNA civ is being skipped on this run." >> $log
         skip
     elif [ -f $out ]
     then

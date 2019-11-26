@@ -62,12 +62,13 @@ function panel()
     rm -fr $outputDir summary-proteins $out
 
     alignment-panel-civ.py \
-      --proteinGenomeDatabase $proteinGenomeDB \
+      --proteinGenomeDatabase $rnaProteinGenomeDB \
       --json $allJSON \
       --fastq $allFASTQ \
       --matcher diamond \
       --outputDir $outputDir \
       --maxTitles 150 \
+      --minMatchingReads $minMatchingReads \ 
       --scoreCutoff 45 \
       --blacklistFile $blacklistFile \
       --negativeTitleRegex phage > summary-proteins
@@ -76,7 +77,7 @@ function panel()
     echo "  proteins-to-pathogens-civ.py started at $(date)" >> $log
     echo summary-proteins | \
         proteins-to-pathogens-civ.py \
-            --proteinGenomeDatabase $proteinGenomeDB \
+            --proteinGenomeDatabase $rnaProteinGenomeDB \
             --taxonomyDatabase $taxonomyDB \
             > $out
     echo "  proteins-to-pathogens-civ.py stopped at $(date)" >> $log
