@@ -1,7 +1,10 @@
-.PHONY: all, html, tar, clean
-.PHONY: html-civ, html-civ-encephalitis
-.PHONY: tar-civ, tar-civ-encephalitis
-.PHONY: clean-civ, clean-civ-encephalitis
+.PHONY: all html tar clean
+.PHONY: html-civ-dna html-civ-dna-encephalitis
+.PHONY: html-civ-rna html-civ-rna-encephalitis
+.PHONY: tar-civ-dna tar-civ-dna-encephalitis
+.PHONY: tar-civ-rna tar-civ-rna-encephalitis
+.PHONY: clean-civ-dna clean-civ-dna-encephalitis
+.PHONY: clean-civ-rna clean-civ-rna-encephalitis
 
 # Any text placed into the file named by PREAMBLE_FILE (if present) will be
 # put into the summary HTML generated below by the html-* targets.
@@ -9,94 +12,167 @@
 PREAMBLE_FILE := summary-preamble.html
 PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 
-CIV_DATE := 20190910
+CIV_DIR := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ
+CIV_DATE := 20191126
 
-# The following must match the proteinGenomeDB variable in common.sh
-PROTEIN_GENOME_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/$(CIV_DATE)-protein-genome.db
+# The following must match the dnaProteinGenomeDB and rnaProteinGenomeDB
+# variables in common.sh
+DNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-protein-genome.db
+RNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-rna-protein-genome.db
 
 # The following must match the taxonomyDB variable in common.sh
-TAXONOMY_DB := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/$(CIV_DATE)-taxonomy.db
+TAXONOMY_DB := $(CIV_DIR)/$(CIV_DATE)-taxonomy.db
 
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
-# It's possible that no virus-civ-encephalitis.png is created due to no
-# matching encephalitis viruses. So make a variable that contains the
-# encephalitis PNG file name if it exists.
-ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-encephalitis.png && echo virus-civ-encephalitis.png)
+# It's possible that no virus-civ-dna-encephalitis.png or
+# virus-civ-rna-encephalitis.png is created due to no matching encephalitis
+# viruses. So, make variables that contains the encephalitis PNG file names
+# only if they exist.
+DNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-dna-encephalitis.png && echo virus-civ-dna-encephalitis.png)
+RNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-rna-encephalitis.png && echo virus-civ-rna-encephalitis.png)
 
 # Similarly, there may be no encephalitis panels.
-ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-encephalitis/out)
+DNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-dna-encephalitis/out)
+RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-rna-encephalitis/out)
 
 all:
 	@echo "There is no default make target. Try make html, or make tar."
 
-html: html-civ html-civ-encephalitis
-tar: tar-civ tar-civ-encephalitis
-clean: clean-civ clean-civ-encephalitis
+html: html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
+tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
+clean: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-encephalitis
 
-html-civ:
-	find . -name summary-proteins | \
-        grep 04-panel-civ/ | \
+html-civ-dna:
+	find [DW]_* -name summary-proteins | \
+        grep 04-panel-civ-dna/ \
         proteins-to-pathogens-civ.py \
             --html \
-            --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
+            --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
-            --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes." \
+            --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes." \
             --preamble $(PREAMBLE) \
-            --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
+            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
-            --pathogenPanelFilename virus-civ.png \
-            --sampleIndexFilename samples-civ.index \
-            --pathogenDataDir pathogen-data-civ \
-            > index-civ.html
+            --pathogenPanelFilename virus-civ-dna.png \
+            --sampleIndexFilename samples-civ-dna.index \
+            --pathogenDataDir pathogen-data-civ-dna \
+            > index-civ-dna.html
 
-html-civ-encephalitis:
-	find . -name summary-proteins | \
-        grep 04-panel-civ-encephalitis/ | \
+html-civ-rna:
+	find [DW]_* -name summary-proteins | \
+        grep 04-panel-civ-rna/ \
         proteins-to-pathogens-civ.py \
             --html \
-            --proteinGenomeDatabase $(PROTEIN_GENOME_DB) \
+            --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
-            --title "Charit&eacute; custom RNA protein database: NCBI Refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses." \
+            --title "Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes." \
+            --preamble $(PREAMBLE) \
+            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
+            --pathogenType viral \
+            --pathogenPanelFilename virus-civ-rna.png \
+            --sampleIndexFilename samples-civ-rna.index \
+            --pathogenDataDir pathogen-data-civ-rna \
+            > index-civ-rna.html
+
+html-civ-dna-encephalitis:
+	find [DW]_* -name summary-proteins | \
+        grep 04-panel-civ-dna-encephalitis/ \
+        proteins-to-pathogens-civ.py \
+            --html \
+            --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
+            --taxonomyDatabase $(TAXONOMY_DB) \
+            --format fastq \
+            --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes." \
             --preamble $(PREAMBLE) \
             --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex '^\./(?:[DW]_)?([^/]+)/' \
+            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
-            --pathogenPanelFilename virus-civ-encephalitis.png \
-            --sampleIndexFilename samples-civ-encephalitis.index \
-            --pathogenDataDir pathogen-data-civ-encephalitis \
-            > index-civ-encephalitis.html
+            --pathogenPanelFilename $(DNA_ENCEPHALITIS_PNG_FILE) \
+            --sampleIndexFilename samples-civ-dna-encephalitis.index \
+            --pathogenDataDir pathogen-data-civ-dna-encephalitis \
+            > index-civ-dna-encephalitis.html
 
-tar-civ:
-	tar cfj results-civ.tar.bz2 \
-            */pipelines/standard/04-panel-civ/out \
-            index-civ.html \
-            virus-civ.png \
-            samples-civ.index \
-            pathogen-data-civ
+html-civ-rna-encephalitis:
+	find [DW]_* -name summary-proteins | \
+        grep 04-panel-civ-rna-encephalitis/ |
+        proteins-to-pathogens-civ.py \
+            --html \
+            --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
+            --taxonomyDatabase $(TAXONOMY_DB) \
+            --format fastq \
+            --title "Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses." \
+            --preamble $(PREAMBLE) \
+            --titleRegex $(ENCEPHALITIS_REGEX) \
+            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
+            --pathogenType viral \
+            --pathogenPanelFilename $(RNA_ENCEPHALITIS_PNG_FILE) \
+            --sampleIndexFilename samples-civ-rna-encephalitis.index \
+            --pathogenDataDir pathogen-data-civ-rna-encephalitis \
+            > index-civ-rna-encephalitis.html
 
-tar-civ-encephalitis:
-	tar cfj results-civ-encephalitis.tar.bz2 \
-            $(ENCEPHALITIS_PANEL_OUT_DIRS) \
-            index-civ-encephalitis.html \
-            $(ENCEPHALITIS_PNG_FILE) \
-            samples-civ-encephalitis.index \
-            pathogen-data-civ-encephalitis
+tar-civ-dna:
+	tar cfj results-civ-dna.tar.bz2 \
+            */pipelines/standard/04-panel-civ-dna/out \
+            index-civ-dna.html \
+            virus-civ-dna.png \
+            samples-civ-dna.index \
+            pathogen-data-civ-dna
 
-clean-civ:
+tar-civ-rna:
+	tar cfj results-civ-rna.tar.bz2 \
+            */pipelines/standard/04-panel-civ-rna/out \
+            index-civ-rna.html \
+            virus-civ-rna.png \
+            samples-civ-rna.index \
+            pathogen-data-civ-rna
+
+tar-civ-dna-encephalitis:
+	tar cfj results-civ-dna-encephalitis.tar.bz2 \
+            $(DNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
+            index-civ-dna-encephalitis.html \
+            $(DNA_ENCEPHALITIS_PNG_FILE) \
+            samples-civ-dna-encephalitis.index \
+            pathogen-data-civ-dna-encephalitis
+
+tar-civ-rna-encephalitis:
+	tar cfj results-civ-rna-encephalitis.tar.bz2 \
+            $(RNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
+            index-civ-rna-encephalitis.html \
+            $(RNA_ENCEPHALITIS_PNG_FILE) \
+            samples-civ-rna-encephalitis.index \
+            pathogen-data-civ-rna-encephalitis
+
+clean-civ-dna:
 	rm -fr \
-            results-civ.tar.bz2 \
-            samples-civ.index \
-            pathogen-data-civ \
-            virus-civ.png \
-            index-civ.html
+            results-civ-dna.tar.bz2 \
+            samples-civ-dna.index \
+            pathogen-data-civ-dna \
+            virus-civ-dna.png \
+            index-civ-dna.html
 
-clean-civ-encephalitis:
+clean-civ-rna:
 	rm -fr \
-            results-civ-encephalitis.tar.bz2 \
-            samples-civ-encephalitis.index \
-            pathogen-data-civ-encephalitis \
-            virus-civ-encephalitis.png \
-            index-civ-encephalitis.html
+            results-civ-rna.tar.bz2 \
+            samples-civ-rna.index \
+            pathogen-data-civ-rna \
+            virus-civ-rna.png \
+            index-civ-rna.html
+
+clean-civ-dna-encephalitis:
+	rm -fr \
+            results-civ-dna-encephalitis.tar.bz2 \
+            samples-civ-dna-encephalitis.index \
+            pathogen-data-civ-dna-encephalitis \
+            $(DNA_ENCEPHALITIS_PNG_FILE) \
+            index-civ-dna-encephalitis.html
+
+clean-civ-rna-encephalitis:
+	rm -fr \
+            results-civ-rna-encephalitis.tar.bz2 \
+            samples-civ-rna-encephalitis.index \
+            pathogen-data-civ-rna-encephalitis \
+            $(RNA_ENCEPHALITIS_PNG_FILE) \
+            index-civ-rna-encephalitis.html
