@@ -33,7 +33,14 @@ do
     if [ -d $dir/pipelines/standard ]
     then
         # echo "  pipelines/standard sub-directory already exists"
-        :
+
+        # Get rid of some old directories that are no longer in the
+        # 2019-11-27 pipeline.
+        for i in 04-panel-civ 04-panel-civ-encephalitis 03-diamond-civ
+        do
+            olddir="$dir/pipelines/standard/$i"
+            test -d "$olddir" && rm -r "$olddir"
+        done
     else
         # echo "  Making pipelines/standard sub-directory"
         mkdir -p $dir/pipelines/standard
