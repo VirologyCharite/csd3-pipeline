@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-#SBATCH -J trim
+#SBATCH -J trim-civ
 #SBATCH -A ACORG-SL2-CPU
 #SBATCH -o slurm-%A.out
 #SBATCH -p skylake

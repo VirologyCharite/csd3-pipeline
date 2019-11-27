@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-#SBATCH -J stop
+#SBATCH -J stop-civ
 #SBATCH -A ACORG-SL2-CPU
 #SBATCH -o slurm-%A.out
 #SBATCH -p skylake

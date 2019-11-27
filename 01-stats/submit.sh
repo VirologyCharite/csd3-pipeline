@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-#SBATCH -J stats
+#SBATCH -J stats-civ
 #SBATCH -A ACORG-SL2-CPU
 #SBATCH -o slurm-%A.out
 #SBATCH -p skylake
