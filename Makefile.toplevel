@@ -45,7 +45,7 @@ clean: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-ence
 
 html-civ-dna:
 	find [DW]_* -name summary-proteins | \
-        grep 04-panel-civ-dna/ \
+        grep 04-panel-civ-dna/ | \
         proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
@@ -62,7 +62,7 @@ html-civ-dna:
 
 html-civ-rna:
 	find [DW]_* -name summary-proteins | \
-        grep 04-panel-civ-rna/ \
+        grep 04-panel-civ-rna/ | \
         proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
@@ -79,7 +79,7 @@ html-civ-rna:
 
 html-civ-dna-encephalitis:
 	find [DW]_* -name summary-proteins | \
-        grep 04-panel-civ-dna-encephalitis/ \
+        grep 04-panel-civ-dna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
@@ -97,7 +97,7 @@ html-civ-dna-encephalitis:
 
 html-civ-rna-encephalitis:
 	find [DW]_* -name summary-proteins | \
-        grep 04-panel-civ-rna-encephalitis/ |
+        grep 04-panel-civ-rna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
             --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
