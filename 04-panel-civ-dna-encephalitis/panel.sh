@@ -68,7 +68,7 @@ function panel()
       --matcher diamond \
       --outputDir $outputDir \
       --maxTitles 150 \
-      --minMatchingReads $minMatchingReads \ 
+      --minMatchingReads $minMatchingReads \
       --scoreCutoff 45 \
       --blacklistFile $blacklistFile \
       --titleRegex "$ENCEPHALITIS_REGEX" \
