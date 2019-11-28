@@ -31,7 +31,7 @@ function panel()
     do
         echo "  Task (i.e., sequencing run) $task" >> $log
 
-        JSON=../03-diamond-civ/$task.json.bz2
+        JSON=../03-diamond-civ-rna/$task.json.bz2
         test -f $JSON || {
             echo "JSON file $JSON does not exist." >> $log
             exit 1
