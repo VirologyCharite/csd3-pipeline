@@ -53,7 +53,7 @@ html-civ-dna:
             --format fastq \
             --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes." \
             --preamble $(PREAMBLE) \
-            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
+            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
             --pathogenPanelFilename virus-civ-dna.png \
             --sampleIndexFilename samples-civ-dna.index \
@@ -70,7 +70,7 @@ html-civ-rna:
             --format fastq \
             --title "Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes." \
             --preamble $(PREAMBLE) \
-            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
+            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
             --pathogenPanelFilename virus-civ-rna.png \
             --sampleIndexFilename samples-civ-rna.index \
@@ -88,7 +88,7 @@ html-civ-dna-encephalitis:
             --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes." \
             --preamble $(PREAMBLE) \
             --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
+            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
             --pathogenPanelFilename $(DNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-dna-encephalitis.index \
@@ -106,7 +106,7 @@ html-civ-rna-encephalitis:
             --title "Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses." \
             --preamble $(PREAMBLE) \
             --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex '^\./([DW]_[^/]+_[DR]NA)_' \
+            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
             --pathogenPanelFilename $(RNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-rna-encephalitis.index \
