@@ -37,7 +37,8 @@ DNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-
 RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-rna-encephalitis/out)
 
 # See the 'colors' target at bottom for how I made the following color list.
-READ_COUNT_COLORS := --readCountColor "10 #feecd2" --readCountColor "20 #fedfb5" --readCountColor "50 #fdd09a" --readCountColor "100 #fdbd86" --readCountColor "200 #fc9e69" --readCountColor "500 #f77f53" --readCountColor "1000 #ed6145"
+# I added the \ chars manually to stop make from thinking they start comments.
+READ_COUNT_COLORS := --readCountColor "10 \#feecd2" --readCountColor "20 \#fedfb5" --readCountColor "50 \#fdd09a" --readCountColor "100 \#fdbd86" --readCountColor "200 \#fc9e69" --readCountColor "500 \#f77f53" --readCountColor "1000 \#ed6145"
 
 all:
 	@echo "There is no default make target. Try make html, or make tar."
