@@ -85,7 +85,7 @@ html-civ-dna-encephalitis:
             --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
-            --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes." \
+            --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses." \
             --preamble $(PREAMBLE) \
             --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
