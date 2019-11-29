@@ -61,6 +61,7 @@ html-civ-dna:
             --pathogenPanelFilename virus-civ-dna.png \
             --sampleIndexFilename samples-civ-dna.index \
             --pathogenDataDir pathogen-data-civ-dna \
+            --bootstrapTreeviewDir .. \
             $(READ_COUNT_COLORS) \
             > index-civ-dna.html
 
@@ -79,6 +80,7 @@ html-civ-rna:
             --pathogenPanelFilename virus-civ-rna.png \
             --sampleIndexFilename samples-civ-rna.index \
             --pathogenDataDir pathogen-data-civ-rna \
+            --bootstrapTreeviewDir .. \
             $(READ_COUNT_COLORS) \
             > index-civ-rna.html
 
@@ -98,6 +100,7 @@ html-civ-dna-encephalitis:
             --pathogenPanelFilename $(DNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-dna-encephalitis.index \
             --pathogenDataDir pathogen-data-civ-dna-encephalitis \
+            --bootstrapTreeviewDir .. \
             $(READ_COUNT_COLORS) \
             > index-civ-dna-encephalitis.html
 
@@ -117,6 +120,7 @@ html-civ-rna-encephalitis:
             --pathogenPanelFilename $(RNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-rna-encephalitis.index \
             --pathogenDataDir pathogen-data-civ-rna-encephalitis \
+            --bootstrapTreeviewDir .. \
             $(READ_COUNT_COLORS) \
             > index-civ-rna-encephalitis.html
 
