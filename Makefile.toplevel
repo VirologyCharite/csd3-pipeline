@@ -6,11 +6,8 @@
 .PHONY: clean-civ-dna clean-civ-dna-encephalitis
 .PHONY: clean-civ-rna clean-civ-rna-encephalitis
 
-# Any text placed into the file named by PREAMBLE_FILE (if present) will be
-# put into the summary HTML generated below by the html-* targets.
-# If the file is not present, there will be no preamble in the HTML output.
 PREAMBLE_FILE := summary-preamble.html
-PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
+# PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
 
 CIV_DIR := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ
 CIV_DATE := 20191126
@@ -42,11 +39,14 @@ READ_COUNT_COLORS := --readCountColor "10 \#0173b2" --readCountColor "50 \#de8f0
 all:
 	@echo "There is no default make target. Try make html, or make tar."
 
+preamble:
+	summarize-run.py --run ../bih-pipeline/data/runs/$(shell basename $(shell /bin/pwd)).json > $(PREAMBLE_FILE)
+
 html: html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
 tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
 clean: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-encephalitis
 
-html-civ-dna:
+html-civ-dna: preamble
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna/ | \
         proteins-to-pathogens-civ.py \
@@ -54,8 +54,8 @@ html-civ-dna:
             --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
-            --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes." \
-            --preamble $(PREAMBLE) \
+            --preamble $(PREAMBLE_FILE) \
+            --preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes.</p>" \
             --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
             --pathogenPanelFilename virus-civ-dna.png \
@@ -65,7 +65,7 @@ html-civ-dna:
             $(READ_COUNT_COLORS) \
             > index-civ-dna.html
 
-html-civ-rna:
+html-civ-rna: preamble
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-rna/ | \
         proteins-to-pathogens-civ.py \
@@ -73,8 +73,8 @@ html-civ-rna:
             --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
-            --title "Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes." \
-            --preamble $(PREAMBLE) \
+            --preamble $(PREAMBLE_FILE) \
+            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
             --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
             --pathogenPanelFilename virus-civ-rna.png \
@@ -84,7 +84,7 @@ html-civ-rna:
             $(READ_COUNT_COLORS) \
             > index-civ-rna.html
 
-html-civ-dna-encephalitis:
+html-civ-dna-encephalitis: preamble
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
@@ -92,8 +92,8 @@ html-civ-dna-encephalitis:
             --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
-            --title "Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses." \
-            --preamble $(PREAMBLE) \
+            --preamble $(PREAMBLE_FILE) \
+            --preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
             --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
@@ -104,7 +104,7 @@ html-civ-dna-encephalitis:
             $(READ_COUNT_COLORS) \
             > index-civ-dna-encephalitis.html
 
-html-civ-rna-encephalitis:
+html-civ-rna-encephalitis: preamble
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-rna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
@@ -112,8 +112,8 @@ html-civ-rna-encephalitis:
             --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
-            --title "Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses." \
-            --preamble $(PREAMBLE) \
+            --preamble $(PREAMBLE_FILE) \
+            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses.</p>" \
             --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
             --pathogenType viral \
