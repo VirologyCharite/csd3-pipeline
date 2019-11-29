@@ -36,6 +36,9 @@ RNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-rna-encephalitis.png && e
 DNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-dna-encephalitis/out)
 RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard */pipelines/standard/04-panel-civ-rna-encephalitis/out)
 
+# See the 'colors' target at bottom for how I made the following color list.
+READ_COUNT_COLORS := --readCountColor "10 #feecd2" --readCountColor "20 #fedfb5" --readCountColor "50 #fdd09a" --readCountColor "100 #fdbd86" --readCountColor "200 #fc9e69" --readCountColor "500 #f77f53" --readCountColor "1000 #ed6145"
+
 all:
 	@echo "There is no default make target. Try make html, or make tar."
 
@@ -58,6 +61,7 @@ html-civ-dna:
             --pathogenPanelFilename virus-civ-dna.png \
             --sampleIndexFilename samples-civ-dna.index \
             --pathogenDataDir pathogen-data-civ-dna \
+            $(READ_COUNT_COLORS) \
             > index-civ-dna.html
 
 html-civ-rna:
@@ -75,6 +79,7 @@ html-civ-rna:
             --pathogenPanelFilename virus-civ-rna.png \
             --sampleIndexFilename samples-civ-rna.index \
             --pathogenDataDir pathogen-data-civ-rna \
+            $(READ_COUNT_COLORS) \
             > index-civ-rna.html
 
 html-civ-dna-encephalitis:
@@ -93,6 +98,7 @@ html-civ-dna-encephalitis:
             --pathogenPanelFilename $(DNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-dna-encephalitis.index \
             --pathogenDataDir pathogen-data-civ-dna-encephalitis \
+            $(READ_COUNT_COLORS) \
             > index-civ-dna-encephalitis.html
 
 html-civ-rna-encephalitis:
@@ -111,6 +117,7 @@ html-civ-rna-encephalitis:
             --pathogenPanelFilename $(RNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-rna-encephalitis.index \
             --pathogenDataDir pathogen-data-civ-rna-encephalitis \
+            $(READ_COUNT_COLORS) \
             > index-civ-rna-encephalitis.html
 
 tar-civ-dna:
@@ -176,3 +183,6 @@ clean-civ-rna-encephalitis:
             pathogen-data-civ-rna-encephalitis \
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-rna-encephalitis.html
+
+colors:
+	@python -c 'import seaborn as sns; print(" ".join([f"--readCountColor \"{count} {color}\"" for count, color in zip((10, 20, 50, 100, 200, 500, 1000), sns.color_palette("OrRd", 10).as_hex())]))'
