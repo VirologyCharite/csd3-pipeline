@@ -188,5 +188,7 @@ clean-civ-rna-encephalitis:
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-rna-encephalitis.html
 
+# See https://chrisalbon.com/python/data_visualization/seaborn_color_palettes/
+# for some possible color palettes.
 colors:
 	@python -c 'import seaborn as sns; print(" ".join([f"--readCountColor \"{count} \\{color}\"" for count, color in zip((10, 50, 100, 500, 1000), sns.color_palette("colorblind", 10).as_hex())]))'

@@ -34,9 +34,11 @@ runningFile=../slurm-pipeline.running
 errorFile=../slurm-pipeline.error
 sampleLogFile=$logDir/sample.log
 
-# Arg values for alignment-panel-civ.py
+# Arg values for alignment-panel-civ.py (used in the various panel.sh
+# scripts in 04-panel-*).
 blacklistFile=../blacklist
 minMatchingReads=2
+percentageIdenticalCutoff=20.0
 
 civDate=20191126
 dnaProteinGenomeDB=$root/share/civ/$civDate-dna-protein-genome.db

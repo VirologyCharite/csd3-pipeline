@@ -69,7 +69,7 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --minMatchingReads $minMatchingReads \
-      --scoreCutoff 45 \
+      --percentageIdenticalCutoff $percentageIdenticalCutoff \
       --blacklistFile $blacklistFile \
       --titleRegex "$ENCEPHALITIS_REGEX" \
       --negativeTitleRegex phage > summary-proteins

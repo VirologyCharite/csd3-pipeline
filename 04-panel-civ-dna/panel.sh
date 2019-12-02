@@ -69,7 +69,7 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --minMatchingReads $minMatchingReads \
-      --scoreCutoff 45 \
+      --percentageIdenticalCutoff $percentageIdenticalCutoff \
       --blacklistFile $blacklistFile \
       --negativeTitleRegex phage > summary-proteins
     echo "  alignment-panel-civ.py stopped at $(date)" >> $log
