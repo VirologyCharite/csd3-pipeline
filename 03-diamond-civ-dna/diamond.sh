@@ -25,7 +25,7 @@ function run_diamond()
         --threads $(($(nproc --all) - 2)) \
         --query $fastq \
         --db $dnaDiamondDB \
-        --outfmt 6 qtitle stitle bitscore evalue qframe qseq qstart qend sseq sstart send slen btop pident |
+        --outfmt 6 qtitle stitle bitscore evalue qframe qseq qstart qend sseq sstart send slen btop nident pident positive ppos |
     convert-diamond-to-json.py | bzip2 > $out
     echo "  DIAMOND DNA blastx stopped at $(date)" >> $log
 }

@@ -38,7 +38,7 @@ sampleLogFile=$logDir/sample.log
 # scripts in 04-panel-*).
 blacklistFile=../blacklist
 minMatchingReads=2
-percentageIdenticalCutoff=20.0
+percentagePositiveCutoff=17.0
 
 civDate=20191126
 dnaProteinGenomeDB=$root/share/civ/$civDate-dna-protein-genome.db

@@ -12,12 +12,6 @@
             "script": "./sbatch.sh"
         },
         {
-            "name": "stats",
-            "dependencies": ["trim"],
-            "cwd": "01-stats",
-            "script": "./sbatch.sh"
-        },
-        {
             "name": "flash",
             "dependencies": ["trim"],
             "cwd": "007-flash",
