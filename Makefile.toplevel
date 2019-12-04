@@ -191,26 +191,43 @@ clean-civ-rna-encephalitis:
 clean-stats:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
 
+clean-stats-on: clean-stats clean-trim-on
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
 clean-trim:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-trim-on: clean-trim clean-flash-on
 
 clean-flash:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
 
+clean-flash-on: clean-flash clean-spades-on
+
 clean-spades:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-spades-on: clean-spades clean-map-on
 
 clean-map:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
 
+clean-map-on: clean-map clean-dedup-on
+
 clean-dedup:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-dedup-on: clean-dedup clean-diamond-on
 
 clean-diamond:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
 
+clean-diamond-on: clean-diamond clean-panel-on
+
 clean-panel:
 	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-panel-on: clean-panel
 
 status:
 	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.*
