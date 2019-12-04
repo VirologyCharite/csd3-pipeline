@@ -46,7 +46,6 @@ preamble:
 
 html: html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
 tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
-clean-results: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-encephalitis
 
 html-civ-dna: preamble
 	find [DW]_* -name summary-proteins | \
@@ -189,6 +188,9 @@ clean-civ-rna-encephalitis:
             pathogen-data-civ-rna-encephalitis \
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-rna-encephalitis.html
+
+clean-results: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-encephalitis
+	rm -f $(PREAMBLE_FILE)
 
 clean-stats:
 	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
