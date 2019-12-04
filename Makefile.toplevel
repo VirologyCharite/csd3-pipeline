@@ -1,4 +1,4 @@
-.PHONY: all html tar clean
+.PHONY: all html tar clean-results
 .PHONY: html-civ-dna html-civ-dna-encephalitis
 .PHONY: html-civ-rna html-civ-rna-encephalitis
 .PHONY: tar-civ-dna tar-civ-dna-encephalitis
@@ -46,7 +46,7 @@ preamble:
 
 html: html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
 tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
-clean: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-encephalitis
+clean-results: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-encephalitis
 
 html-civ-dna: preamble
 	find [DW]_* -name summary-proteins | \
