@@ -40,7 +40,7 @@ blacklistFile=../blacklist
 minMatchingReads=2
 percentagePositiveCutoff=17.0
 
-civDate=20191126
+civDate=20191204
 dnaProteinGenomeDB=$root/share/civ/$civDate-dna-protein-genome.db
 dnaDiamondDB=$root/share/civ/$civDate-dna-proteins.dmnd
 rnaProteinGenomeDB=$root/share/civ/$civDate-rna-protein-genome.db

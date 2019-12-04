@@ -8,11 +8,9 @@
 
 DIRS := $(wildcard [DW]_*/pipelines/standard)
 
-PREAMBLE_FILE := summary-preamble.html
-# PREAMBLE := "$(shell test -f $(PREAMBLE_FILE) && cat $(PREAMBLE_FILE))"
-
+# CIV_DATE *must* match the value of civDate in common.sh
+CIV_DATE := 20191204
 CIV_DIR := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ
-CIV_DATE := 20191126
 
 # The following must match the dnaProteinGenomeDB and rnaProteinGenomeDB
 # variables in common.sh
@@ -23,6 +21,8 @@ RNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-rna-protein-genome.db
 TAXONOMY_DB := $(CIV_DIR)/$(CIV_DATE)-taxonomy.db
 
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
+
+PREAMBLE_FILE := summary-preamble.html
 
 # It's possible that no virus-civ-dna-encephalitis.png or
 # virus-civ-rna-encephalitis.png is created due to no matching encephalitis
