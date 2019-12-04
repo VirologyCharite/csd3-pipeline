@@ -188,6 +188,33 @@ clean-civ-rna-encephalitis:
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-rna-encephalitis.html
 
+clean-stats:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-trim:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-flash:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-spades:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-map:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-dedup:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-diamond:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+clean-panel:
+	@for i in [DW]_*/pipelines/standard; do cd $i; make $@; cd ../../..; done
+
+status:
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.*
+
 # See https://chrisalbon.com/python/data_visualization/seaborn_color_palettes/
 # for some possible color palettes.
 colors:
