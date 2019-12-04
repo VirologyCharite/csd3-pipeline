@@ -231,8 +231,11 @@ clean-panel:
 
 clean-panel-on: clean-panel
 
+run:
+	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
+
 status:
-	@ls -l $(DIRS)/slurm-pipeline.*
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.*
 
 # See https://chrisalbon.com/python/data_visualization/seaborn_color_palettes/
 # for some possible color palettes.
