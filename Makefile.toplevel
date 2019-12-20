@@ -58,10 +58,10 @@ preamble:
 gitpull:
 	cd ../bih-pipeline && git pull
 
-html: gitpull html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
+html: gitpull preamble html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
 tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
 
-html-civ-dna: preamble
+html-civ-dna:
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna/ | \
         proteins-to-pathogens-civ.py \
@@ -80,7 +80,7 @@ html-civ-dna: preamble
             $(READ_COUNT_COLORS) \
             > index-civ-dna.html
 
-html-civ-rna: preamble
+html-civ-rna:
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-rna/ | \
         proteins-to-pathogens-civ.py \
@@ -99,7 +99,7 @@ html-civ-rna: preamble
             $(READ_COUNT_COLORS) \
             > index-civ-rna.html
 
-html-civ-dna-encephalitis: preamble
+html-civ-dna-encephalitis:
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
@@ -119,7 +119,7 @@ html-civ-dna-encephalitis: preamble
             $(READ_COUNT_COLORS) \
             > index-civ-dna-encephalitis.html
 
-html-civ-rna-encephalitis: preamble
+html-civ-rna-encephalitis:
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-rna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
