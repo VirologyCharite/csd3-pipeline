@@ -33,6 +33,7 @@ PREAMBLE_FILE := summary-preamble.html
 UPLOAD_USERID := terry
 UPLOAD_HOST := civnb.info
 UPLOAD_DIR := /1GB/diagnostics/tmp
+REPO_DIR := /1GB/diagnostics/bih-pipeline
 UNTAR_SCRIPT := /1GB/diagnostics/bih-pipeline/bin/untar-results.sh
 
 # It's possible that no virus-civ-dna-encephalitis.png or
@@ -172,6 +173,7 @@ upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
 	scp results-civ-[dr]na{,-encephalitis}.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
+	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'cd $(REPO_DIR) && git pull'"
 
 clean-civ-dna:
 	rm -fr \
