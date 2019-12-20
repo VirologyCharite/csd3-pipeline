@@ -8,6 +8,9 @@
 
 DIRS := $(wildcard [DW]_*/pipelines/standard)
 
+# RUNID will be something like 191205
+RUNID := $(shell basename $(shell /bin/pwd))
+
 # CIV_DATE *must* match the value of civDate in common.sh
 CIV_DATE := 20191204
 CIV_DIR := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ
@@ -23,6 +26,10 @@ TAXONOMY_DB := $(CIV_DIR)/$(CIV_DATE)-taxonomy.db
 ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
 PREAMBLE_FILE := summary-preamble.html
+
+UPLOAD_HOST := civnb.info
+UPLOAD_DIR := /1GB/diagnostics/tmp
+UNTAR_SCRIPT := /1GB/diagnostics/bih-pipeline/bin/untar-results.sh
 
 # It's possible that no virus-civ-dna-encephalitis.png or
 # virus-civ-rna-encephalitis.png is created due to no matching encephalitis
@@ -42,7 +49,7 @@ all:
 	@echo "There is no default make target. Try make html, or make tar."
 
 preamble:
-	summarize-run.py --run ../bih-pipeline/data/runs/$(shell basename $(shell /bin/pwd)).json > $(PREAMBLE_FILE)
+	summarize-run.py --run ../bih-pipeline/data/runs/$(RUNID).json > $(PREAMBLE_FILE)
 
 html: html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
 tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
@@ -156,6 +163,11 @@ tar-civ-rna-encephalitis:
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             samples-civ-rna-encephalitis.index \
             pathogen-data-civ-rna-encephalitis
+
+upload:
+	ssh $(UPLOAD_HOST) mkdir $(UPLOAD_DIR)/$(RUNID)
+	scp results-civ-[dr]na{,-encephalitis}.tar.bz2 $(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
+	ssh $(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
 
 clean-civ-dna:
 	rm -fr \
