@@ -27,6 +27,10 @@ ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
 PREAMBLE_FILE := summary-preamble.html
 
+# The following (terry name) will need to be changed if Barbara ever starts
+# uploading from Cambridge to civnb.info (suggest grepping local username
+# from a config file to pull out remote username).
+UPLOAD_USERID := terry
 UPLOAD_HOST := civnb.info
 UPLOAD_DIR := /1GB/diagnostics/tmp
 UNTAR_SCRIPT := /1GB/diagnostics/bih-pipeline/bin/untar-results.sh
@@ -165,9 +169,9 @@ tar-civ-rna-encephalitis:
             pathogen-data-civ-rna-encephalitis
 
 upload:
-	ssh $(UPLOAD_HOST) mkdir $(UPLOAD_DIR)/$(RUNID)
-	scp results-civ-[dr]na{,-encephalitis}.tar.bz2 $(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
-	ssh $(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
+	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) mkdir $(UPLOAD_DIR)/$(RUNID)
+	scp results-civ-[dr]na{,-encephalitis}.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
+	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
 
 clean-civ-dna:
 	rm -fr \
