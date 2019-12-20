@@ -56,7 +56,10 @@ all:
 preamble:
 	summarize-run.py --run ../bih-pipeline/data/runs/$(RUNID).json > $(PREAMBLE_FILE)
 
-html: html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
+gitpull:
+	cd ../bih-pipeline && git pull
+
+html: gitpull html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
 tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
 
 html-civ-dna: preamble
