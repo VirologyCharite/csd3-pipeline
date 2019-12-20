@@ -50,8 +50,7 @@ RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel
 # See the 'colors' target at bottom for how I made the following color list.
 READ_COUNT_COLORS := --readCountColor "10 \#0173b2" --readCountColor "50 \#de8f05" --readCountColor "100 \#029e73" --readCountColor "500 \#d55e00" --readCountColor "1000 \#cc78bc"
 
-all:
-	@echo "There is no default make target. Try make html, or make tar."
+all: html tar upload
 
 preamble:
 	summarize-run.py --run ../bih-pipeline/data/runs/$(RUNID).json > $(PREAMBLE_FILE)
