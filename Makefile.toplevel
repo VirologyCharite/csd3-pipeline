@@ -173,7 +173,7 @@ upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
 	scp results-civ-[dr]na{,-encephalitis}.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
-	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'cd $(REPO_DIR) && git pull'"
+	ssh -A $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'cd $(REPO_DIR) && git pull'"
 
 clean-civ-dna:
 	rm -fr \
