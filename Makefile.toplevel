@@ -2,8 +2,10 @@
 .PHONY: html-civ-dna html-civ-dna-encephalitis
 .PHONY: html-civ-rna html-civ-rna-encephalitis
 .PHONY: tar-civ-dna tar-civ-dna-encephalitis
+.PHONY: tar-civ-dna-large tar-civ-dna-large-encephalitis
 .PHONY: tar-civ-rna tar-civ-rna-encephalitis
 .PHONY: clean-civ-dna clean-civ-dna-encephalitis
+.PHONY: clean-civ-dna-large clean-civ-dna-large-encephalitis
 .PHONY: clean-civ-rna clean-civ-rna-encephalitis
 
 DIRS := $(wildcard [DW]_*/pipelines/standard)
@@ -18,6 +20,7 @@ CIV_DIR := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ
 # The following must match the dnaProteinGenomeDB and rnaProteinGenomeDB
 # variables in common.sh
 DNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-protein-genome.db
+DNA_LARGE_PROTEIN_GENOME_DB := $(CIV_DIR)/20200106-dna-protein-genome.db
 RNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-rna-protein-genome.db
 
 # The following must match the taxonomyDB variable in common.sh
@@ -27,24 +30,26 @@ ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
 PREAMBLE_FILE := summary-preamble.html
 
-# The following (terry name) will need to be changed if Barbara ever starts
-# uploading from Cambridge to civnb.info (suggest grepping local username
-# from a config file to pull out remote username).
+# The 'terry' name in the following will need to be changed if Barbara ever
+# starts uploading from Cambridge to civnb.info (suggest grepping local
+# username from a config file to pull out remote username).
 UPLOAD_USERID := terry
 UPLOAD_HOST := civnb.info
 UPLOAD_DIR := /1GB/diagnostics/tmp
 REPO_DIR := /1GB/diagnostics/bih-pipeline
 UNTAR_SCRIPT := /1GB/diagnostics/bih-pipeline/bin/untar-results.sh
 
-# It's possible that no virus-civ-dna-encephalitis.png or
-# virus-civ-rna-encephalitis.png is created due to no matching encephalitis
-# viruses. So, make variables that contains the encephalitis PNG file names
-# only if they exist.
+# It's possible that no virus-civ-dna-encephalitis.png,
+# virus-civ-dna-large-encephalitis.png or virus-civ-rna-encephalitis.png is
+# created due to no matching encephalitis viruses. So, make variables that
+# contains the encephalitis PNG file names only if they exist.
 DNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-dna-encephalitis.png && echo virus-civ-dna-encephalitis.png)
+DNA_LARGE_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-dna-large-encephalitis.png && echo virus-civ-dna-large-encephalitis.png)
 RNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-rna-encephalitis.png && echo virus-civ-rna-encephalitis.png)
 
 # Similarly, there may be no encephalitis panels.
 DNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna-encephalitis/out)
+DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna-large-encephalitis/out)
 RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-rna-encephalitis/out)
 
 # See the 'colors' target at bottom for how I made the following color list.
@@ -58,8 +63,11 @@ preamble:
 gitpull:
 	cd ../bih-pipeline && git pull
 
-html: gitpull preamble html-civ-dna html-civ-dna-encephalitis html-civ-rna html-civ-rna-encephalitis
-tar: tar-civ-dna tar-civ-dna-encephalitis tar-civ-rna tar-civ-rna-encephalitis
+html: gitpull preamble \
+    html-civ-dna html-civ-dna-large \
+    html-civ-dna-encephalitis html-civ-dna-large-encephalitis \
+    html-civ-rna html-civ-rna-encephalitis
+tar: tar-civ-dna tar-civ-dna-large tar-civ-dna-encephalitis tar-civ-dna-large-encephalitis tar-civ-rna tar-civ-rna-encephalitis
 
 html-civ-dna:
 	find [DW]_* -name summary-proteins | \
@@ -79,6 +87,25 @@ html-civ-dna:
             --bootstrapTreeviewDir .. \
             $(READ_COUNT_COLORS) \
             > index-civ-dna.html
+
+html-civ-dna-large:
+	find [DW]_* -name summary-proteins | \
+        grep 04-panel-civ-dna-large/ | \
+        proteins-to-pathogens-civ.py \
+            --html \
+            --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
+            --taxonomyDatabase $(TAXONOMY_DB) \
+            --format fastq \
+            --preamble $(PREAMBLE_FILE) \
+            --preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes.</p>" \
+            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
+            --pathogenType viral \
+            --pathogenPanelFilename virus-civ-dna-large.png \
+            --sampleIndexFilename samples-civ-dna-large.index \
+            --pathogenDataDir pathogen-data-civ-dna-large \
+            --bootstrapTreeviewDir .. \
+            $(READ_COUNT_COLORS) \
+            > index-civ-dna-large.html
 
 html-civ-rna:
 	find [DW]_* -name summary-proteins | \
@@ -119,6 +146,26 @@ html-civ-dna-encephalitis:
             $(READ_COUNT_COLORS) \
             > index-civ-dna-encephalitis.html
 
+html-civ-dna-large-encephalitis:
+	find [DW]_* -name summary-proteins | \
+        grep 04-panel-civ-dna-large-encephalitis/ | \
+        proteins-to-pathogens-civ.py \
+            --html \
+            --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
+            --taxonomyDatabase $(TAXONOMY_DB) \
+            --format fastq \
+            --preamble $(PREAMBLE_FILE) \
+            --preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
+            --titleRegex $(ENCEPHALITIS_REGEX) \
+            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)_' \
+            --pathogenType viral \
+            --pathogenPanelFilename $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
+            --sampleIndexFilename samples-civ-dna-large-encephalitis.index \
+            --pathogenDataDir pathogen-data-civ-dna-large-encephalitis \
+            --bootstrapTreeviewDir .. \
+            $(READ_COUNT_COLORS) \
+            > index-civ-dna-large-encephalitis.html
+
 html-civ-rna-encephalitis:
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-rna-encephalitis/ | \
@@ -147,6 +194,14 @@ tar-civ-dna:
             samples-civ-dna.index \
             pathogen-data-civ-dna
 
+tar-civ-dna-large:
+	tar cfj results-civ-dna-large.tar.bz2 \
+            [DW]_*/pipelines/standard/04-panel-civ-dna-large/out \
+            index-civ-dna-large.html \
+            virus-civ-dna-large.png \
+            samples-civ-dna-large.index \
+            pathogen-data-civ-dna-large
+
 tar-civ-rna:
 	tar cfj results-civ-rna.tar.bz2 \
             [DW]_*/pipelines/standard/04-panel-civ-rna/out \
@@ -162,6 +217,14 @@ tar-civ-dna-encephalitis:
             $(DNA_ENCEPHALITIS_PNG_FILE) \
             samples-civ-dna-encephalitis.index \
             pathogen-data-civ-dna-encephalitis
+
+tar-civ-dna-large-encephalitis:
+	tar cfj results-civ-dna-large-encephalitis.tar.bz2 \
+            $(DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS) \
+            index-civ-dna-large-encephalitis.html \
+            $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
+            samples-civ-dna-large-encephalitis.index \
+            pathogen-data-civ-dna-large-encephalitis
 
 tar-civ-rna-encephalitis:
 	tar cfj results-civ-rna-encephalitis.tar.bz2 \
@@ -185,6 +248,14 @@ clean-civ-dna:
             virus-civ-dna.png \
             index-civ-dna.html
 
+clean-civ-dna-large:
+	rm -fr \
+            results-civ-dna-large.tar.bz2 \
+            samples-civ-dna-large.index \
+            pathogen-data-civ-dna-large \
+            virus-civ-dna-large.png \
+            index-civ-dna-large.html
+
 clean-civ-rna:
 	rm -fr \
             results-civ-rna.tar.bz2 \
@@ -201,6 +272,14 @@ clean-civ-dna-encephalitis:
             $(DNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-dna-encephalitis.html
 
+clean-civ-dna-large-encephalitis:
+	rm -fr \
+            results-civ-dna-large-encephalitis.tar.bz2 \
+            samples-civ-dna-large-encephalitis.index \
+            pathogen-data-civ-dna-large-encephalitis \
+            $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
+            index-civ-dna-large-encephalitis.html
+
 clean-civ-rna-encephalitis:
 	rm -fr \
             results-civ-rna-encephalitis.tar.bz2 \
@@ -209,7 +288,7 @@ clean-civ-rna-encephalitis:
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-rna-encephalitis.html
 
-clean-results: clean-civ-dna clean-civ-dna-encephalitis clean-civ-rna clean-civ-rna-encephalitis
+clean-results: clean-civ-dna clean-civ-dna-large clean-civ-dna-encephalitis clean-civ-dna-large-encephalitis clean-civ-rna clean-civ-rna-encephalitis
 	rm -f $(PREAMBLE_FILE)
 
 clean-stats:

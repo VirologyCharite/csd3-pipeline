@@ -43,13 +43,18 @@ percentagePositiveCutoff=17.0
 civDate=20191204
 dnaProteinGenomeDB=$root/share/civ/$civDate-dna-protein-genome.db
 dnaDiamondDB=$root/share/civ/$civDate-dna-proteins.dmnd
+
+dnaLargeProteinGenomeDB=$root/share/civ/20200106-dna-large-protein-genome.db
+dnaLargeDiamondDB=$root/share/civ/20200106-dna-large-proteins.dmnd
+
 rnaProteinGenomeDB=$root/share/civ/$civDate-rna-protein-genome.db
 rnaDiamondDB=$root/share/civ/$civDate-rna-proteins.dmnd
+
 taxonomyDB=$root/share/civ/$civDate-taxonomy.db
 
 if [ ! -f $dnaProteinGenomeDB ]
 then
-    echo "  DNA Protein/genome database file $dnaProteinGenomeDB does not exist!" >> $log
+    echo "  DNA protein/genome database file $dnaProteinGenomeDB does not exist!" >> $log
     exit 1
 fi
 
@@ -59,9 +64,21 @@ then
     exit 1
 fi
 
+if [ ! -f $dnaLargeProteinGenomeDB ]
+then
+    echo "  DNA large protein/genome database file $dnaLargeProteinGenomeDB does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $dnaLargeDiamondDB ]
+then
+    echo "  DIAMOND large DNA database file $dnaLargeDiamondDB does not exist!" >> $log
+    exit 1
+fi
+
 if [ ! -f $rnaProteinGenomeDB ]
 then
-    echo "  RNA Protein/genome database file $rnaProteinGenomeDB does not exist!" >> $log
+    echo "  RNA protein/genome database file $rnaProteinGenomeDB does not exist!" >> $log
     exit 1
 fi
 
