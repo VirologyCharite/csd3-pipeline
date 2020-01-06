@@ -64,10 +64,19 @@ gitpull:
 	cd ../bih-pipeline && git pull
 
 html: gitpull preamble \
-    html-civ-dna html-civ-dna-large \
-    html-civ-dna-encephalitis html-civ-dna-large-encephalitis \
-    html-civ-rna html-civ-rna-encephalitis
-tar: tar-civ-dna tar-civ-dna-large tar-civ-dna-encephalitis tar-civ-dna-large-encephalitis tar-civ-rna tar-civ-rna-encephalitis
+    html-civ-dna \
+    html-civ-dna-large \
+    html-civ-dna-encephalitis \
+    html-civ-dna-large-encephalitis \
+    html-civ-rna \
+    html-civ-rna-encephalitis
+
+tar: tar-civ-dna \
+     tar-civ-dna-large \
+     tar-civ-dna-encephalitis \
+     tar-civ-dna-large-encephalitis \
+     tar-civ-rna \
+     tar-civ-rna-encephalitis
 
 html-civ-dna:
 	find [DW]_* -name summary-proteins | \
@@ -236,7 +245,7 @@ tar-civ-rna-encephalitis:
 
 upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
-	scp results-civ-[dr]na{,-encephalitis}.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
+	scp results-*.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
 	ssh -A $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'cd $(REPO_DIR) && git pull'"
 
