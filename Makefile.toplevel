@@ -347,6 +347,15 @@ run:
 status:
 	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.*
 
+done:
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.done 2>/dev/null
+
+error:
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.error 2>/dev/null
+
+running:
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.running 2>/dev/null
+
 # See https://chrisalbon.com/python/data_visualization/seaborn_color_palettes/
 # for some possible color palettes.
 colors:
