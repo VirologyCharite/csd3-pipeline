@@ -69,6 +69,7 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --minMatchingReads $minMatchingReads \
+      --minProteinCount $minDnaLargeProteinCount \
       --percentagePositiveCutoff $percentagePositiveCutoff \
       --blacklistFile $blacklistFile \
       --negativeTitleRegex phage > summary-proteins

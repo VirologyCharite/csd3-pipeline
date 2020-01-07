@@ -39,6 +39,7 @@ sampleLogFile=$logDir/sample.log
 blacklistFile=../blacklist
 minMatchingReads=2
 percentagePositiveCutoff=17.0
+minDnaLargeProteinCount=5
 
 civDate=20191204
 dnaProteinGenomeDB=$root/share/civ/$civDate-dna-protein-genome.db
