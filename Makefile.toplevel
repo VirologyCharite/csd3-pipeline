@@ -58,7 +58,7 @@ READ_COUNT_COLORS := --readCountColor "10 \#0173b2" --readCountColor "50 \#de8f0
 all: html tar upload
 
 preamble:
-	summarize-run.py --run ../bih-pipeline/data/runs/$(RUNID).json > $(PREAMBLE_FILE)
+	summarize-run.py --run $(RUNID) > $(PREAMBLE_FILE)
 
 gitpull:
 	cd ../bih-pipeline && git pull
