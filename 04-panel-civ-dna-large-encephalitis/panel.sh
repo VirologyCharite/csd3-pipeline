@@ -69,7 +69,6 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --minMatchingReads $minMatchingReads \
-      --minProteinCount $minDnaLargeProteinCount \
       --percentagePositiveCutoff $percentagePositiveCutoff \
       --blacklistFile $blacklistFile \
       --titleRegex "$ENCEPHALITIS_REGEX" \
@@ -80,6 +79,7 @@ function panel()
     echo summary-proteins | \
         proteins-to-pathogens-civ.py \
             --proteinGenomeDatabase $dnaLargeProteinGenomeDB \
+            --minProteinCount $minDnaLargeProteinCount \
             --taxonomyDatabase $taxonomyDB \
             > $out
     echo "  proteins-to-pathogens-civ.py DNA large stopped at $(date)" >> $log

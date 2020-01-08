@@ -69,7 +69,6 @@ function panel()
       --outputDir $outputDir \
       --maxTitles 150 \
       --minMatchingReads $minMatchingReads \
-      --minProteinCount $minDnaLargeProteinCount \
       --percentagePositiveCutoff $percentagePositiveCutoff \
       --blacklistFile $blacklistFile \
       --negativeTitleRegex phage > summary-proteins
@@ -79,6 +78,7 @@ function panel()
     echo summary-proteins | \
         proteins-to-pathogens-civ.py \
             --proteinGenomeDatabase $dnaLargeProteinGenomeDB \
+            --minProteinCount $minDnaLargeProteinCount \
             --taxonomyDatabase $taxonomyDB \
             > $out
     echo "  proteins-to-pathogens-civ.py stopped at $(date)" >> $log
