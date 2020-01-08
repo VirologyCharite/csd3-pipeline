@@ -23,6 +23,9 @@ DNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-protein-genome.db
 DNA_LARGE_PROTEIN_GENOME_DB := $(CIV_DIR)/20200106-dna-protein-genome.db
 RNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-rna-protein-genome.db
 
+# For the large DNA database panels.
+DNA_LARGE_MIN_PROTEIN_COUNT := 5
+
 # The following must match the taxonomyDB variable in common.sh
 TAXONOMY_DB := $(CIV_DIR)/$(CIV_DATE)-taxonomy.db
 
@@ -102,6 +105,7 @@ html-civ-dna-large:
         grep 04-panel-civ-dna-large/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
             --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
@@ -160,6 +164,7 @@ html-civ-dna-large-encephalitis:
         grep 04-panel-civ-dna-large-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
             --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \

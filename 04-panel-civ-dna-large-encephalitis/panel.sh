@@ -76,10 +76,13 @@ function panel()
     echo "  alignment-panel-civ.py DNA large stopped at $(date)" >> $log
 
     echo "  proteins-to-pathogens-civ.py DNA large started at $(date)" >> $log
+    # Note that we do not pass --minProteinCount here, though we use it in
+    # ../Makefile.toplevel when making the HTML output. That's because I'd
+    # like to see the viruses in the summary-virus file even if they have a
+    # low number of matching proteins. But not see them in the HTML.
     echo summary-proteins | \
         proteins-to-pathogens-civ.py \
             --proteinGenomeDatabase $dnaLargeProteinGenomeDB \
-            --minProteinCount $minDnaLargeProteinCount \
             --taxonomyDatabase $taxonomyDB \
             > $out
     echo "  proteins-to-pathogens-civ.py DNA large stopped at $(date)" >> $log
