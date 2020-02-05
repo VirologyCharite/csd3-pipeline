@@ -33,6 +33,7 @@ clean-trim:
 clean-flash:
 	rm -fr \
                007-flash/*.fastq.gz \
+               007-flash/*.fastq \
                007-flash/out.* \
                007-flash/flash.std{err,out} \
                007-flash/slurm-*.out

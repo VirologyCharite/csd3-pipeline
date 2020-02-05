@@ -12,6 +12,8 @@ esac
 TOP=$(/bin/pwd)
 MAKEFILE=../csd3-pipeline/Makefile.toplevel
 
+FASTQ_FILENAME_CHECKER=../bih-pipeline/bin/check-fastq-filenames.py
+
 for dir in "$@"
 do
     echo "Processing $dir"
@@ -26,19 +28,51 @@ do
 
     cd $dir
 
+    if [ ! -f $FASTQ_FILENAME_CHECKER ]
+    then
+        echo "In $(pwd), could not find $FASTQ_FILENAME_CHECKER" >&2
+        exit 1
+    fi
+
     if [ -f Makefile ]
     then
         echo "  Makefile already exists."
     else
-        if [ ! -f $MAKEFILE ]
+        if [ -f $MAKEFILE ]
         then
-            echo "In $(pwd), could not find $MAKEFILE" >&2
-            exit 1
-        else
             echo "  Making symbolic link to $MAKEFILE"
             ln -s $MAKEFILE Makefile
+        else
+            echo "In $(pwd), could not find $MAKEFILE" >&2
+            exit 1
         fi
     fi
+
+    # Check the names of all FASTQ files (if any) and move them into
+    # sub-directories.
+    first=1
+    for fastq in [DW]_*.fastq.gz
+    do
+        if [ $first -eq 1 ]
+        then
+            # Test all FASTQ filenames. This will exit non-zero if any
+            # filenames cannot be parsed properly (maybe that's too strict,
+            # but let's see).
+            first=0
+            $FASTQ_FILENAME_CHECKER [DW]_*.fastq.gz
+        fi
+
+        subdir=$(echo $fastq | cut -f1-8 -d_)
+        test -d $subdir || mkdir $subdir
+
+        if [ -f $subdir/$fastq ]
+        then
+            echo "In $(pwd), FASTQ file $fastq is found both in this directory and in $subdir!" >&2
+            exit 1
+        else
+            mv $fastq $subdir
+        fi
+    done
 
     cd $TOP
 done
