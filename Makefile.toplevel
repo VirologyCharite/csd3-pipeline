@@ -33,10 +33,9 @@ ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
 
 PREAMBLE_FILE := summary-preamble.html
 
-# The 'terry' name in the following will need to be changed if Barbara ever
-# starts uploading from Cambridge to civnb.info (suggest grepping local
-# username from a config file to pull out remote username).
-UPLOAD_USERID := terry
+# The civnb.info user name. We only know about two names since there are
+# only two Cambridge accounts (Terry, Barbara) that could be doing this.
+UPLOAD_USERID := $(shell test $$USER = tcj25 && echo terry || echo barbara)
 UPLOAD_HOST := civnb.info
 UPLOAD_DIR := /1GB/diagnostics/tmp
 REPO_DIR := /1GB/diagnostics/bih-pipeline
