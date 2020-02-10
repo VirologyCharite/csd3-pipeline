@@ -41,17 +41,22 @@ UPLOAD_DIR := /1GB/diagnostics/tmp
 REPO_DIR := /1GB/diagnostics/bih-pipeline
 UNTAR_SCRIPT := /1GB/diagnostics/bih-pipeline/bin/untar-results.sh
 
-# It's possible that no virus-civ-dna-encephalitis.png,
-# virus-civ-dna-large-encephalitis.png or virus-civ-rna-encephalitis.png is
-# created due to no matching encephalitis viruses. So, make variables that
-# contains the encephalitis PNG file names only if they exist.
+# It's possible that the PNG panel files do not exist due to no (or
+# insufficiently) matching viruses. So, use variables that contains the
+# PNG file names only if they exist.
+DNA_PNG_FILE := $(shell test -f virus-civ-dna.png && echo virus-civ-dna.png)
+DNA_LARGE_PNG_FILE := $(shell test -f virus-civ-dna-large.png && echo virus-civ-dna-large.png)
 DNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-dna-encephalitis.png && echo virus-civ-dna-encephalitis.png)
 DNA_LARGE_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-dna-large-encephalitis.png && echo virus-civ-dna-large-encephalitis.png)
+RNA_PNG_FILE := $(shell test -f virus-civ-rna.png && echo virus-civ-rna.png)
 RNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-rna-encephalitis.png && echo virus-civ-rna-encephalitis.png)
 
-# Similarly, there may be no encephalitis panels.
+# Similarly, there may be no panels.
+DNA_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna/out)
+DNA_LARGE_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna-large/out)
 DNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna-encephalitis/out)
 DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna-large-encephalitis/out)
+RNA_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-rna/out)
 RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-rna-encephalitis/out)
 
 # See the 'colors' target at bottom for how I made the following color list.
@@ -201,48 +206,48 @@ html-civ-rna-encephalitis:
 
 tar-civ-dna:
 	tar cfj results-civ-dna.tar.bz2 \
-            [DW]_*/pipelines/standard/04-panel-civ-dna/out \
             index-civ-dna.html \
-            virus-civ-dna.png \
+            $(DNA_PANEL_OUT_DIRS) \
+            $(DNA_PNG_FILE) \
             samples-civ-dna.index \
             pathogen-data-civ-dna
 
 tar-civ-dna-large:
 	tar cfj results-civ-dna-large.tar.bz2 \
-            [DW]_*/pipelines/standard/04-panel-civ-dna-large/out \
             index-civ-dna-large.html \
-            virus-civ-dna-large.png \
+            $(DNA_LARGE_PANEL_OUT_DIRS) \
+            $(DNA_LARGE_PNG_FILE) \
             samples-civ-dna-large.index \
             pathogen-data-civ-dna-large
 
 tar-civ-rna:
 	tar cfj results-civ-rna.tar.bz2 \
-            [DW]_*/pipelines/standard/04-panel-civ-rna/out \
             index-civ-rna.html \
-            virus-civ-rna.png \
+            $(RNA_PANEL_OUT_DIRS) \
+            $(RNA_PNG_FILE) \
             samples-civ-rna.index \
             pathogen-data-civ-rna
 
 tar-civ-dna-encephalitis:
 	tar cfj results-civ-dna-encephalitis.tar.bz2 \
-            $(DNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
             index-civ-dna-encephalitis.html \
+            $(DNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
             $(DNA_ENCEPHALITIS_PNG_FILE) \
             samples-civ-dna-encephalitis.index \
             pathogen-data-civ-dna-encephalitis
 
 tar-civ-dna-large-encephalitis:
 	tar cfj results-civ-dna-large-encephalitis.tar.bz2 \
-            $(DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS) \
             index-civ-dna-large-encephalitis.html \
+            $(DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS) \
             $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
             samples-civ-dna-large-encephalitis.index \
             pathogen-data-civ-dna-large-encephalitis
 
 tar-civ-rna-encephalitis:
 	tar cfj results-civ-rna-encephalitis.tar.bz2 \
-            $(RNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
             index-civ-rna-encephalitis.html \
+            $(RNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             samples-civ-rna-encephalitis.index \
             pathogen-data-civ-rna-encephalitis
