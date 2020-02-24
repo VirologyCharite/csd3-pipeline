@@ -46,7 +46,7 @@ function hcov()
     echo "  compare consensuses started at $(date)." >> $log
     cat $out $hcovReference |
         compare-sequences.py --align --showDiffs --aligner mafft > \
-        $task-reference-consensus-comparison.txt
+        $task-reference-consensus-comparison.txt 2>> $log
     echo "  compare consensuses stopped at $(date)." >> $log
 
     rm -r tmp
