@@ -52,6 +52,8 @@ rnaDiamondDB=$root/share/civ/$civDate-rna-proteins.dmnd
 
 taxonomyDB=$root/share/civ/$civDate-taxonomy.db
 
+hcovReference=$root/share/civ/hcov-reference.fasta
+
 if [ ! -f $dnaProteinGenomeDB ]
 then
     echo "  DNA protein/genome database file $dnaProteinGenomeDB does not exist!" >> $log
@@ -91,6 +93,12 @@ fi
 if [ ! -f $taxonomyDB ]
 then
     echo "  Taxonomy database file $taxonomyDB does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $hcovReference ]
+then
+    echo "  Human CoV reference file $hcovReference does not exist!" >> $log
     exit 1
 fi
 

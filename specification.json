@@ -12,6 +12,13 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "hcov",
+            "dependencies": ["trim"],
+            "cwd": "006-hcov",
+            "script": "./sbatch.sh",
+            "skip": true
+        },
+        {
             "name": "flash",
             "dependencies": ["trim"],
             "cwd": "007-flash",
