@@ -11,7 +11,7 @@ fastq=../005-trim/$task.trim.fastq.gz
 fastq2=../005-trim/$task2.trim.fastq.gz
 
 log=$logDir/$task.log
-out=consensus.fasta
+out=$task-consensus.fasta
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
