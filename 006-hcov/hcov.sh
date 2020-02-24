@@ -27,7 +27,7 @@ function hcov()
     # Remove the output file and any other pre-existing hcov output files
     # before doing anything, in case we fail for some reason.
     rm -f $out $task.bam $task.bam.bai $task.vcf.gz $task.vcf.gz.tbi
-    rm -f $task-reference-consensus-comparison.txt
+    rm -f $task-reference-consensus-comparison.txt $task-coverage.txt
     rm -fr tmp
     mkdir tmp
 
@@ -50,6 +50,10 @@ function hcov()
         compare-sequences.py --align --showDiffs --aligner mafft > \
         $task-reference-consensus-comparison.txt 2>> $log
     echo "  compare consensuses stopped at $(date)." >> $log
+
+    echo "  SAM coverage depth started at $(date)." >> $log
+    sam-coverage-depth.py $task.bam > $task-coverage.txt 2>> $log
+    echo "  SAM coverage depth stopped at $(date)." >> $log
 
     rm -r tmp
 }
