@@ -21,7 +21,7 @@ function hcov()
 {
     # Remove the output file and any other pre-existing hcov output files
     # before doing anything, in case we fail for some reason.
-    rm -f $out $task.bam $task-consensus.fasta $task.vcf.gz tmp $task-reference-consensus-comparison.txt
+    rm -f $out $task.bam $task.vcf.gz tmp $task-reference-consensus-comparison.txt
     mkdir tmp
 
     echo "  run-bowtie2.py started at $(date)." >> $log
@@ -35,11 +35,11 @@ function hcov()
     echo "  make-consensus.py started at $(date)." >> $log
     make-consensus.py --reference $hcovReference \
         --id "$task-consensus" \
-        --vcfFile $task.vcf.gz --log > $task-consensus.fasta 2>> $log
+        --vcfFile $task.vcf.gz --log > $out 2>> $log
     echo "  make-consensus.py stopped at $(date)." >> $log
 
     echo "  compare consensuses started at $(date)." >> $log
-    cat $task-consensus.fasta $hcovReference |
+    cat $out $hcovReference |
         compare-sequences.py --align --showDiffs --aligner mafft > \
         $task-reference-consensus-comparison.txt
     echo "  compare consensuses stopped at $(date)." >> $log
