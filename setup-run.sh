@@ -62,7 +62,7 @@ do
             $FASTQ_FILENAME_CHECKER [DW]_*.fastq.gz
         fi
 
-        subdir=$(echo $fastq | cut -f1-8 -d_)
+        subdir=$(echo $fastq | cut -f1-7 -d_)
         test -d $subdir || mkdir $subdir
 
         if [ -f $subdir/$fastq ]
