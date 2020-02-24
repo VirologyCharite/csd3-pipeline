@@ -4,7 +4,12 @@ set -Eeuo pipefail
 
 . ../common.sh
 
-task=$1
+case $# in
+    0) task=$(basename ../005-trim/*_R1_*.trim.fastq.gz | cut -f1 -d.);;
+    1) task=$1;;
+    *) echo "$(basename $0): Unexpectedly called with args $@" >> $log; exit 1;;
+esac
+          
 task2=$(mateFile $task)
 
 fastq=../005-trim/$task.trim.fastq.gz
