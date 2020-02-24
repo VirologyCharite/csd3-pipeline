@@ -30,6 +30,13 @@ clean-trim:
                005-trim/*.settings \
                005-trim/slurm-*.out
 
+clean-hcov:
+	rm -fr \
+               006-hcov/*.bam* \
+               006-hcov/*.vcf* \
+               006-hcov/*-consensus*
+               006-hcov/tmp
+
 clean-flash:
 	rm -fr \
                007-flash/*.fastq.gz \

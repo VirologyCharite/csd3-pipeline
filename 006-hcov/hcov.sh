@@ -26,7 +26,9 @@ function hcov()
 {
     # Remove the output file and any other pre-existing hcov output files
     # before doing anything, in case we fail for some reason.
-    rm -f $out $task.bam $task.vcf.gz tmp $task-reference-consensus-comparison.txt
+    rm -f $out $task.bam $task.bam.bai $task.vcf.gz $task.vcf.gz.tbi
+    rm -f $task-reference-consensus-comparison.txt
+    rm -fr tmp
     mkdir tmp
 
     echo "  run-bowtie2.py started at $(date)." >> $log
