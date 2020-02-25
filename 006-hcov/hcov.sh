@@ -28,6 +28,7 @@ function hcov()
     # before doing anything, in case we fail for some reason.
     rm -f $out $task.bam $task.bam.bai $task.vcf.gz $task.vcf.gz.tbi
     rm -f $task-reference-consensus-comparison.txt $task-coverage.txt
+    rm -f $task-read-count.txt
     rm -fr tmp
     mkdir tmp
 
@@ -54,6 +55,10 @@ function hcov()
     echo "  SAM coverage depth started at $(date)." >> $log
     sam-coverage-depth.py $task.bam > $task-coverage.txt 2>> $log
     echo "  SAM coverage depth stopped at $(date)." >> $log
+
+    echo "  SAM read count started at $(date)." >> $log
+    samtools view -c $task.bam > $task-read-count.txt 2>> $log
+    echo "  SAM read cound stopped at $(date)." >> $log
 
     rm -r tmp
 }

@@ -252,6 +252,9 @@ tar-civ-rna-encephalitis:
             samples-civ-rna-encephalitis.index \
             pathogen-data-civ-rna-encephalitis
 
+zip-hcov:
+	./zip-hcov.sh
+
 upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
 	scp results-*.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID)
