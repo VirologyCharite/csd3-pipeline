@@ -253,7 +253,7 @@ tar-civ-rna-encephalitis:
             pathogen-data-civ-rna-encephalitis
 
 zip-hcov:
-	./zip-hcov.sh
+	../csd3-pipeline/zip-hcov.sh
 
 upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
