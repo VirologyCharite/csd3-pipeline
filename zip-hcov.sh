@@ -11,8 +11,8 @@ mkdir $tmpdir/$zipbase
 for i in [DW]_*/pipelines/standard/006-hcov
 do
     sample=$(echo $i | cut -f1 -d/)
-    mkdir $tmpdir/$zipbase/$i
-    cp $i/*.{bam,vcf}* $i/*-consensus.fasta $i/*.txt $tmpdir/$zipbase/$i
+    mkdir $tmpdir/$zipbase/$sample
+    cp $i/*.{bam,vcf}* $i/*-consensus.fasta $i/*.txt $tmpdir/$zipbase/$sample
 done
 
 cd $tmpdir
