@@ -37,6 +37,7 @@ clean-hcov:
                006-hcov/*-consensus* \
                006-hcov/*-coverage.txt \
                006-hcov/*-read-count.txt \
+               006-hcov/*-alignment.fasta \
                006-hcov/tmp
 
 clean-flash:
