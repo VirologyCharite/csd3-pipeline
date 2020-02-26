@@ -94,12 +94,6 @@ then
     exit 1
 fi
 
-if [ ! -f $hcovReference ]
-then
-    echo "  Human CoV reference file $hcovReference does not exist!" >> $log
-    exit 1
-fi
-
 # A simple way to set defaults for our SP_* variables, without causing
 # problems when e.g., using test, if set -ue is active (causing scripts to
 # exit with status 1 and no explanation).
