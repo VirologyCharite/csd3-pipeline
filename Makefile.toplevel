@@ -359,9 +359,6 @@ clean-panel-on: clean-panel
 run:
 	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
 
-hcov:
-	@for i in $(DIRS); do cd $$i/006-hcov; sbatch-run.py --job $$(basename $$i | cut -f1-3 -d_) --time 00:25:00 --exclusive ./hcov.sh; cd ../../../..; done
-
 status:
 	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.*
 

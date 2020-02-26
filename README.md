@@ -95,3 +95,55 @@ for this to run seamlessly and not ask you for a password.
 
 Results are then available at
 [https://civnb.info/diagnostics/](https://civnb.info/diagnostics/).
+
+## Making BAM files and consensuses
+
+If you want to make a BAM file and consensus against a specific reference,
+you can do this once the trimming of the FASTQ for the sample(s) in question
+has completed.
+
+You then `cd` into the `006-hcov` directory of each sample:
+
+```sh
+$ cd D_200219_4_555_5_isolate_RNA/pipelines/standard/006-hcov
+```
+
+Then run the `hcov.sh` script, giving a reference FASTA file as its only
+argument, or put your reference into `reference.fasta` and run with no
+arguments. Note that you might want to run this on an exclusive machine
+so that the `bowtie2` process (and things it launches) can use 32 cores
+and you don't clog up a login machine:
+
+```sh
+sbatch-run.py --job hcov --time 00:30:00 --exclusive ./hcov.sh
+```
+
+The `hcov.sh` script will create you a BAM and consensus file, and various
+others. E.g.:
+
+```
+D_200219_4_555_5_isolate_RNA_S4_R1_001-alignment.fasta
+D_200219_4_555_5_isolate_RNA_S4_R1_001-consensus.fasta
+D_200219_4_555_5_isolate_RNA_S4_R1_001-coverage.txt
+D_200219_4_555_5_isolate_RNA_S4_R1_001-read-count.txt
+D_200219_4_555_5_isolate_RNA_S4_R1_001-reference-consensus-comparison.txt
+D_200219_4_555_5_isolate_RNA_S4_R1_001.bam
+D_200219_4_555_5_isolate_RNA_S4_R1_001.bam.bai
+D_200219_4_555_5_isolate_RNA_S4_R1_001.vcf.gz
+D_200219_4_555_5_isolate_RNA_S4_R1_001.vcf.gz.tbi
+```
+
+You can then do whatever you like with those files.
+
+For convenience, if you do the above on several samples, you can then go to
+the top level of the run and type
+
+```sh
+$ make zip-hcov
+```
+
+Which will make you a zip file with a name like
+`200220-nCoV-isolates-hcov.zip` (the `200220-nCoV-isolates` here is the run
+id) that you can send to someone. This will have the BAM and consensus (and
+more, as above) from all the `006-hcov` sub-directories where you made
+consensuses.
