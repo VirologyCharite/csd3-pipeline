@@ -17,7 +17,7 @@ do
     if ls $i/*.bam >/dev/null 2>&1
     then
         mkdir $tmpdir/$zipbase/$sample
-        cp $i/*.{bam,vcf}* $i/*.txt $i/*.fasta $i/*.fasta.fai $tmpdir/$zipbase/$sample
+        cp $i/*.{bam,vcf}* $i/*.txt $i/*.fasta $tmpdir/$zipbase/$sample
     fi
 done
 
