@@ -93,6 +93,7 @@ function hcov()
         --reference $hcovReference \
         --callHaplotypesGATK --out $task.bam --markDuplicatesGATK \
         --vcfFile $task.vcf.gz --fastq1 $fastq --fastq2 $fastq2 \
+        --bowtie2Args '--no-unal --local' \
         --removeDuplicates --tempdir tmp --verbose --log 2>> $log
     echo "  run-bowtie2.py stopped at $(date)." >> $log
 
