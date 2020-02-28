@@ -105,8 +105,8 @@ function hcov()
 
     echo "  compare consensuses started at $(date)." >> $log
     cat $out $hcovReference |
-        compare-sequences.py --align --showDiffs --aligner mafft \
-        --alignmentFile $task-alignment.fasta > \
+        compare-sequences.py --align --showDiffs --showAmbiguous \
+        --aligner mafft --alignmentFile $task-alignment.fasta > \
         $task-reference-consensus-comparison.txt 2>> $log
     echo "  compare consensuses stopped at $(date)." >> $log
 
