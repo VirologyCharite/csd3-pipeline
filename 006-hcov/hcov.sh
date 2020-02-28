@@ -110,9 +110,9 @@ function hcov()
         $task-reference-consensus-comparison.txt 2>> $log
     echo "  compare consensuses stopped at $(date)." >> $log
 
-    echo "  SAM coverage depth started at $(date)." >> $log
-    sam-coverage-depth.py $task.bam > $task-coverage.txt 2>> $log
-    echo "  SAM coverage depth stopped at $(date)." >> $log
+    # echo "  SAM coverage depth started at $(date)." >> $log
+    # sam-coverage-depth.py $task.bam > $task-coverage.txt 2>> $log
+    # echo "  SAM coverage depth stopped at $(date)." >> $log
 
     echo "  SAM read count started at $(date)." >> $log
     samtools view -c $task.bam > $task-read-count.txt 2>> $log
