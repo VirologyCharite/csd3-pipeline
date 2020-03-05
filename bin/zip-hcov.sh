@@ -2,10 +2,10 @@
 
 set -Eeuo pipefail
 
-tmpdir=$(mktemp -d)
-here=$(/bin/pwd)
-zipbase=$(basename $here)-hcov
+top=$(/bin/pwd)
+zipbase=$(basename $top)-hcov
 
+tmpdir=$(mktemp -d)
 mkdir $tmpdir/$zipbase
 
 for i in [DW]_*/pipelines/standard/006-hcov
@@ -22,5 +22,5 @@ do
 done
 
 cd $tmpdir
-zip -r $here/$zipbase.zip .
+zip -r $top/$zipbase.zip .
 rm -r $tmpdir

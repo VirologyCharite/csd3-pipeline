@@ -1,0 +1,34 @@
+{
+    "steps": [
+        {
+            "name": "start",
+            "cwd": "00-start",
+            "script": "./start.sh"
+        },
+        {
+            "name": "trim",
+            "dependencies": ["start"],
+            "cwd": "005-trim",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "hcov",
+            "dependencies": ["trim"],
+            "cwd": "006-hcov",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "stop",
+            "dependencies": ["hcov"],
+            "cwd": "06-stop",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "error",
+            "dependencies": ["stop"],
+            "error step": true,
+            "cwd": "07-error",
+            "script": "./sbatch.sh"
+        }
+    ]
+}

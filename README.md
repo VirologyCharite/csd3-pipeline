@@ -16,6 +16,10 @@ the reason why).
 
 ## Running on csd3
 
+There are various `make` commands below. It's good to know about the `-n`
+option to `make`, which will print out what would be done if you didn't use
+`-n`. I (Terry) use `make -n TARGET` often, and so should you!
+
 You need to do all the following on the Cambridge cluster.
 
 ### Make a subdirectory for the run
@@ -40,9 +44,10 @@ $ cd projects/charite
 $ ./setup-run.sh 200101
 ```
 
-The `setup-run.sh` script will make a `Makefile` (symbolic link) in the
-`200101` directory and also move all the FASTQ you transferred into
-sub-directories, assuming their file names can be parsed.
+The `setup-run.sh` script will put a `Makefile` (which is in fact a
+symbolic link to `Makefile.toplevel` in this repo) in the `200101`
+directory and also move all the FASTQ you transferred into sub-directories,
+assuming their filenames can be parsed.
 
 ### Copy the pipeline into each sample sub-directory
 
@@ -53,7 +58,41 @@ $ cd projects/charite
 $ ./setup-pipeline.sh 200101/[DW]_*
 ```
 
+### Set the type of each sample to be run.
+
+This only needs to be done if some of the runs should only make a human
+coronavirus (SARS-CoV-2) consensus and BAM files. If you don't do this
+step, the whole pipeline will be run and may generate many massive FASTQ
+output files containing essentially the same reads.
+
+To set a sample run to just run the HCoV pipeline:
+
+```sh
+$ set-run-type.sh hcov DIRNAME [DIRNAME...]
+```
+
+To set a sample run to run the standard pipeline:
+
+```sh
+$ set-run-type.sh standard DIRNAME [DIRNAME...]
+```
+
+As mentioned, `standard` is the default.
+
+You can see the run types for all sub-directories via
+
+```sh
+$ make print-standard:
+$ make print-hcov:
+```
+
+The run type is stored in a `run-type` file in each sample directory. It
+will either contain `hcov` or `standard`.
+
 ### Start the pipeline
+
+Once you have set the run types (if any are non-standard), you can run the
+pipeline:
 
 ```sh
 $ cd projects/charite/200101

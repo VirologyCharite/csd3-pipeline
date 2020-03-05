@@ -1,10 +1,15 @@
-.PHONY: all run force status cancel unfinished clean clobber
+.PHONY: all run run-standard run-hcov force status cancel unfinished clean clobber
 
 all:
 	@echo "There is no default make target. Use 'make run' to run the SLURM pipeline."
 
-run:
+run: run-standard
+
+run-standard:
 	slurm-pipeline.py --specification specification.json > status.json
+
+run-hcov:
+	slurm-pipeline.py --specification specification-hcov.json > status.json
 
 force:
 	slurm-pipeline.py --specification specification.json --force > status.json
