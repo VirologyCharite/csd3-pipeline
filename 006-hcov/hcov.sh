@@ -88,8 +88,24 @@ function hcov()
     rm -fr tmp
     mkdir tmp
 
+    # If there is a reference.fasta file here, use it as a reference, else
+    # we'll use the pre-set value in $hcovReference set in ../common.sh
+    if [ -f reference.fasta ]
+    then
+        echo "  Using local 'reference.fasta' as a reference." >> $log
+        hcovReference=reference.fasta
+        # Let Bowtie2 build its own index from the reference.
+        bt2IndexArgs=
+    else
+        echo "  Using default $hcovReference as a reference." >> $log
+        bt2IndexArgs="--index $hcovReferenceIndex"
+    fi
+
+    echo "  Reference id: $(head -n 1 < $hcovReference | cut -c2-)" >> $log
+
     echo "  run-bowtie2.py started at $(date)." >> $log
     run-bowtie2.py \
+        $bt2IndexArgs \
         --reference $hcovReference \
         --callHaplotypesGATK --out $task.bam --markDuplicatesGATK \
         --vcfFile $task.vcf.gz --fastq1 $fastq --fastq2 $fastq2 \
@@ -110,6 +126,8 @@ function hcov()
         $task-reference-consensus-comparison.txt 2>> $log
     echo "  compare consensuses stopped at $(date)." >> $log
 
+    # This is too slow to always run by default!
+    #
     # echo "  SAM coverage depth started at $(date)." >> $log
     # sam-coverage-depth.py $task.bam > $task-coverage.txt 2>> $log
     # echo "  SAM coverage depth stopped at $(date)." >> $log

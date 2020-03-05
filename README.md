@@ -68,13 +68,13 @@ output files containing essentially the same reads.
 To set a sample run to just run the HCoV pipeline:
 
 ```sh
-$ set-run-type.sh hcov DIRNAME [DIRNAME...]
+$ ./set-run-type.sh hcov DIRNAME [DIRNAME...]
 ```
 
 To set a sample run to run the standard pipeline:
 
 ```sh
-$ set-run-type.sh standard DIRNAME [DIRNAME...]
+$ ./set-run-type.sh standard DIRNAME [DIRNAME...]
 ```
 
 As mentioned, `standard` is the default.
@@ -86,13 +86,36 @@ $ make print-standard:
 $ make print-hcov:
 ```
 
+You should do this to check that the samples you expect to be run using the
+hcov pipeline are recognized as such.
+
 The run type is stored in a `run-type` file in each sample directory. It
 will either contain `hcov` or `standard`.
 
+### Put reference files in place for HCoV processing
+
+For runs that are of type `hcov`, a reference coronavirus sequence is
+needed. By default the sequence in
+`/rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/hcov/hcov-reference.fasta`
+will be used. This is currently a symbolic link to `EPI_ISL_402123.fasta` file
+(sequence id `BetaCoV/Wuhan/IPBCAMS-WH-01/2019|EPI_ISL_402123`) in the
+[data/sequences](https://github.com/VirologyCharite/2019-nCoV-sequences/tree/master/data/sequences)
+directory of the
+[2019-nCoV-sequences](https://github.com/VirologyCharite/2019-nCoV-sequences/)
+repo.
+
+If you do not want to use this default reference for a sample, you can put
+a file (or a symbolic link) called `reference.fasta` into the individual
+`006-hcov` directory for that sample. You have to do this for each sample
+that should be aligned against a non-default reference. The reference will
+be aligned against using Bowtie2 and a consensus will be made based on
+this. There is no need to build a Bowtie2 index for your reference, that
+will be done automatically. Just put a `reference.fasta` in place.
+
 ### Start the pipeline
 
-Once you have set the run types (if any are non-standard), you can run the
-pipeline:
+Once you have set the run types (if any are non-standard) and hcov
+reference files, you can run the pipeline:
 
 ```sh
 $ cd projects/charite/200101

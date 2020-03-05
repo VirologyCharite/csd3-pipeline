@@ -6,10 +6,17 @@ set -Eeuo pipefail
 logDir=../logs
 log=$logDir/common.sh.stderr
 root=/rds/project/djs200/rds-djs200-acorg/bt/root
+civDir=$root/share/civ
 
 if [ ! -d $root ]
 then
     echo "  Root directory '$root' does not exist." >> $log
+    exit 1
+fi
+
+if [ ! -d $civDir ]
+then
+    echo "  CIV directory '$civDir' does not exist." >> $log
     exit 1
 fi
 
@@ -40,17 +47,22 @@ blacklistFile=../blacklist
 minMatchingReads=2
 percentagePositiveCutoff=17.0
 
+# HCoV reference sequence to be used by default in the 006-hcov/hcov.sh
+# script if no reference.fasta file is present in that directory.
+hcovReference=$civDir/hcov/hcov-reference.fasta
+hcovReferenceIndex=$civDir/hcov/hcov-reference.1.bt2
+
 civDate=20191204
-dnaProteinGenomeDB=$root/share/civ/$civDate-dna-protein-genome.db
-dnaDiamondDB=$root/share/civ/$civDate-dna-proteins.dmnd
+dnaProteinGenomeDB=$civDir/$civDate-dna-protein-genome.db
+dnaDiamondDB=$civDir/$civDate-dna-proteins.dmnd
 
-dnaLargeProteinGenomeDB=$root/share/civ/20200106-dna-large-protein-genome.db
-dnaLargeDiamondDB=$root/share/civ/20200106-dna-large-proteins.dmnd
+dnaLargeProteinGenomeDB=$civDir/20200106-dna-large-protein-genome.db
+dnaLargeDiamondDB=$civDir/20200106-dna-large-proteins.dmnd
 
-rnaProteinGenomeDB=$root/share/civ/$civDate-rna-protein-genome.db
-rnaDiamondDB=$root/share/civ/$civDate-rna-proteins.dmnd
+rnaProteinGenomeDB=$civDir/$civDate-rna-protein-genome.db
+rnaDiamondDB=$civDir/$civDate-rna-proteins.dmnd
 
-taxonomyDB=$root/share/civ/$civDate-taxonomy.db
+taxonomyDB=$civDir/$civDate-taxonomy.db
 
 if [ ! -f $dnaProteinGenomeDB ]
 then
@@ -91,6 +103,18 @@ fi
 if [ ! -f $taxonomyDB ]
 then
     echo "  Taxonomy database file $taxonomyDB does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $hcovReference ]
+then
+    echo "  HCoV reference file $hcovReference does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $hcovReferenceIndex ]
+then
+    echo "  HCoV reference Bowtie2 index file $hcovReferenceIndex does not exist!" >> $log
     exit 1
 fi
 
