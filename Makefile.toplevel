@@ -321,10 +321,10 @@ tar-hcov-individual:
 
 upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
-	@if test -n "$(STANDARD_DIRS)"; then \
+	@if ls results-*.tar.bz2 >/dev/null 2>&1; then \
             scp results-*.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
         fi
-	@if test -n "$(HCOV_DIRS)"; then \
+	@if ls *-hcov.zip >/dev/null 2>&1; then \
             scp *-hcov.zip $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
         fi
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
