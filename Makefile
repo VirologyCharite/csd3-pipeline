@@ -43,7 +43,8 @@ clean-hcov:
                006-hcov/*-coverage.txt \
                006-hcov/*-read-count.txt \
                006-hcov/*-alignment.fasta \
-               006-hcov/tmp
+               006-hcov/tmp \
+               006-hcov/slurm-*.out
 
 clean-flash:
 	rm -fr \
