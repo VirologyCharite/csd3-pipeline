@@ -42,7 +42,7 @@ then
     else
         # No need to get an exclusive machine. On a busy SLURM system it's
         # faster to just get one CPU and do it that way.
-        exclusive=
+        exclusive=--exclusive
         echo "  Not simulating or skipping. Not requesting exclusive node." >> $log
     fi
 
