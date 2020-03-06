@@ -4,6 +4,8 @@ set -Eeuo pipefail
 
 . ../common.sh
 
+bt2IndexArgs=
+
 case $# in
     0)
         # No args. Figure out the task name and look for the reference in
@@ -23,23 +25,26 @@ case $# in
 
     1)
         # If the arg is a file, use it as the reference and figure out the
-        # task. Else use it as the task and look for the reference in
+        # task. Else use it as the task name and look for the reference in
         # reference.fasta.
         if [ -f $1 ]
         then
             hcovReference=$1
             task=$(basename ../005-trim/*_R1_*.trim.fastq.gz | cut -f1 -d.)
+            log=$logDir/$task.log
         else
             task=$1
             log=$logDir/$task.log
 
+            # If there is a reference.fasta file here, use it as a reference, else
+            # we'll use the pre-set value in $hcovReference set in ../common.sh
             if [ -f reference.fasta ]
             then
+                echo "  Using local 'reference.fasta' as a reference." >> $log
                 hcovReference=reference.fasta
             else
-                echo "$(basename $0) called with no reference and reference.fasta is not present." >> $log
-                echo "Usage: $(basename $0) [task] [reference-file.fasta]" >> $log
-                exit 1
+                echo "  Using default $hcovReference as a reference." >> $log
+                bt2IndexArgs="--index $hcovReferenceIndex"
             fi
         fi
         ;;
@@ -71,7 +76,9 @@ task2=$(mateFile $task)
 fastq=../005-trim/$task.trim.fastq.gz
 fastq2=../005-trim/$task2.trim.fastq.gz
 
+# Log should have been set above, so this line should no longer be needed.
 log=$logDir/$task.log
+
 out=$task-consensus.fasta
 
 logStepStart $log
@@ -87,19 +94,6 @@ function hcov()
     rm -f $task-read-count.txt $task-alignment.fasta
     rm -fr tmp
     mkdir tmp
-
-    # If there is a reference.fasta file here, use it as a reference, else
-    # we'll use the pre-set value in $hcovReference set in ../common.sh
-    if [ -f reference.fasta ]
-    then
-        echo "  Using local 'reference.fasta' as a reference." >> $log
-        hcovReference=reference.fasta
-        # Let Bowtie2 build its own index from the reference.
-        bt2IndexArgs=
-    else
-        echo "  Using default $hcovReference as a reference." >> $log
-        bt2IndexArgs="--index $hcovReferenceIndex"
-    fi
 
     echo "  Reference id: $(head -n 1 < $hcovReference | cut -c2-)" >> $log
 
