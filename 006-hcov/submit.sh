@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -J flash-civ
+#SBATCH -J hcov
 #SBATCH -A ACORG-SL2-CPU
 #SBATCH -o slurm-%A.out
 #SBATCH -p skylake
