@@ -434,16 +434,16 @@ run-hcov:
 	@for i in $(HCOV_DIRS); do cd $$i; make $@; cd ../../..; done
 
 status:
-	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.*
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.* 2>/dev/null || true
 
 done:
-	@-ls -l [DW]_*/pipelines/standard/slurm-pipeline.done 2>/dev/null
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.done 2>/dev/null || true
 
 error:
-	@-ls -l [DW]_*/pipelines/standard/slurm-pipeline.error 2>/dev/null
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.error 2>/dev/null || true
 
 running:
-	@-ls -l [DW]_*/pipelines/standard/slurm-pipeline.running 2>/dev/null
+	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.running 2>/dev/null || true
 
 # See https://chrisalbon.com/python/data_visualization/seaborn_color_palettes/
 # for some possible color palettes.

@@ -109,7 +109,7 @@ function hcov()
 
     echo "  make-consensus.py started at $(date)." >> $log
     make-consensus.py --reference $hcovReference \
-        --id "$task-consensus" \
+        --id "$task-consensus" --maskNoCoverage --bam $task.bam \
         --vcfFile $task.vcf.gz --log > $out 2>> $log
     echo "  make-consensus.py stopped at $(date)." >> $log
 
