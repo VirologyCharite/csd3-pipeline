@@ -56,6 +56,8 @@ function map()
         bwa mem -t $nproc $bwaDatabase $fastq > $sam
         echo "  bwa mem (against $bwaDatabaseName) stopped at $(date)" >> $log
 
+        samtools quickcheck $sam
+
         # Extract the unmapped reads.
         echo "  extract unmapped reads started at $(date)" >> $log
         samtools fastq --threads $(nproc) -f 4 $sam > $outUncompressed

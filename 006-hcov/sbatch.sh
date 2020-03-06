@@ -17,7 +17,7 @@ echo "  Dependencies are $SP_DEPENDENCY_ARG" >> $log
 
 if [ -f $out ]
 then
-    if [ "$SP_FORCE" = "1" -a "$SP_SKIP" = "0" ]
+    if [ "$SP_FORCE" = "1" -a "$SP_SKIP" = "0" -a "$SP_SIMULATE" = "0" ]
     then
         schedule=1
         echo "  Output file $out already exists, but SP_FORCE is 1. Will run." >> $log
@@ -37,18 +37,18 @@ if [ $schedule -eq 1 ]
 then
     if [ "$SP_SIMULATE" = "1" -o "$SP_SKIP" = "1" ]
     then
-        exclusive=
-        echo "  Simulating or skipping. Not requesting exclusive node. No way to skip this step." >> $log
+        echo "  Simulating or skipping." >> $log
+        ./hcov.sh $task
+        echo "TASK: $task"
     else
         # No need to get an exclusive machine. On a busy SLURM system it's
         # faster to just get one CPU and do it that way.
         exclusive=--exclusive
         echo "  Not simulating or skipping. Not requesting exclusive node." >> $log
+        jobid=$(sbatch -n 1 $exclusive $SP_DEPENDENCY_ARG $SP_NICE_ARG submit.sh $task | cut -f4 -d' ')
+        echo "TASK: $task $jobid"
+        echo "  Job id is $jobid" >> $log
     fi
-
-    jobid=$(sbatch -n 1 $exclusive $SP_DEPENDENCY_ARG $SP_NICE_ARG submit.sh $task | cut -f4 -d' ')
-    echo "TASK: $task $jobid"
-    echo "  Job id is $jobid" >> $log
 else
     echo "TASK: $task"
 fi

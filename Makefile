@@ -56,12 +56,14 @@ clean-flash:
 clean-spades:
 	rm -fr \
                008-spades/spades.out \
+               008-spades/*.fasta \
                008-spades/*.fasta.gz \
                008-spades/slurm-*.out
 
 clean-map:
 	rm -fr \
                02-map/*.[bs]am \
+               02-map/*-unmapped.fastq \
                02-map/*-unmapped.fastq.gz \
                02-map/slurm-*.out
 
