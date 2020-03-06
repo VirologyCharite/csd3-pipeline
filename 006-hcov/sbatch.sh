@@ -41,8 +41,7 @@ then
         ./hcov.sh $task
         echo "TASK: $task"
     else
-        # No need to get an exclusive machine. On a busy SLURM system it's
-        # faster to just get one CPU and do it that way.
+        # Get an exclusive machine so bowtie2 and MAFFT can use all threads.
         exclusive=--exclusive
         echo "  Not simulating or skipping. Not requesting exclusive node." >> $log
         jobid=$(sbatch -n 1 $exclusive $SP_DEPENDENCY_ARG $SP_NICE_ARG submit.sh $task | cut -f4 -d' ')
