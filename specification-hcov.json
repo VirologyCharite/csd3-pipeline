@@ -18,8 +18,87 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "flash",
+            "dependencies": ["trim"],
+            "cwd": "007-flash",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "map",
+            "dependencies": ["flash"],
+            "cwd": "02-map",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "dedup",
+            "dependencies": ["map"],
+            "cwd": "025-dedup",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "diamond-civ-dna",
+            "dependencies": ["dedup"],
+            "cwd": "03-diamond-civ-dna",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "diamond-civ-dna-large",
+            "dependencies": ["dedup"],
+            "cwd": "03-diamond-civ-dna-large",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "diamond-civ-rna",
+            "dependencies": ["dedup"],
+            "cwd": "03-diamond-civ-rna",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-civ-dna",
+            "dependencies": ["diamond-civ-dna"],
+            "collect": true,
+            "cwd": "04-panel-civ-dna",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-civ-dna-large",
+            "dependencies": ["diamond-civ-dna-large"],
+            "collect": true,
+            "cwd": "04-panel-civ-dna-large",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-civ-rna-hcov",
+            "dependencies": ["diamond-civ-rna"],
+            "collect": true,
+            "cwd": "04-panel-civ-rna-hcov",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-civ-dna-encephalitis",
+            "dependencies": ["diamond-civ-dna"],
+            "collect": true,
+            "cwd": "04-panel-civ-dna-encephalitis",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-civ-dna-large-encephalitis",
+            "dependencies": ["diamond-civ-dna-large"],
+            "collect": true,
+            "cwd": "04-panel-civ-dna-large-encephalitis",
+            "script": "./sbatch.sh"
+        },
+        {
+            "name": "panel-civ-rna-encephalitis",
+            "dependencies": ["diamond-civ-rna"],
+            "collect": true,
+            "cwd": "04-panel-civ-rna-encephalitis",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "stop",
-            "dependencies": ["hcov"],
+            "dependencies": ["panel-civ-dna", "panel-civ-dna-large", "panel-civ-rna-hcov", "panel-civ-dna-encephalitis", "panel-civ-dna-large-encephalitis", "panel-civ-rna-encephalitis"],
+            "collect": true,
             "cwd": "06-stop",
             "script": "./sbatch.sh"
         },

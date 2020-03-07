@@ -11,3 +11,6 @@ acc|GENBANK|ASY03258.1|GENBANK|MF141070|RNA-dependent RNA-polymerase [Norway lut
 acc|GENBANK|ASY03260.1|GENBANK|MF141071|RNA-dependent RNA-polymerase [Norway luteo-like virus 4]
 acc|GENBANK|ASY03259.1|GENBANK|MF141070|coat protein [Norway luteo-like virus 4]
 civ|OKIAV|OKIAV_000680-rdrp|OKIAV|OKIAV_000680|RdRp [OKIAV virus OKIAV_000680]
+civ|GENBANK|YP_008431132.1|GENBANK|NC_022089.1|putative 15-kDa protein [Parvovirus NIH-CQV]
+civ|GENBANK|YP_008431133.1|GENBANK|NC_022089.1|putative replication associated protein [Parvovirus NIH-CQV]
+civ|GENBANK|YP_008431134.1|GENBANK|NC_022089.1|putative capsid protein [Parvovirus NIH-CQV]

@@ -51,13 +51,14 @@ percentagePositiveCutoff=17.0
 # script if no reference.fasta file is present in that directory.
 hcovReference=$civDir/hcov/hcov-reference.fasta
 hcovReferenceIndex=$civDir/hcov/hcov-reference.1.bt2
+whitelistHcovFile=../whitelist-hcov
 
-civDate=20191204
+civDate=20200308
 dnaProteinGenomeDB=$civDir/$civDate-dna-protein-genome.db
 dnaDiamondDB=$civDir/$civDate-dna-proteins.dmnd
 
-dnaLargeProteinGenomeDB=$civDir/20200106-dna-large-protein-genome.db
-dnaLargeDiamondDB=$civDir/20200106-dna-large-proteins.dmnd
+dnaLargeProteinGenomeDB=$civDir/$civDate-dna-large-protein-genome.db
+dnaLargeDiamondDB=$civDir/$civDate-dna-large-proteins.dmnd
 
 rnaProteinGenomeDB=$civDir/$civDate-rna-protein-genome.db
 rnaDiamondDB=$civDir/$civDate-rna-proteins.dmnd
@@ -115,6 +116,18 @@ fi
 if [ ! -f $hcovReferenceIndex ]
 then
     echo "  HCoV reference Bowtie2 index file $hcovReferenceIndex does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $blacklistFile ]
+then
+    echo "  Blacklist file $blacklistFile does not exist!" >> $log
+    exit 1
+fi
+
+if [ ! -f $whitelistHcovFile ]
+then
+    echo "  HCoV whitelist file $whitelistHcovFile does not exist!" >> $log
     exit 1
 fi
 
