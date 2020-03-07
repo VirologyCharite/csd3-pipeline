@@ -113,7 +113,7 @@ tar: tar-civ-dna \
      tar-civ-rna-encephalitis
 
 html-civ-dna:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna/ | \
         proteins-to-pathogens-civ.py \
@@ -134,7 +134,7 @@ html-civ-dna:
         fi
 
 html-civ-dna-large:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna-large/ | \
         proteins-to-pathogens-civ.py \
@@ -156,7 +156,7 @@ html-civ-dna-large:
         fi
 
 html-civ-rna:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-rna/ | \
         proteins-to-pathogens-civ.py \
@@ -177,7 +177,7 @@ html-civ-rna:
         fi
 
 html-civ-dna-encephalitis:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
@@ -199,7 +199,7 @@ html-civ-dna-encephalitis:
         fi
 
 html-civ-dna-large-encephalitis:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-dna-large-encephalitis/ | \
         proteins-to-pathogens-civ.py \
@@ -222,7 +222,7 @@ html-civ-dna-large-encephalitis:
         fi
 
 html-civ-rna-encephalitis:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	find [DW]_* -name summary-proteins | \
         grep 04-panel-civ-rna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
@@ -244,7 +244,7 @@ html-civ-rna-encephalitis:
         fi
 
 tar-civ-dna:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-civ-dna.tar.bz2 \
             index-civ-dna.html \
             $(DNA_PANEL_OUT_DIRS) \
@@ -254,7 +254,7 @@ tar-civ-dna:
         fi
 
 tar-civ-dna-large:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-civ-dna-large.tar.bz2 \
             index-civ-dna-large.html \
             $(DNA_LARGE_PANEL_OUT_DIRS) \
@@ -264,7 +264,7 @@ tar-civ-dna-large:
        fi
 
 tar-civ-rna:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-civ-rna.tar.bz2 \
             index-civ-rna.html \
             $(RNA_PANEL_OUT_DIRS) \
@@ -274,7 +274,7 @@ tar-civ-rna:
         fi
 
 tar-civ-dna-encephalitis:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-civ-dna-encephalitis.tar.bz2 \
             index-civ-dna-encephalitis.html \
             $(DNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
@@ -284,7 +284,7 @@ tar-civ-dna-encephalitis:
         fi
 
 tar-civ-dna-large-encephalitis:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-civ-dna-large-encephalitis.tar.bz2 \
             index-civ-dna-large-encephalitis.html \
             $(DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS) \
@@ -294,7 +294,7 @@ tar-civ-dna-large-encephalitis:
         fi
 
 tar-civ-rna-encephalitis:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-civ-rna-encephalitis.tar.bz2 \
             index-civ-rna-encephalitis.html \
             $(RNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
@@ -304,13 +304,13 @@ tar-civ-rna-encephalitis:
         fi
 
 zip:
-	@if test -n "$(HCOV_DIRS)"; then \
+	if test -n "$(HCOV_DIRS)"; then \
 	../csd3-pipeline/bin/zip-hcov.sh; \
         fi
 
 # The following is unused (see tar-hcov).
 zip-hcov-individual:
-	@if test -n "$(STANDARD_DIRS)"; then \
+	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-hcov.tar.bz2 \
             [DW]_*/pipelines/standard/006-hcov/*.bam \
             [DW]_*/pipelines/standard/006-hcov/*.bam.bai \
@@ -323,10 +323,10 @@ zip-hcov-individual:
 
 upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
-	@if ls results-*.tar.bz2 >/dev/null 2>&1; then \
+	if ls results-*.tar.bz2 >/dev/null 2>&1; then \
             scp results-*.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
         fi
-	@if ls *-hcov.zip >/dev/null 2>&1; then \
+	if ls *-hcov.zip >/dev/null 2>&1; then \
             scp *-hcov.zip $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
         fi
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
