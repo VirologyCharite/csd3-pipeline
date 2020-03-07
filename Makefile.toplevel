@@ -86,7 +86,7 @@ RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel
 # See the 'colors' target at bottom for how I made the following color list.
 READ_COUNT_COLORS := --readCountColor "10 \#0173b2" --readCountColor "50 \#de8f05" --readCountColor "100 \#029e73" --readCountColor "500 \#d55e00" --readCountColor "1000 \#cc78bc"
 
-all: html tar upload
+all: html tar zip upload
 
 preamble:
 	bin/summarize-run.py --run $(RUNID) > $(PREAMBLE_FILE)
@@ -102,13 +102,12 @@ html: gitpull preamble \
     html-civ-rna \
     html-civ-rna-encephalitis
 
-tar: tar-civ-dna \
+tar-standard: tar-civ-dna \
      tar-civ-dna-large \
      tar-civ-dna-encephalitis \
      tar-civ-dna-large-encephalitis \
      tar-civ-rna \
-     tar-civ-rna-encephalitis \
-     zip-hcov
+     tar-civ-rna-encephalitis
 
 html-civ-dna:
 	@if test -n "$(STANDARD_DIRS)"; then \
@@ -301,7 +300,7 @@ tar-civ-rna-encephalitis:
             pathogen-data-civ-rna-encephalitis; \
         fi
 
-zip-hcov:
+zip:
 	@if test -n "$(HCOV_DIRS)"; then \
 	../csd3-pipeline/bin/zip-hcov.sh; \
         fi
