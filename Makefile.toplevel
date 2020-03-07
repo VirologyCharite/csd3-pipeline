@@ -1,9 +1,11 @@
-.PHONY: all html tar clean-results
+.PHONY: all html tar zip upload
 .PHONY: html-civ-dna html-civ-dna-encephalitis
 .PHONY: html-civ-rna html-civ-rna-encephalitis
 .PHONY: tar-civ-dna tar-civ-dna-encephalitis
 .PHONY: tar-civ-dna-large tar-civ-dna-large-encephalitis
 .PHONY: tar-civ-rna tar-civ-rna-encephalitis
+.PHONY: zip-hcov-individual
+.PHONY: clean-results colors
 .PHONY: clean-civ-dna clean-civ-dna-encephalitis
 .PHONY: clean-civ-dna-large clean-civ-dna-large-encephalitis
 .PHONY: clean-civ-rna clean-civ-rna-encephalitis
@@ -94,7 +96,8 @@ preamble:
 gitpull:
 	cd ../bih-pipeline && git pull
 
-html: gitpull preamble \
+html: gitpull \
+    preamble \
     html-civ-dna \
     html-civ-dna-large \
     html-civ-dna-encephalitis \
@@ -102,7 +105,7 @@ html: gitpull preamble \
     html-civ-rna \
     html-civ-rna-encephalitis
 
-tar-standard: tar-civ-dna \
+tar: tar-civ-dna \
      tar-civ-dna-large \
      tar-civ-dna-encephalitis \
      tar-civ-dna-large-encephalitis \
@@ -306,7 +309,7 @@ zip:
         fi
 
 # The following is unused (see tar-hcov).
-tar-hcov-individual:
+zip-hcov-individual:
 	@if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-hcov.tar.bz2 \
             [DW]_*/pipelines/standard/006-hcov/*.bam \
