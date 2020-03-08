@@ -43,7 +43,7 @@ then
         echo "TASK: $task"
     else
         # Try setting exclusive=--exclusive if the panel runs out of memory.
-        exclusive=
+        exclusive=--exclusive
         echo "  Not simulating or skipping. Not requesting exclusive node." >> $log
         jobid=$(sbatch -n 1 $exclusive $SP_DEPENDENCY_ARG $SP_NICE_ARG submit.sh $task | cut -f4 -d' ')
         echo "TASK: panel $jobid"
