@@ -369,7 +369,7 @@ upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
 	ssh -A $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'cd $(REPO_DIR) && git pull'"
 
-clean-civ-dna:
+clean-civ-dna-results:
 	rm -fr \
             results-civ-dna.tar.bz2 \
             samples-civ-dna.index \
@@ -377,7 +377,7 @@ clean-civ-dna:
             virus-civ-dna.png \
             index-civ-dna.html
 
-clean-civ-dna-large:
+clean-civ-dna-large-results:
 	rm -fr \
             results-civ-dna-large.tar.bz2 \
             samples-civ-dna-large.index \
@@ -385,7 +385,7 @@ clean-civ-dna-large:
             virus-civ-dna-large.png \
             index-civ-dna-large.html
 
-clean-civ-rna:
+clean-civ-rna-results:
 	rm -fr \
             results-civ-rna.tar.bz2 \
             samples-civ-rna.index \
@@ -393,7 +393,7 @@ clean-civ-rna:
             virus-civ-rna.png \
             index-civ-rna.html
 
-clean-civ-dna-encephalitis:
+clean-civ-dna-encephalitis-results:
 	rm -fr \
             results-civ-dna-encephalitis.tar.bz2 \
             samples-civ-dna-encephalitis.index \
@@ -401,7 +401,7 @@ clean-civ-dna-encephalitis:
             $(DNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-dna-encephalitis.html
 
-clean-civ-dna-large-encephalitis:
+clean-civ-dna-large-encephalitis-results:
 	rm -fr \
             results-civ-dna-large-encephalitis.tar.bz2 \
             samples-civ-dna-large-encephalitis.index \
@@ -409,7 +409,7 @@ clean-civ-dna-large-encephalitis:
             $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
             index-civ-dna-large-encephalitis.html
 
-clean-civ-rna-encephalitis:
+clean-civ-rna-encephalitis-results:
 	rm -fr \
             results-civ-rna-encephalitis.tar.bz2 \
             samples-civ-rna-encephalitis.index \
@@ -417,7 +417,17 @@ clean-civ-rna-encephalitis:
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             index-civ-rna-encephalitis.html
 
-clean-results: clean-civ-dna clean-civ-dna-large clean-civ-dna-encephalitis clean-civ-dna-large-encephalitis clean-civ-rna clean-civ-rna-encephalitis
+clean-civ-rna-hcov-results:
+	rm -f $(RUNID)-hcov.zip
+
+clean-results: \
+    clean-civ-dna-results \
+    clean-civ-dna-large-results \
+    clean-civ-dna-encephalitis-results \
+    clean-civ-dna-large-encephalitis-results \
+    clean-civ-rna-results \
+    clean-civ-rna-encephalitis-results \
+    clean-civ-rna-hcov-results
 	rm -f $(PREAMBLE_FILE)
 
 clean-stats:
