@@ -427,7 +427,13 @@ clean-civ-rna-encephalitis-results:
             index-civ-rna-encephalitis.html
 
 clean-civ-rna-hcov-results:
-	rm -f $(RUNID)-hcov.zip
+	rm -fr \
+            results-civ-rna-hcov.tar.bz2 \
+            samples-civ-rna-hcov.index \
+            pathogen-data-civ-rna-hcov \
+            $(RNA_HCOV_PNG_FILE) \
+            index-civ-rna-hcov.html \
+            $(RUNID)-hcov.zip
 
 clean-results: \
     clean-civ-dna-results \
