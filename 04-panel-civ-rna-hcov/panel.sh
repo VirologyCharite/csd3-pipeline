@@ -72,7 +72,7 @@ function panel()
       --percentagePositiveCutoff $percentagePositiveCutoff \
       --blacklistFile $blacklistFile \
       --whitelistFile $whitelistHcovFile \
-      --negativeTitleRegex 'phage|coronavirus' > summary-proteins
+      --negativeTitleRegex "phage|$CORONAVIRUS_REGEX" > summary-proteins
     echo "  alignment-panel-civ.py stopped at $(date)" >> $log
 
     echo "  proteins-to-pathogens-civ.py started at $(date)" >> $log

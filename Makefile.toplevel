@@ -248,6 +248,16 @@ html-civ-rna-encephalitis:
             > index-civ-rna-encephalitis.html; \
         fi
 
+# Note that we don't need to pass --negativeTitleRegex
+# "$(CORONAVIRUS_REGEX)" in the following. That's because that has already
+# been done in 04-panel-civ-rna-hcov/panel.sh, so the coronavirus proteins
+# (apart from those in whitelist-hcov) are already gone from the
+# summary-proteins files.  This is slightly different from the situation
+# with the encephalitis titleregular expression because in that case it's a
+# positive regex, and we use it select things to keep (not to discard). In
+# theory we don't need to keep using it after using it once because
+# everything that doesn't match will have been discarded, but I'm already
+# using it here (above) and don't want to change that right now.
 html-civ-rna-hcov:
 	if test -n "$(HCOV_DIRS)"; then \
 	find $(HCOV_DIRS) -name summary-proteins | \

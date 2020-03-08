@@ -142,6 +142,8 @@ echo ${SP_SIMULATE:=0} ${SP_SKIP:=0} ${SP_FORCE:=0} \
 # Schneider sent me (Terry) on Jan 19, 2019.
 ENCEPHALITIS_REGEX="$(cat ../encephalitis-regex.txt)"
 
+CORONAVIRUS_REGEX="$(cat ../coronavirus-regex.txt)"
+
 function mateFile()
 {
     echo $1 | sed -e s/_R1_/_R2_/
