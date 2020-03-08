@@ -55,7 +55,8 @@ DNA_LARGE_MIN_PROTEIN_COUNT := 5
 # The following must match the taxonomyDB variable in common.sh
 TAXONOMY_DB := $(CIV_DIR)/$(CIV_DATE)-taxonomy.db
 
-ENCEPHALITIS_REGEX := "$(shell cat ../csd3-pipeline/encephalitis-regex.txt)"
+ENCEPHALITIS_REGEX := '$(shell cat ../csd3-pipeline/encephalitis-regex.txt)'
+SAMPLE_NAME_REGEX := '^([DW]_[^/]+_[DR]NA)'
 
 PREAMBLE_FILE := summary-preamble.html
 
@@ -76,6 +77,7 @@ DNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-dna-encephalitis.png && e
 DNA_LARGE_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-dna-large-encephalitis.png && echo virus-civ-dna-large-encephalitis.png)
 RNA_PNG_FILE := $(shell test -f virus-civ-rna.png && echo virus-civ-rna.png)
 RNA_ENCEPHALITIS_PNG_FILE := $(shell test -f virus-civ-rna-encephalitis.png && echo virus-civ-rna-encephalitis.png)
+RNA_HCOV_PNG_FILE := $(shell test -f virus-civ-rna-hcov.png && echo virus-civ-rna-hcov.png)
 
 # Similarly, there may be no panels.
 DNA_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna/out)
@@ -84,6 +86,7 @@ DNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel
 DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-dna-large-encephalitis/out)
 RNA_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-rna/out)
 RNA_ENCEPHALITIS_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-rna-encephalitis/out)
+RNA_HCOV_PANEL_OUT_DIRS := $(wildcard [DW]_*/pipelines/standard/04-panel-civ-rna-hcov/out)
 
 # See the 'colors' target at bottom for how I made the following color list.
 READ_COUNT_COLORS := --readCountColor "10 \#0173b2" --readCountColor "50 \#de8f05" --readCountColor "100 \#029e73" --readCountColor "500 \#d55e00" --readCountColor "1000 \#cc78bc"
@@ -99,22 +102,24 @@ gitpull:
 html: gitpull \
     preamble \
     html-civ-dna \
-    html-civ-dna-large \
     html-civ-dna-encephalitis \
+    html-civ-dna-large \
     html-civ-dna-large-encephalitis \
     html-civ-rna \
-    html-civ-rna-encephalitis
+    html-civ-rna-encephalitis \
+    html-civ-rna-hcov
 
 tar: tar-civ-dna \
-     tar-civ-dna-large \
      tar-civ-dna-encephalitis \
+     tar-civ-dna-large \
      tar-civ-dna-large-encephalitis \
      tar-civ-rna \
-     tar-civ-rna-encephalitis
+     tar-civ-rna-encephalitis \
+     tar-civ-rna-hcov
 
 html-civ-dna:
 	if test -n "$(STANDARD_DIRS)"; then \
-	find [DW]_* -name summary-proteins | \
+	find $(STANDARD_DIRS) -name summary-proteins | \
         grep 04-panel-civ-dna/ | \
         proteins-to-pathogens-civ.py \
             --html \
@@ -123,7 +128,7 @@ html-civ-dna:
             --format fastq \
             --preamble $(PREAMBLE_FILE) \
             --preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes.</p>" \
-            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)' \
+            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename virus-civ-dna.png \
             --sampleIndexFilename samples-civ-dna.index \
@@ -135,7 +140,7 @@ html-civ-dna:
 
 html-civ-dna-large:
 	if test -n "$(STANDARD_DIRS)"; then \
-	find [DW]_* -name summary-proteins | \
+	find $(STANDARD_DIRS) -name summary-proteins | \
         grep 04-panel-civ-dna-large/ | \
         proteins-to-pathogens-civ.py \
             --html \
@@ -145,7 +150,7 @@ html-civ-dna-large:
             --format fastq \
             --preamble $(PREAMBLE_FILE) \
             --preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes.</p>" \
-            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)' \
+            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename virus-civ-dna-large.png \
             --sampleIndexFilename samples-civ-dna-large.index \
@@ -157,7 +162,7 @@ html-civ-dna-large:
 
 html-civ-rna:
 	if test -n "$(STANDARD_DIRS)"; then \
-	find [DW]_* -name summary-proteins | \
+	find $(STANDARD_DIRS) -name summary-proteins | \
         grep 04-panel-civ-rna/ | \
         proteins-to-pathogens-civ.py \
             --html \
@@ -166,7 +171,7 @@ html-civ-rna:
             --format fastq \
             --preamble $(PREAMBLE_FILE) \
             --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
-            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)' \
+            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename virus-civ-rna.png \
             --sampleIndexFilename samples-civ-rna.index \
@@ -178,7 +183,7 @@ html-civ-rna:
 
 html-civ-dna-encephalitis:
 	if test -n "$(STANDARD_DIRS)"; then \
-	find [DW]_* -name summary-proteins | \
+	find $(STANDARD_DIRS) -name summary-proteins | \
         grep 04-panel-civ-dna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
@@ -188,7 +193,7 @@ html-civ-dna-encephalitis:
             --preamble $(PREAMBLE_FILE) \
             --preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
             --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)' \
+            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename $(DNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-dna-encephalitis.index \
@@ -200,7 +205,7 @@ html-civ-dna-encephalitis:
 
 html-civ-dna-large-encephalitis:
 	if test -n "$(STANDARD_DIRS)"; then \
-	find [DW]_* -name summary-proteins | \
+	find $(STANDARD_DIRS) -name summary-proteins | \
         grep 04-panel-civ-dna-large-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
@@ -211,7 +216,7 @@ html-civ-dna-large-encephalitis:
             --preamble $(PREAMBLE_FILE) \
             --preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
             --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)' \
+            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-dna-large-encephalitis.index \
@@ -223,7 +228,7 @@ html-civ-dna-large-encephalitis:
 
 html-civ-rna-encephalitis:
 	if test -n "$(STANDARD_DIRS)"; then \
-	find [DW]_* -name summary-proteins | \
+	find $(STANDARD_DIRS) -name summary-proteins | \
         grep 04-panel-civ-rna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
@@ -233,7 +238,7 @@ html-civ-rna-encephalitis:
             --preamble $(PREAMBLE_FILE) \
             --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses.</p>" \
             --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex '^([DW]_[^/]+_[DR]NA)' \
+            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename $(RNA_ENCEPHALITIS_PNG_FILE) \
             --sampleIndexFilename samples-civ-rna-encephalitis.index \
@@ -241,6 +246,28 @@ html-civ-rna-encephalitis:
             --bootstrapTreeviewDir .. \
             $(READ_COUNT_COLORS) \
             > index-civ-rna-encephalitis.html; \
+        fi
+
+html-civ-rna-hcov:
+	if test -n "$(HCOV_DIRS)"; then \
+	find $(HCOV_DIRS) -name summary-proteins | \
+        grep 04-panel-civ-rna-hcov/ | \
+        proteins-to-pathogens-civ.py \
+            --html \
+            --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
+            --taxonomyDatabase $(TAXONOMY_DB) \
+            --format fastq \
+            --preamble $(PREAMBLE_FILE) \
+            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes (with no coronaviruses), the SARS-CoV-2 reference (MN908947.3), sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
+            --titleRegex $(ENCEPHALITIS_REGEX) \
+            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
+            --pathogenType viral \
+            --pathogenPanelFilename $(RNA_HCOV_PNG_FILE) \
+            --sampleIndexFilename samples-civ-rna-hcov.index \
+            --pathogenDataDir pathogen-data-civ-rna-hcov \
+            --bootstrapTreeviewDir .. \
+            $(READ_COUNT_COLORS) \
+            > index-civ-rna-hcov.html; \
         fi
 
 tar-civ-dna:
@@ -301,6 +328,16 @@ tar-civ-rna-encephalitis:
             $(RNA_ENCEPHALITIS_PNG_FILE) \
             samples-civ-rna-encephalitis.index \
             pathogen-data-civ-rna-encephalitis; \
+        fi
+
+tar-civ-rna-hcov:
+	if test -n "$(HCOV_DIRS)"; then \
+	tar cfj results-civ-rna-hcov.tar.bz2 \
+            index-civ-rna-hcov.html \
+            $(RNA_HCOV_PANEL_OUT_DIRS) \
+            $(RNA_HCOV_PNG_FILE) \
+            samples-civ-rna-hcov.index \
+            pathogen-data-civ-rna-hcov; \
         fi
 
 zip:
