@@ -4,7 +4,7 @@ import sys
 import argparse
 from glob import glob
 
-from dark.utils import parseRangeString
+from dark.utils import parseRangeExpression
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -18,14 +18,16 @@ parser.add_argument(
     'range', metavar='NUMBER,RANGE,...',
     help=('The ranges of directory inc numbers that should be printed. E.g., '
           '1-3,5 will output just the 1st, 2nd, 3rd, and 5th directory '
-          'names. All others will be omitted.'))
+          'names. All others will be omitted. This option can include '
+          'parentheses and Python set operators, e.g. '
+          '"(3-5 | 10-12) - 5-10".'))
 
 args = parser.parse_args()
 
 result = []
 missing = []
 
-for n in parseRangeString(args.range):
+for n in parseRangeExpression(args.range):
     files = glob('[DW]_[0-9][0-9][0-9][0-9][0-9][0-9]_%d_*' % n)
     if len(files) == 1:
         result.append(files[0])
