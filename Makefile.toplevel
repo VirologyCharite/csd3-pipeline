@@ -1,6 +1,6 @@
 .PHONY: all html tar zip upload
 .PHONY: html-civ-dna html-civ-dna-encephalitis
-.PHONY: html-civ-rna html-civ-rna-encephalitis
+.PHONY: html-civ-rna html-civ-rna-encephalitis html-civ-rna-hcov
 .PHONY: tar-civ-dna tar-civ-dna-encephalitis
 .PHONY: tar-civ-dna-large tar-civ-dna-large-encephalitis
 .PHONY: tar-civ-rna tar-civ-rna-encephalitis
@@ -9,6 +9,7 @@
 .PHONY: clean-civ-dna clean-civ-dna-encephalitis
 .PHONY: clean-civ-dna-large clean-civ-dna-large-encephalitis
 .PHONY: clean-civ-rna clean-civ-rna-encephalitis
+.PHONY: clean-civ-rna-hcov
 
 DIRS := $(wildcard [DW]_*/pipelines/standard)
 
