@@ -259,7 +259,6 @@ html-civ-rna-hcov:
             --format fastq \
             --preamble $(PREAMBLE_FILE) \
             --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes (with no coronaviruses), the SARS-CoV-2 reference (MN908947.3), sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
-            --titleRegex $(ENCEPHALITIS_REGEX) \
             --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename $(RNA_HCOV_PNG_FILE) \
