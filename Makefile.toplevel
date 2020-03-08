@@ -46,7 +46,7 @@ CIV_DIR := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ
 # The following must match the dnaProteinGenomeDB and rnaProteinGenomeDB
 # variables in common.sh
 DNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-protein-genome.db
-DNA_LARGE_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-protein-genome.db
+DNA_LARGE_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-large-protein-genome.db
 RNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-rna-protein-genome.db
 
 # For the large DNA database panels.
