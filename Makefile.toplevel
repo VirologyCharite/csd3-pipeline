@@ -40,13 +40,13 @@ print-hcov:
 RUNID := $(shell basename $(shell /bin/pwd))
 
 # CIV_DATE *must* match the value of civDate in common.sh
-CIV_DATE := 20191204
+CIV_DATE := 20200308
 CIV_DIR := /rds/project/djs200/rds-djs200-acorg/bt/root/share/civ
 
 # The following must match the dnaProteinGenomeDB and rnaProteinGenomeDB
 # variables in common.sh
 DNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-protein-genome.db
-DNA_LARGE_PROTEIN_GENOME_DB := $(CIV_DIR)/20200106-dna-protein-genome.db
+DNA_LARGE_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-dna-protein-genome.db
 RNA_PROTEIN_GENOME_DB := $(CIV_DIR)/$(CIV_DATE)-rna-protein-genome.db
 
 # For the large DNA database panels.
