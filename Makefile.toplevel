@@ -117,6 +117,7 @@ html-civ-dna:
         grep 04-panel-civ-dna/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --title "Summary of small DNA viruses for run $(RUNID)" \
             --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
@@ -136,6 +137,7 @@ html-civ-dna-large:
         grep 04-panel-civ-dna-large/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --title "Summary of large DNA viruses for run $(RUNID)" \
             --minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
             --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
@@ -157,6 +159,7 @@ html-civ-rna:
         grep 04-panel-civ-rna/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --title "Summary of RNA viruses for run $(RUNID)" \
             --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
@@ -177,6 +180,7 @@ html-civ-dna-encephalitis:
         grep 04-panel-civ-dna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --title "Summary of small DNA encephalitis-causing viruses for run $(RUNID)" \
             --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
@@ -197,6 +201,7 @@ html-civ-dna-large-encephalitis:
         grep 04-panel-civ-dna-large-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --title "Summary of large DNA encephalitis-causing viruses for run $(RUNID)" \
             --minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
             --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
@@ -218,6 +223,7 @@ html-civ-rna-encephalitis:
         grep 04-panel-civ-rna-encephalitis/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --title "Summary of RNA encephalitis-causing viruses for run $(RUNID)" \
             --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
@@ -249,11 +255,12 @@ html-civ-rna-hcov:
         grep 04-panel-civ-rna-hcov/ | \
         proteins-to-pathogens-civ.py \
             --html \
+            --title "Summary of RNA viruses (one CoV) for run $(RUNID)" \
             --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
             --taxonomyDatabase $(TAXONOMY_DB) \
             --format fastq \
             --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes (with no coronaviruses), the SARS-CoV-2 reference (MN908947.3), sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
+            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes (no CoV), the SARS-CoV-2 reference (MN908947.3), sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
             --sampleNameRegex $(SAMPLE_NAME_REGEX) \
             --pathogenType viral \
             --pathogenPanelFilename $(RNA_HCOV_PNG_FILE) \
