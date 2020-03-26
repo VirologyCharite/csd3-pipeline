@@ -76,10 +76,11 @@ task2=$(mateFile $task)
 fastq=../005-trim/$task.trim.fastq.gz
 fastq2=../005-trim/$task2.trim.fastq.gz
 
-# Log should have been set above, so this line should no longer be needed.
-log=$logDir/$task.log
+# Log must have been set in the case statement above. If not, this will
+# fail due to the set -u.
+echo $log > /dev/null
 
-out=$task-consensus.fasta
+out=$task.done
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
@@ -87,50 +88,94 @@ checkFastq $fastq $log
 
 function hcov()
 {
-    # Remove the output file and any other pre-existing hcov output files
-    # before doing anything, in case we fail for some reason.
-    rm -f $out $task.bam $task.bam.bai $task.vcf.gz $task.vcf.gz.tbi
-    rm -f $task-reference-consensus-comparison.txt $task-coverage.txt
-    rm -f $task-read-count.txt $task-alignment.fasta
+    # Remove any pre-existing hcov output files before doing anything, in
+    # case we fail for some reason.
+    rm -f $out *.bam *.bam.bai *.vcf.gz *.vcf.gz.tbi
+    rm -f *-consensus.fasta *-reference-consensus-comparison.txt *-coverage.txt
+    rm -f *-read-count.txt *-alignment.fasta
     rm -fr tmp
     mkdir tmp
 
+    # See if we can find a CSpecVir sample consensus to compare the
+    # consensus we just made to. Watch out for spaces in sample id.
+    case=$(caseName)
+    sampleNum=$(sampleNumber)
+    sampleId="$(sample-id-for-case.py --sampleNumber $sampleNum $case | tr -d ' ')"
+
+    case "$sampleId" in
+        CSpecVir*)
+            prefix="$(echo $task | cut -f1-7 -d_)-$sampleId"
+        ;;
+
+        *)
+            prefix="$(echo $task | cut -f1-7 -d_)"
+        ;;
+    esac
+
     echo "  Reference id: $(head -n 1 < $hcovReference | cut -c2-)" >> $log
+    hcovReferenceId="$(head -n 1 < $hcovReference | cut -c2- | cut -f1 -d' ')"
 
     echo "  run-bowtie2.py started at $(date)." >> $log
     run-bowtie2.py \
         $bt2IndexArgs \
         --reference $hcovReference \
-        --callHaplotypesGATK --out $task.bam --markDuplicatesGATK \
-        --vcfFile $task.vcf.gz --fastq1 $fastq --fastq2 $fastq2 \
+        --callHaplotypesGATK --out $prefix.bam --markDuplicatesGATK \
+        --vcfFile $prefix.vcf.gz --fastq1 $fastq --fastq2 $fastq2 \
         --bowtie2Args '--no-unal --local' \
         --removeDuplicates --tempdir tmp --verbose --log 2>> $log
     echo "  run-bowtie2.py stopped at $(date)." >> $log
 
     echo "  make-consensus.py started at $(date)." >> $log
     make-consensus.py --reference $hcovReference \
-        --id "$task-consensus" --maskNoCoverage --bam $task.bam \
-        --vcfFile $task.vcf.gz --log > $out 2>> $log
+        --id "$prefix-consensus" --maskNoCoverage --bam $prefix.bam \
+        --vcfFile $prefix.vcf.gz --log > $prefix-consensus.fasta 2>> $log
     echo "  make-consensus.py stopped at $(date)." >> $log
 
     echo "  compare consensuses started at $(date)." >> $log
-    cat $out $hcovReference |
+    cat $prefix-consensus.fasta $hcovReference |
         compare-sequences.py --align --showDiffs --showAmbiguous \
-        --aligner mafft --alignmentFile $task-alignment.fasta > \
-        $task-reference-consensus-comparison.txt 2>> $log
+        --aligner mafft --alignmentFile $prefix-alignment.fasta > \
+        $prefix-reference-consensus-comparison.txt 2>> $log
     echo "  compare consensuses stopped at $(date)." >> $log
 
     # This is too slow to always run by default!
     #
     # echo "  SAM coverage depth started at $(date)." >> $log
-    # sam-coverage-depth.py $task.bam > $task-coverage.txt 2>> $log
+    # sam-coverage-depth.py $prefix.bam > $prefix-coverage.txt 2>> $log
     # echo "  SAM coverage depth stopped at $(date)." >> $log
 
     echo "  SAM read count started at $(date)." >> $log
-    samtools view -c $task.bam > $task-read-count.txt 2>> $log
+    samtools view -c $prefix.bam > $prefix-read-count.txt 2>> $log
     echo "  SAM read cound stopped at $(date)." >> $log
 
+    case "$sampleId" in
+        CSpecVir*)
+            # Look for all CSpecVir sequences to compare the consensus we
+            # just made to.
+            shopt -s nullglob
+
+            for sequence in $sequencesDir/$sampleId*.fasta
+            do
+                base=$(basename $sequence | sed -e 's/\.fasta//')
+
+                echo "  compare consensuses against $base started at $(date)." >> $log
+                cat $prefix-consensus.fasta $sequence |
+                    compare-sequences.py --align --showDiffs --showAmbiguous \
+                    --aligner mafft --alignmentFile $prefix-$base-alignment.fasta > \
+                    $prefix-$base-reference-consensus-comparison.txt 2>> $log
+                echo "  compare consensuses against $base stopped at $(date)." >> $log
+            done
+
+            shopt -u nullglob
+        ;;
+
+        *)
+            echo "Case $case (sample id '$sampleId') does not correspond to a CSpecVir sample." >> $log
+        ;;
+    esac
+
     rm -r tmp
+    touch $out
 }
 
 if [ $SP_SIMULATE = "1" ]

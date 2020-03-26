@@ -85,14 +85,25 @@ clean-panel:
                04-panel-*/slurm-*.out
 
 clean:
-	rm -f \
+	rm -fr \
                status.json \
                slurm-pipeline.done \
                slurm-pipeline.error \
-               slurm-pipeline.running
+               slurm-pipeline.running \
+               csd3lib/__pycache__ \
+               test/__pycache__
 
 clean-all: clean clean-stats clean-trim clean-flash clean-spades clean-map clean-dedup clean-diamond clean-panel
 
 clobber: clean-all
 	rm -fr \
                logs
+
+pytest:
+	env PYTHONPATH=. pytest
+
+discover:
+	env PYTHONPATH=. python -m discover -v
+
+tcheck:
+	env PYTHONPATH=. trial --rterrors test

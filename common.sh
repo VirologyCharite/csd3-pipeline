@@ -53,6 +53,8 @@ hcovReference=$civDir/hcov/hcov-reference.fasta
 hcovReferenceIndex=$civDir/hcov/hcov-reference.1.bt2
 whitelistHcovFile=../whitelist-hcov
 
+sequencesDir=../../../../../2019-nCoV-sequences/data/sequences
+
 civDate=20200308
 dnaProteinGenomeDB=$civDir/$civDate-dna-protein-genome.db
 dnaDiamondDB=$civDir/$civDate-dna-proteins.dmnd
@@ -113,6 +115,12 @@ then
     exit 1
 fi
 
+if [ ! -d $sequencesDir ]
+then
+    echo "  Sequences dir $sequencesDir does not exist!" >> $log
+    exit 1
+fi
+
 if [ ! -f $hcovReferenceIndex ]
 then
     echo "  HCoV reference Bowtie2 index file $hcovReferenceIndex does not exist!" >> $log
@@ -147,6 +155,23 @@ CORONAVIRUS_REGEX="$(cat ../coronavirus-regex.txt)"
 function mateFile()
 {
     echo $1 | sed -e s/_R1_/_R2_/
+}
+
+function caseName()
+{
+    # Get e.g., W608 out of pwd output that ends with something like
+    # W_200320_10_608_2_isolate_RNA/pipelines/standard/006-hcov
+    dir=$(basename $(dirname $(dirname $(dirname $(/bin/pwd)))))
+    echo "$(echo $dir | cut -c1)$(echo $dir | cut -f4 -d_)"
+}
+
+function sampleNumber()
+{
+    # Get e.g., 2 (the sample number) out of pwd output that ends with
+    # something like
+    # W_200320_10_608_2_isolate_RNA/pipelines/standard/006-hcov
+    dir=$(basename $(dirname $(dirname $(dirname $(/bin/pwd)))))
+    echo $dir | cut -f5 -d_
 }
 
 function tasksForSample()

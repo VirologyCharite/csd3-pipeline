@@ -8,7 +8,7 @@ task=$1
 log=$logDir/sbatch.log
 
 # NOTE!! The following must have the identical value set and used in hcov.sh
-out=$task-consensus.fasta
+out=$task.done
 
 
 echo "$(basename $(pwd)) sbatch.sh running at $(date)" >> $log

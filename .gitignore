@@ -10,3 +10,5 @@ status.json
 04-panel/summary-proteins
 04-panel/summary-virus
 05-sample-count/*.count
+_trial_temp
+__pycache__
