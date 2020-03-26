@@ -497,6 +497,10 @@ print-standard:
 print-hcov:
 	@for i in $(HCOV_DIRS); do echo $$i; done
 
+sample-ids:
+	@for i in $(DIRS); do echo $$i $$(sample-id-for-case.py --sampleNumber $$(echo $$i | cut -f5 -d_) "$$(echo $$i | cut -c1)$$(echo $$i | cut -f4 -d_)"); done
+
+
 # See https://chrisalbon.com/python/data_visualization/seaborn_color_palettes/
 # for some possible color palettes.
 colors:
