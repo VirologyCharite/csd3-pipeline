@@ -18,8 +18,8 @@ case $# in
             hcovReference=reference.fasta
         else
             echo "$(basename $0) called with no reference and reference.fasta is not present." >> $log
-            echo "Usage: $(basename $0) [task] [reference-file.fasta]" >> $log
-            exit 1
+            echo "  Using default $hcovReference as a reference." >> $log
+            bt2IndexArgs="--index $hcovReferenceIndex"
         fi
         ;;
 
