@@ -47,5 +47,5 @@ do
     fi
 
     # echo "  Copying pipeline files"
-    tar -C csd3-pipeline --exclude-vcs -c -f - . | tar -C $dir/pipelines/standard -x -f -
+    tar -C csd3-pipeline --exclude-vcs -c -f - . | tar --no-overwrite-dir -C $dir/pipelines/standard -x -f -
 done
