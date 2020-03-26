@@ -100,11 +100,13 @@ function hcov()
     # consensus we just made to. Watch out for spaces in sample id.
     case=$(caseName)
     sampleNum=$(sampleNumber)
-    sampleId="$(sample-id-for-case.py --sampleNumber $sampleNum $case | tr -d ' ')"
+    sampleIdNoSpaces="$(sample-id-for-case.py --sampleNumber $sampleNum $case | tr -d ' ')"
+    sampleIdNoSpacesNoPassage="$(sample-id-for-case.py --sampleNumber $sampleNum $case | tr -d ' ' | sed -r -e 's/p[0-9]+$//')"
+    sampleIdWithSpaces="$(sample-id-for-case.py --sampleNumber $sampleNum $case)"
 
-    case "$sampleId" in
+    case "$sampleIdNoSpaces" in
         CSpecVir*)
-            prefix="$(echo $task | cut -f1-7 -d_)-$sampleId"
+            prefix="$(echo $task | cut -f1-7 -d_)-$sampleIdNoSpaces"
         ;;
 
         *)
@@ -148,13 +150,13 @@ function hcov()
     samtools view -c $prefix.bam > $prefix-read-count.txt 2>> $log
     echo "  SAM read cound stopped at $(date)." >> $log
 
-    case "$sampleId" in
+    case "$sampleIdNoSpaces" in
         CSpecVir*)
             # Look for all CSpecVir sequences to compare the consensus we
             # just made to.
             shopt -s nullglob
 
-            for sequence in $sequencesDir/$sampleId*.fasta
+            for sequence in $sequencesDir/$sampleIdNoSpacesNoPassage*.fasta
             do
                 base=$(basename $sequence | sed -e 's/\.fasta//')
 
@@ -170,7 +172,7 @@ function hcov()
         ;;
 
         *)
-            echo "Case $case (sample id '$sampleId') does not correspond to a CSpecVir sample." >> $log
+            echo "Case $case (sample id '$sampleIdWithSpaces') does not correspond to a CSpecVir sample." >> $log
         ;;
     esac
 
