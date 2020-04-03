@@ -32,7 +32,7 @@ $ mkdir projects/charite/200101
 
 Into the `200101` directory you just made. You'll need to know where these
 are on the BIH cluster (I think under
-`/fast/projects/civ-diagnostics/work/raw` - TODO: check!).
+`/fast/projects/civ-diagnostics/work/raw` - TODO: check!). You can remove the files with names that contain `*_I1_*` and `*_I2_*`, those are the sequencing files for the indices.
 
 ### Setup the run
 
@@ -82,8 +82,8 @@ As mentioned, `standard` is the default.
 You can see the run types for all sub-directories via
 
 ```sh
-$ make print-standard:
-$ make print-hcov:
+$ make print-standard
+$ make print-hcov
 ```
 
 You should do this to check that the samples you expect to be run using the
@@ -97,8 +97,8 @@ will either contain `hcov` or `standard`.
 For runs that are of type `hcov`, a reference coronavirus sequence is
 needed. By default the sequence in
 `/rds/project/djs200/rds-djs200-acorg/bt/root/share/civ/hcov/hcov-reference.fasta`
-will be used. This is currently a symbolic link to `EPI_ISL_402123.fasta` file
-(sequence id `BetaCoV/Wuhan/IPBCAMS-WH-01/2019|EPI_ISL_402123`) in the
+will be used. This is currently a symbolic link to `EPI_ISL_402125.fasta` file
+(sequence id `hCoV-19/Wuhan-Hu-1/2019|EPI_ISL_402125`) in the
 [data/sequences](https://github.com/VirologyCharite/2019-nCoV-sequences/tree/master/data/sequences)
 directory of the
 [2019-nCoV-sequences](https://github.com/VirologyCharite/2019-nCoV-sequences/)
