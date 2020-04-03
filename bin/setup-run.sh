@@ -14,6 +14,19 @@ MAKEFILE=../csd3-pipeline/Makefile.toplevel
 
 FASTQ_FILENAME_CHECKER=../bih-pipeline/bin/check-fastq-filenames.py
 
+BIH_PIPELINE_DIR=../bih-pipeline
+
+if [ -d $BIH_PIPELINE_DIR ]
+then
+    cd $BIH_PIPELINE_DIR
+    git pull origin master
+    cd $TOP
+else
+    echo "bih-pipeline directory '$BIH_PIPELINE_DIR' does not exist!" >&2
+    exit 1
+fi
+
+
 for dir in "$@"
 do
     echo "Processing $dir"

@@ -38,7 +38,7 @@ function doFlash()
     # Collect all the combined and uncombined reads together into
     # $outUncompressed. 
     echo "  Collecting all FASTQ into $outUncompressed at $(date)." >> $log
-    cp out.extendedFrags.fastq $outUncompressed
+    mv out.extendedFrags.fastq $outUncompressed
     for i in 1 2
     do
         # Add a -1 and -2 to the read ids of the uncombined pairs so their
@@ -52,10 +52,8 @@ function doFlash()
         filter-fasta.py --quiet --fastq \
                         --idLambda 'lambda r: "-'$i' ".join(r.split(None, 1))' < \
                         out.notCombined_$i.fastq >> $outUncompressed
+        rm out.notCombined_$i.fastq
     done
-
-    echo "  Compressing flash output at $(date)." >> $log
-    gzip out.*.fastq
 
     echo "  Compressing combined FASTQ into $out at $(date)." >> $log
     gzip $outUncompressed

@@ -97,7 +97,7 @@
         },
         {
             "name": "stop",
-            "dependencies": ["panel-civ-dna", "panel-civ-dna-large", "panel-civ-rna-hcov", "panel-civ-dna-encephalitis", "panel-civ-dna-large-encephalitis", "panel-civ-rna-encephalitis"],
+            "dependencies": ["panel-civ-dna", "panel-civ-dna-large", "panel-civ-rna-hcov", "panel-civ-dna-encephalitis", "panel-civ-dna-large-encephalitis", "panel-civ-rna-encephalitis", "hcov"],
             "collect": true,
             "cwd": "06-stop",
             "script": "./sbatch.sh"

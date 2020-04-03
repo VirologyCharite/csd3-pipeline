@@ -94,6 +94,8 @@ def countCommonOneLineReads(fp1, fp2):
     reads = Reads()
     nextFrom = None
     count1 = count2 = 0
+    ids1 = set()
+    ids2 = set()
 
     while True:
         if nextFrom is None:
@@ -127,12 +129,13 @@ def countCommonOneLineReads(fp1, fp2):
             else:
                 count2 += 1
 
-        if hash1 == hash2:
-            reads.add(Read(hash1, )
-            nextFrom = None
-        elif hash1 < hash2:
-            nextFrom = 1
-        else:
-            nextFrom = 2
+        # if hash1 == hash2:
+        #     # TODO: fix me !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #     reads.add(Read(hash1, None))
+        #     nextFrom = None
+        # elif hash1 < hash2:
+        #     nextFrom = 1
+        # else:
+        #     nextFrom = 2
 
-    return count1, count2, common
+    # return count1, count2, common

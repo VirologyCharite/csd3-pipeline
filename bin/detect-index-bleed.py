@@ -7,7 +7,7 @@ from collections import defaultdict
 
 from dark.process import Executor
 
-from csd3lib.comm import countCommon
+from csd3lib.comm import countCommonOneLineReads
 
 
 def _key(s):
@@ -29,6 +29,7 @@ def checkFastqSuffixes(args):
 
 
 def getCounts(args):
+    nonUnique = defaultdict(set)
     counts = defaultdict(dict)
     for filename1 in args.fastq:
         md5Filename1 = filename1[:-len('fastq')] + 'md5'
@@ -37,7 +38,10 @@ def getCounts(args):
                 md5Filename2 = filename2[:-len('fastq')] + 'md5'
                 with open(md5Filename1) as fp1:
                     with open(md5Filename2) as fp2:
-                        counts[filename1][filename2] = countCommon(fp1, fp2)
+                        count, nonU1, nonU2 = countCommonOneLineReads(fp1, fp2)
+                        nonUnique[filename1].add(nonU1)
+                        nonUnique[filename2].add(nonU2)
+                        counts[filename1][filename2] = count
 
     return counts
 
