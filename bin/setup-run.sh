@@ -14,7 +14,7 @@ MAKEFILE=../csd3-pipeline/Makefile.toplevel
 
 FASTQ_FILENAME_CHECKER=../bih-pipeline/bin/check-fastq-filenames.py
 
-BIH_PIPELINE_DIR=../bih-pipeline
+BIH_PIPELINE_DIR=bih-pipeline
 
 if [ -d $BIH_PIPELINE_DIR ]
 then
