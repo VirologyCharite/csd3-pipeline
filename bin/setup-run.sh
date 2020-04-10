@@ -54,9 +54,9 @@ else
 fi
 
 # Set nullglob so the expansion of [DW]_* etc., results in nothing if no
-# files exist (i.e., all have already been moved into their sub-directories.
+# files exist (i.e., all have already been moved into their
+# sub-directories.
 shopt -s nullglob
-
 
 for dir in "$@"
 do
@@ -92,14 +92,12 @@ do
         fi
     fi
 
-    # The following will result in fastqFiles being empty if there are no
+    # The following will result in fastqFiles being unset if there are no
     # FASTQ files due to the nullglob setting above.
-    fastqFiles=[DW]_*.fastq.gz
+    fastqFiles=$(echo [DW]_*.fastq.gz)
 
-    if [ -z "$fastqFiles" ]
+    if [ -n "$fastqFiles" ]
     then
-        echo "No FASTQ files were found in $(pwd)." >&2
-    else
         # Check the names of all FASTQ files (if any) and move them into
         # sub-directories.
 
@@ -134,6 +132,8 @@ do
                 run mv $fastq $subdir
             fi
         done
+    else
+        echo "No FASTQ files were found in $(pwd)." >&2
     fi
 
     cd $TOP
