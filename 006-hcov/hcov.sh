@@ -148,7 +148,7 @@ function hcov()
 
     echo "  SAM read count started at $(date)." >> $log
     samtools view -c $prefix.bam > $prefix-read-count.txt 2>> $log
-    echo "  SAM read cound stopped at $(date)." >> $log
+    echo "  SAM read count stopped at $(date)." >> $log
 
     case "$sampleIdNoSpaces" in
         CSpecVir*)
