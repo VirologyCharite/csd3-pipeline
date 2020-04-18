@@ -37,14 +37,14 @@ function run_diamond()
         $unmappedArgs \
         --outfmt 6 qtitle stitle bitscore evalue qframe qseq qstart qend sseq sstart send slen btop nident pident positive ppos |
     convert-diamond-to-json.py | bzip2 > $out
+    echo "  DIAMOND DNA blastx stopped at $(date)" >> $log
 
     if [ $collectUnmapped -eq 1 ]
     then
-        echo "  Compressing unmapped reads." >> $log
+        echo "  Compressing unmapped reads started at $(date)." >> $log
         gzip $task-unmapped.fastq
+        echo "  Compressing unmapped reads stopped at $(date)." >> $log
     fi
-
-    echo "  DIAMOND DNA blastx stopped at $(date)" >> $log
 }
 
 
