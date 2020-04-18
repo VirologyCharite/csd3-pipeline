@@ -348,6 +348,11 @@ function rmFileAndLink()
 # breaking things elsewhere!
 sampleType=standard
 
+# collectUnmapped is used to determine whether all unmapped reads are
+# collected after the various map-* steps. This results in per-sample FASTQ
+# files of dark-matter reads for further analysis.
+collectUnmapped=0
+
 # Check for per-run and per-sample settings. There is a specificity here
 # due to the ordering: the run settings will override the settings in this
 # file and the sample settings will override them both.

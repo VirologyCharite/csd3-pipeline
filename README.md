@@ -32,7 +32,9 @@ $ mkdir projects/charite/200101
 
 Into the `200101` directory you just made. You'll need to know where these
 are on the BIH cluster (I think under
-`/fast/projects/civ-diagnostics/work/raw` - TODO: check!). You can remove the files with names that contain `*_I1_*` and `*_I2_*`, those are the sequencing files for the indices.
+`/fast/projects/civ-diagnostics/work/raw` - TODO: check!). You can remove
+the files with names that contain `*_I1_*` and `*_I2_*`, those are the
+sequencing files for the indices.
 
 ### Setup the run
 
@@ -70,10 +72,10 @@ functions defined in these files will be accessible to pipeline scripts
 because they all source the `common.sh` file, which in turn sources the
 settings files (if they exist).
 
-#### Setting the sample type
+#### Easy setting of the sample type
 
 As a convenience (and for backwards compatibility) you can use
-`bin/set-sample-type.sh` to set the type of a sample. This just results in
+`./set-sample-type.sh` to set the type of a sample. This just results in
 a line being placed in the `sample-settings.sh` file:
 
 This only needs to be done if some of the samples should make a human
@@ -85,13 +87,13 @@ same reads.
 To set a sample run to run the HCoV pipeline:
 
 ```sh
-$ ./bin/set-sample-type.sh hcov DIRNAME [DIRNAME...]
+$ ./set-sample-type.sh hcov DIRNAME [DIRNAME...]
 ```
 
 Or to set a sample run to run the standard pipeline:
 
 ```sh
-$ ./bin/set-sample-type.sh standard DIRNAME [DIRNAME...]
+$ ./set-sample-type.sh standard DIRNAME [DIRNAME...]
 ```
 
 As mentioned, `standard` is the default.
@@ -105,9 +107,6 @@ $ make print-hcov
 
 You should do this to check that the samples you expect to be run using the
 hcov pipeline are recognized as such.
-
-The run type is stored in a `run-type` file in each sample directory. It
-will either contain `hcov` or `standard`.
 
 ### Put reference files in place for HCoV processing
 
@@ -128,6 +127,12 @@ that should be aligned against a non-default reference. The reference will
 be aligned against using Bowtie2 and a consensus will be made based on
 this. There is no need to build a Bowtie2 index for your reference, that
 will be done automatically. Just put a `reference.fasta` in place.
+
+TODO: improve this by just letting the user give a different value for
+`hcovReference` and `hcovReferenceIndex` in `sample-settings.sh`. That will
+need a little work in `006-hcov/hcov.sh` and some work on the server to go
+find the `reference.fasta` files and put their paths into the settings file.
+
 
 ### Start the pipeline
 

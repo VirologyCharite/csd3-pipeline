@@ -20,11 +20,21 @@ function skip()
 
 function run_diamond()
 {
+    if [ $collectUnmapped -eq 1 ]
+    then
+        echo "  We are collecting unmapped reads." >> $log
+        unmappedArgs="--un $task-unmapped.fastq --unfmt fastq"
+    else
+        echo "  We are not collecting unmapped reads." >> $log
+        unmappedArgs=
+    fi
+
     echo "  DIAMOND RNA blastx started at $(date)" >> $log
     diamond blastx \
         --threads $(($(nproc --all) - 2)) \
         --query $fastq \
         --db $rnaDiamondDB \
+        $unmappedArgs \
         --outfmt 6 qtitle stitle bitscore evalue qframe qseq qstart qend sseq sstart send slen btop nident pident positive ppos |
     convert-diamond-to-json.py | bzip2 > $out
     echo "  DIAMOND RNA blastx stopped at $(date)" >> $log
