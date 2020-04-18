@@ -8,8 +8,7 @@ bt2IndexArgs=
 
 case $# in
     0)
-        # No args. Figure out the task name and look for the reference in
-        # reference.fasta.
+        # No args. Figure out the task name.
         task=$(basename ../005-trim/*_R1_*.trim.fastq.gz | cut -f1 -d.)
         log=$logDir/$task.log
         ;;
@@ -26,11 +25,6 @@ case $# in
         ;;
 esac
 
-task2=$(mateFile $task)
-
-fastq=../005-trim/$task.trim.fastq.gz
-fastq2=../005-trim/$task2.trim.fastq.gz
-
 # Log must have been set in the case statement above. If not, this will
 # fail due to the set -u.
 echo $log > /dev/null
@@ -39,7 +33,6 @@ out=$task.fastq.gz
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
-checkFastq $fastq $log
 
 function collectUnmapped()
 {
