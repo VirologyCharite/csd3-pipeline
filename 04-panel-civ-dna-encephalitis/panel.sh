@@ -37,7 +37,7 @@ function panel()
             exit 1
         }
 
-        FASTQ=../025-dedup/$task-unmapped.fastq.gz
+        FASTQ=../025-dedup/$task.fastq.gz
         test -f $FASTQ || {
             echo "FASTQ file $FASTQ does not exist." >> $log
             exit 1
