@@ -1,6 +1,10 @@
 # IMPORTANT: All (relative) paths in this file are relative to the scripts
 # in 00-start, etc. This file is sourced by those scripts.
 
+# Note that all settings in this file can be over-ridden by settings in
+# ../../../../run-settings.sh or ../../../sample-settings.sh if they exist.
+# See the code at very bottom.
+
 set -Eeuo pipefail
 
 logDir=../logs
@@ -337,3 +341,19 @@ function rmFileAndLink()
         rm -f $file
     done
 }
+
+# Note that the value of 'standard' here must match what's in
+# bin/set-sample-type.sh and that the value may be examined by pipeline
+# scripts to decide what to do. So you can't arbitrarily change it without
+# breaking things elsewhere!
+sampleType=standard
+
+# Check for per-run and per-sample settings. There is a specificity here
+# due to the ordering: the run settings will override the settings in this
+# file and the sample settings will override them both.
+
+f=../../../../run-settings.sh
+test -f $f && . $f
+
+f=../../../sample-settings.sh
+test -f $f && . $f

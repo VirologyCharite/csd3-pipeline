@@ -23,6 +23,13 @@ function skip()
 
 function panel()
 {
+    if [ $sampleType = standard ]
+    then
+        echo "  This is not an hcov sample. Taking no action and exiting with status 0." >> $log
+        logStepStop $log
+        exit 0
+    fi
+
     echo "  alignment-panel-civ.py started at $(date)" >> $log
 
     allJSON=

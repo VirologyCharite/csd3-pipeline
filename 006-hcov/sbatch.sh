@@ -15,7 +15,11 @@ echo "$(basename $(pwd)) sbatch.sh running at $(date)" >> $log
 echo "  Task is $task" >> $log
 echo "  Dependencies are $SP_DEPENDENCY_ARG" >> $log
 
-if [ -f $out ]
+if [ $sampleType != hcov ]
+then
+    echo "  This is not an hcov sample. Taking no action." >> $log
+    schedule=0
+elif [ -f $out ]
 then
     if [ "$SP_FORCE" = "1" -a "$SP_SKIP" = "0" -a "$SP_SIMULATE" = "0" ]
     then

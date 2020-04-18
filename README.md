@@ -58,23 +58,40 @@ $ cd projects/charite
 $ ./setup-pipeline.sh 200101/[DW]_*
 ```
 
-### Set the type of each sample to be run.
+### Per-run and/or per-sample settings
 
-This only needs to be done if some of the runs should only make a human
-coronavirus (SARS-CoV-2) consensus and BAM files. If you don't do this
-step, the whole pipeline will be run and may generate many massive FASTQ
-output files containing essentially the same reads.
+You can specify per-run or per-sample settings by making a file
+`run-settings.sh` in the top-level directory for the run (e.g., in
+`200409-SARS-2/run-settings.sh`) or by putting a `sample-settings.sh` file
+into the directory for a sample (e.g., in
+`200409-SARS-2/D_200409_3_885_1_swab_RNA/sample-settings.sh`). These files
+can be used to override settings in `common.sh`. The variables and
+functions defined in these files will be accessible to pipeline scripts
+because they all source the `common.sh` file, which in turn sources the
+settings files (if they exist).
 
-To set a sample run to just run the HCoV pipeline:
+#### Setting the sample type
+
+As a convenience (and for backwards compatibility) you can use
+`bin/set-sample-type.sh` to set the type of a sample. This just results in
+a line being placed in the `sample-settings.sh` file:
+
+This only needs to be done if some of the samples should make a human
+coronavirus (SARS-CoV-2) consensus and BAM file and should only match
+against one coronavirus sequence. If you don't do this step, the pipeline
+will generate many massive FASTQ output files containing essentially the
+same reads.
+
+To set a sample run to run the HCoV pipeline:
 
 ```sh
-$ ./set-run-type.sh hcov DIRNAME [DIRNAME...]
+$ ./bin/set-sample-type.sh hcov DIRNAME [DIRNAME...]
 ```
 
-To set a sample run to run the standard pipeline:
+Or to set a sample run to run the standard pipeline:
 
 ```sh
-$ ./set-run-type.sh standard DIRNAME [DIRNAME...]
+$ ./bin/set-sample-type.sh standard DIRNAME [DIRNAME...]
 ```
 
 As mentioned, `standard` is the default.

@@ -3,13 +3,8 @@
 all:
 	@echo "There is no default make target. Use 'make run' to run the SLURM pipeline."
 
-run: run-standard
-
-run-standard:
+run:
 	slurm-pipeline.py --specification specification.json > status.json
-
-run-hcov:
-	slurm-pipeline.py --specification specification-hcov.json > status.json
 
 force:
 	slurm-pipeline.py --specification specification.json --force > status.json

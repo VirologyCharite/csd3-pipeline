@@ -15,9 +15,9 @@ DIRS := $(wildcard [DW]_*/pipelines/standard)
 
 STANDARD_DIRS := $(shell for i in [DW]_*; \
                  do \
-                     if test -f $$i/run-type; \
+                     if test -f $$i/sample-settings.sh; \
                      then \
-                         grep -q standard $$i/run-type && echo $$i/pipelines/standard; \
+                         egrep -q '^sampleType=standard$$' $$i/sample-settings.sh && echo $$i/pipelines/standard; \
                      else \
                          echo $$i/pipelines/standard; \
                      fi \
@@ -25,9 +25,9 @@ STANDARD_DIRS := $(shell for i in [DW]_*; \
 
 HCOV_DIRS := $(shell for i in [DW]_*; \
                  do \
-                     if test -f $$i/run-type; \
+                     if test -f $$i/sample-settings.sh; \
                      then \
-                         grep -q hcov $$i/run-type && echo $$i/pipelines/standard; \
+                         egrep -q '^sampleType=hcov$$' $$i/sample-settings.sh && echo $$i/pipelines/standard; \
                      fi \
                  done)
 
@@ -471,13 +471,8 @@ clean-panel:
 
 clean-panel-on: clean-panel
 
-run: run-standard run-hcov
-
-run-standard:
-	@for i in $(STANDARD_DIRS); do cd $$i; make $@; cd ../../..; done
-
-run-hcov:
-	@for i in $(HCOV_DIRS); do cd $$i; make $@; cd ../../..; done
+run:
+	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
 
 status:
 	@ls -l [DW]_*/pipelines/standard/slurm-pipeline.* 2>/dev/null || true

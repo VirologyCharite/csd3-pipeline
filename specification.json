@@ -12,6 +12,12 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "hcov",
+            "dependencies": ["trim"],
+            "cwd": "006-hcov",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "flash",
             "dependencies": ["trim"],
             "cwd": "007-flash",
@@ -62,10 +68,10 @@
             "script": "./sbatch.sh"
         },
         {
-            "name": "panel-civ-rna",
+            "name": "panel-civ-rna-hcov",
             "dependencies": ["diamond-civ-rna"],
             "collect": true,
-            "cwd": "04-panel-civ-rna",
+            "cwd": "04-panel-civ-rna-hcov",
             "script": "./sbatch.sh"
         },
         {
@@ -91,7 +97,7 @@
         },
         {
             "name": "stop",
-            "dependencies": ["panel-civ-dna", "panel-civ-dna-large", "panel-civ-rna", "panel-civ-dna-encephalitis", "panel-civ-dna-large-encephalitis", "panel-civ-rna-encephalitis"],
+            "dependencies": ["panel-civ-dna", "panel-civ-dna-large", "panel-civ-rna-hcov", "panel-civ-dna-encephalitis", "panel-civ-dna-large-encephalitis", "panel-civ-rna-encephalitis", "hcov"],
             "collect": true,
             "cwd": "06-stop",
             "script": "./sbatch.sh"

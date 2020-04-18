@@ -17,7 +17,7 @@ case $# in
         then
             hcovReference=reference.fasta
         else
-            echo "$(basename $0) called with no reference and reference.fasta is not present." >> $log
+            echo "  $(basename $0) called with no reference and reference.fasta is not present." >> $log
             echo "  Using default $hcovReference as a reference." >> $log
             bt2IndexArgs="--index $hcovReferenceIndex"
         fi
@@ -59,18 +59,18 @@ case $# in
         then
             hcovReference=$2
         else
-            echo "$(basename $0) called with task ($task) and reference ($2) but reference is not a file." >> $log
+            echo "  $(basename $0) called with task ($task) and reference ($2) but reference is not a file." >> $log
             exit 1
         fi
         ;;
 
     *)
-        echo "$(basename $0): called with args $@" >> $log
-        echo "Usage: $(basename $0) [task] [reference-file.fasta]" >> $log
+        echo "  $(basename $0): called with args $@" >> $log
+        echo "  Usage: $(basename $0) [task] [reference-file.fasta]" >> $log
         exit 1
         ;;
 esac
-          
+
 task2=$(mateFile $task)
 
 fastq=../005-trim/$task.trim.fastq.gz
@@ -88,6 +88,13 @@ checkFastq $fastq $log
 
 function hcov()
 {
+    if [ $sampleType != hcov ]
+    then
+        echo "  This is not an hcov sample. Taking no action and exiting with status 0." >> $log
+        logStepStop $log
+        exit 0
+    fi
+
     # Remove any pre-existing hcov output files before doing anything, in
     # case we fail for some reason.
     rm -f $out *.bam *.bam.bai *.vcf.gz *.vcf.gz.tbi
