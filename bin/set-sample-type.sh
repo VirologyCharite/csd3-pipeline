@@ -24,7 +24,9 @@ do
         if [ -f $settings ]
         then
             tmp=$(mktemp)
+            set +e
             egrep -v '^sampleType=' < $settings > $tmp
+            set -e
             mv $tmp $settings
             chmod g+rw $settings
         fi
