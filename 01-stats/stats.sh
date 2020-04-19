@@ -4,7 +4,14 @@ set -Eeuo pipefail
 
 . ../common.sh
 
-task=$1
+case $# in
+    0) task=$(taskName);;
+    1) task=$1;;
+    *) echo "  $(basename $0): called with args '$@'" >&2
+       echo "  Usage: $(basename $0) [task]" >&2
+       exit 1;;
+esac
+
 log=$logDir/$task.log
 out=$task.count
 

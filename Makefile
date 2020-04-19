@@ -1,4 +1,4 @@
-.PHONY: all run run-standard run-hcov force status cancel unfinished clean clobber
+.PHONY: all run force status cancel unfinished clean clean-all clobber
 
 all:
 	@echo "There is no default make target. Use 'make run' to run the SLURM pipeline."
@@ -13,71 +13,50 @@ status:
 	@slurm-pipeline-status.py --specification status.json
 
 cancel:
-	@jobs=$$(slurm-pipeline-status.py --specification status.json --printUnfinished); if [ -z "$$jobs" ]; then echo "No unfinished jobs."; else echo "Canceling $$(echo $$jobs | tr '\012' ' ')"; scancel $$jobs; fi
+	@jobs=$$(slurm-pipeline-status.py --specification status.json --printUnfinished); \
+        if [ -z "$$jobs" ]; \
+        then \
+            echo "No unfinished jobs."; \
+        else \
+            echo "Canceling $$(echo $$jobs | tr '\012' ' ')"; \
+            scancel $$jobs; \
+        fi
 
 unfinished:
 	@slurm-pipeline-status.py --specification status.json --printUnfinished
 
 clean-stats:
-	rm -fr \
-               01-stats/*.count \
-               01-stats/slurm-*.out
+	make -C 01-stats clean
 
 clean-trim:
-	rm -fr \
-               005-trim/*.gz \
-               005-trim/*.out \
-               005-trim/*.settings \
-               005-trim/slurm-*.out
+	make -C 005-trim clean
 
 clean-hcov:
-	rm -fr \
-               006-hcov/*.bam* \
-               006-hcov/*.vcf* \
-               006-hcov/*-consensus* \
-               006-hcov/*-coverage.txt \
-               006-hcov/*-read-count.txt \
-               006-hcov/*-alignment.fasta \
-               006-hcov/tmp \
-               006-hcov/slurm-*.out
+	make -C 006-hcov clean
 
 clean-flash:
-	rm -fr \
-               007-flash/*.fastq.gz \
-               007-flash/*.fastq \
-               007-flash/out.* \
-               007-flash/flash.std{err,out} \
-               007-flash/slurm-*.out
+	make -C 007-flash clean
 
 clean-spades:
-	rm -fr \
-               008-spades/spades.out \
-               008-spades/*.fasta \
-               008-spades/*.fasta.gz \
-               008-spades/slurm-*.out
+	make -C 008-spades clean
 
 clean-map:
-	rm -fr \
-               02-map/*.[bs]am \
-               02-map/*-unmapped.fastq \
-               02-map/*-unmapped.fastq.gz \
-               02-map/slurm-*.out
+	make -C 02-map clean
 
 clean-dedup:
-	rm -fr \
-               025-dedup/*.fastq.gz \
-               025-dedup/slurm-*.out
+	make -C 025-dedup clean
 
 clean-diamond:
-	rm -fr \
-               03-diamond-*/*.json.bz2 \
-               03-diamond-*/slurm-*.out
+	for i in 03-diamond-*; \
+        do \
+            make -C $$i clean; \
+        done
 
 clean-panel:
-	rm -fr \
-               04-panel-*/out \
-               04-panel-*/summary-{proteins,virus} \
-               04-panel-*/slurm-*.out
+	for i in 04-panel-*; \
+        do \
+            make -C $$i clean; \
+        done
 
 clean:
 	rm -fr \
@@ -88,11 +67,10 @@ clean:
                csd3lib/__pycache__ \
                test/__pycache__
 
-clean-all: clean clean-stats clean-trim clean-flash clean-spades clean-map clean-dedup clean-diamond clean-panel
+clean-all: clean clean-stats clean-trim clean-hcov clean-flash clean-spades clean-map clean-dedup clean-diamond clean-panel
 
 clobber: clean-all
-	rm -fr \
-               logs
+	rm -fr logs
 
 pytest:
 	env PYTHONPATH=. pytest

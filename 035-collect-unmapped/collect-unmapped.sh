@@ -4,33 +4,16 @@ set -Eeuo pipefail
 
 . ../common.sh
 
-bt2IndexArgs=
-
 case $# in
-    0)
-        # No args. Figure out the task name.
-        task=$(basename ../005-trim/*_R1_*.trim.fastq.gz | cut -f1 -d.)
-        log=$logDir/$task.log
-        ;;
-
-    1)
-        task=$1
-        log=$logDir/$task.log
-        ;;
-
-    *)
-        echo "  $(basename $0): called with args $@" >> $log
-        echo "  Usage: $(basename $0) [task]" >> $log
-        exit 1
-        ;;
+    0) task=$(taskName);;
+    1) task=$1;;
+    *) echo "  $(basename $0): called with args '$@'" >&2
+       echo "  Usage: $(basename $0) [task]" >&2
+       exit 1;;
 esac
 
-# Log must have been set in the case statement above. If not, this will
-# fail due to the set -u.
-echo $log > /dev/null
-
 out=$task.fastq.gz
-
+log=$logDir/$task.log
 logStepStart $log
 logTaskToSlurmOutput $task $log
 

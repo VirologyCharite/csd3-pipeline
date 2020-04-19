@@ -178,6 +178,11 @@ function sampleNumber()
     echo $dir | cut -f5 -d_
 }
 
+function taskName()
+{
+    files=$(basename $dataDir/*_R1_*.fastq.gz | sed -e 's/\.fastq\.gz//')
+}
+
 function tasksForSample()
 {
     # Emit a task for all sequencing files that correspond to this sample.

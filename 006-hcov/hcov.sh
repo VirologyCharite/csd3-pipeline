@@ -10,7 +10,7 @@ case $# in
     0)
         # No args. Figure out the task name and look for the reference in
         # reference.fasta.
-        task=$(basename ../005-trim/*_R1_*.trim.fastq.gz | cut -f1 -d.)
+        task=$(taskName)
         log=$logDir/$task.log
 
         if [ -f reference.fasta ]

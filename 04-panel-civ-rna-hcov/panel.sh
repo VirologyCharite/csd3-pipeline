@@ -8,7 +8,11 @@ set -Eeuo pipefail
 # 'collect' step that is only run once.
 log=$sampleLogFile
 out=summary-virus
-tasks="$@"
+
+case $# in
+    0) tasks=$(taskName);;
+    *) tasks="$@";;
+esac
 
 logStepStart $log
 logTaskToSlurmOutput panel $log
