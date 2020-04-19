@@ -180,7 +180,7 @@ function sampleNumber()
 
 function taskName()
 {
-    files=$(basename $dataDir/*_R1_*.fastq.gz | sed -e 's/\.fastq\.gz//')
+    basename $dataDir/*_R1_*.fastq.gz | sed -e 's/\.fastq\.gz//'
 }
 
 function tasksForSample()
