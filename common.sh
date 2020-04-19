@@ -367,3 +367,9 @@ test -f $f && . $f
 
 f=../../../sample-settings.sh
 test -f $f && . $f
+
+# Make sure our last command results in a zero exit status, otherwise
+# scripts that include this file will fail if they are using set -e We need
+# this because the test -f above can fail due to their being no
+# sample-settings.sh file, in which case $? is set to 1.
+true
