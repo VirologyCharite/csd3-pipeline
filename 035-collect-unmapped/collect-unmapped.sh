@@ -37,7 +37,7 @@ function collectUnmapped()
 
     for dir in 03-diamond-civ-dna 03-diamond-civ-dna-large 03-diamond-civ-rna
     do
-        fastq=$dir/$task-unmapped.fastq.gz
+        fastq=../$dir/$task-unmapped.fastq.gz
         if [ -f $fastq ]
         then
             allFastq="$allFastq $fastq"
