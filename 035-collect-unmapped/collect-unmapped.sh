@@ -32,10 +32,24 @@ function collectUnmapped()
 
     echo "  collecting unmapped reads started at $(date)." >> $log
 
-    cat ../03-diamond-civ-dna/$task-unmapped.fastq.gz \
-        ../03-diamond-civ-dna-large/$task-unmapped.fastq.gz \
-        ../03-diamond-civ-rna/$task-unmapped.fastq.gz | gunzip |
-        filter-fasta.py --removeDuplicatesById --quiet --fastq | gzip > $out
+    allFastq=
+    missing=0
+
+    for dir in 03-diamond-civ-dna 03-diamond-civ-dna-large 03-diamond-civ-rna
+    do
+        fastq=$dir/$task-unmapped.fastq.gz
+        if [ -f $fastq ]
+        then
+            allFastq="$allFastq $fastq"
+        else
+            echo "  Required FASTQ file '$fastq' not found." >> $log
+            missing=1
+        fi
+    done
+
+    test $missing -eq 1 && exit 1
+
+    cat $allFastq | gunzip | filter-fasta.py --removeDuplicatesById --quiet --fastq | gzip > $out
 
     echo "  collecting unmapped reads stopped at $(date)." >> $log
 }
