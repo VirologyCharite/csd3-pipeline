@@ -47,7 +47,10 @@ function collectUnmapped()
         fi
     done
 
-    test $missing -eq 1 && exit 1
+    test $missing -eq 0 || {
+        logStepStop $log
+        exit 1
+    }
 
     cat $allFastq | gunzip | filter-fasta.py --removeDuplicatesById --quiet --fastq | gzip > $out
 
