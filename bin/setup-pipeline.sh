@@ -26,6 +26,10 @@ do
     fi
 done
 
+# Prepare the tarball that will be unpacked in each sample dir.
+tartmp=$(mktemp)
+tar -C csd3-pipeline --exclude-vcs -c -f $tartmp .
+
 for dir in "$@"
 do
     echo "Processing $dir"
@@ -36,7 +40,7 @@ do
 
         # Get rid of some old directories that are no longer in the
         # 2019-11-27 pipeline.
-        for i in 04-panel-civ 04-panel-civ-encephalitis 03-diamond-civ
+        for i in 04-panel-civ 04-panel-civ-encephalitis 03-diamond-civ 03-diamond-refseq 03-diamond-rvdb
         do
             olddir="$dir/pipelines/standard/$i"
             test -d "$olddir" && rm -r "$olddir"
@@ -47,5 +51,7 @@ do
     fi
 
     # echo "  Copying pipeline files"
-    tar -C csd3-pipeline --exclude-vcs -c -f - . | tar --no-overwrite-dir -C $dir/pipelines/standard -x -f -
+    tar --no-overwrite-dir -C $dir/pipelines/standard -x -f $tartmp
 done
+
+rm $tartmp
