@@ -435,7 +435,6 @@ clean-stats:
 	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
 
 clean-stats-on: clean-stats clean-trim-on
-	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
 
 clean-trim:
 	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
