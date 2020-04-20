@@ -427,6 +427,10 @@ clean-results: \
     clean-civ-rna-hcov-results
 	rm -f $(PREAMBLE_FILE)
 
+clean-all: \
+    clean-results \
+    clean-stats-on
+
 clean-stats:
 	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
 
