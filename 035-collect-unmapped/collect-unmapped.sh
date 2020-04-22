@@ -30,7 +30,7 @@ function collectUnmapped()
     # we fail for some reason.
     rm -f $out
 
-    echo "  collecting unmapped reads started at $(date)." >> $log
+    echo "  Collecting unmapped reads started at $(date)." >> $log
 
     allFastq=
     missing=0
@@ -54,7 +54,7 @@ function collectUnmapped()
 
     cat $allFastq | gunzip | filter-fasta.py --removeDuplicatesById --quiet --fastq | gzip > $out
 
-    echo "  collecting unmapped reads stopped at $(date)." >> $log
+    echo "  Collecting unmapped reads stopped at $(date)." >> $log
 }
 
 if [ $SP_SIMULATE = "1" ]

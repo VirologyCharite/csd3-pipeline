@@ -40,7 +40,7 @@ do
 
         # Get rid of some old directories that are no longer in the
         # 2019-11-27 pipeline.
-        for i in 04-panel-civ 04-panel-civ-encephalitis 03-diamond-civ 03-diamond-refseq 03-diamond-rvdb
+        for i in 04-panel-{civ,refseq,rvdb,civ-encephalitis} 03-diamond-{civ,refseq,rvdb}
         do
             olddir="$dir/pipelines/standard/$i"
             test -d "$olddir" && rm -r "$olddir"
