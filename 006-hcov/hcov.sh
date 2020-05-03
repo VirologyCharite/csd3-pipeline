@@ -70,7 +70,7 @@ case $# in
         exit 1
         ;;
 esac
-          
+
 task2=$(mateFile $task)
 
 fastq=../005-trim/$task.trim.fastq.gz
@@ -129,7 +129,7 @@ function hcov()
 
     echo "  make-consensus.py started at $(date)." >> $log
     make-consensus.py --reference $hcovReference \
-        --id "$prefix-consensus" --maskNoCoverage --bam $prefix.bam \
+        --id "$prefix-consensus" --maskLowCoverage 3 --bam $prefix.bam \
         --vcfFile $prefix.vcf.gz --log > $prefix-consensus.fasta 2>> $log
     echo "  make-consensus.py stopped at $(date)." >> $log
 
