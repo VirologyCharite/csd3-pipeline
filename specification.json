@@ -12,6 +12,12 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "rrna",
+            "dependencies": ["trim"],
+            "cwd": "0055-rrna",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "hcov",
             "dependencies": ["trim"],
             "cwd": "006-hcov",

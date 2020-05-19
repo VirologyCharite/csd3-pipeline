@@ -14,22 +14,30 @@
 DIRS := $(wildcard [DW]_*/pipelines/standard)
 
 STANDARD_DIRS := $(shell for i in [DW]_*; \
-                 do \
-                     if test -f $$i/sample-settings.sh; \
-                     then \
-                         egrep -q '^sampleType=standard$$' $$i/sample-settings.sh && echo $$i/pipelines/standard; \
-                     else \
-                         echo $$i/pipelines/standard; \
-                     fi \
-                 done)
+				 do \
+					 if test -f $$i/sample-settings.sh; \
+					 then \
+						 egrep -q '^sampleType=standard$$' $$i/sample-settings.sh && echo $$i/pipelines/standard; \
+					 else \
+						 echo $$i/pipelines/standard; \
+					 fi \
+				 done)
 
 HCOV_DIRS := $(shell for i in [DW]_*; \
-                 do \
-                     if test -f $$i/sample-settings.sh; \
-                     then \
-                         egrep -q '^sampleType=hcov$$' $$i/sample-settings.sh && echo $$i/pipelines/standard; \
-                     fi \
-                 done)
+				 do \
+					 if test -f $$i/sample-settings.sh; \
+					 then \
+						 egrep -q '^sampleType=hcov$$' $$i/sample-settings.sh && echo $$i/pipelines/standard; \
+					 fi \
+				 done)
+
+MEDMUSEUM_DIRS := $(shell for i in [DW]_*; \
+				 do \
+					 if test -f $$i/sample-settings.sh; \
+					 then \
+						 egrep -q '^sampleType=medmuseum$$' $$i/sample-settings.sh && echo $$i/pipelines/standard; \
+					 fi \
+				 done)
 
 # RUNID will be something like 191205
 RUNID := $(shell basename $(shell /bin/pwd))
@@ -95,149 +103,149 @@ gitpull:
 	cd ../bih-pipeline && git pull
 
 html: gitpull \
-    preamble \
-    html-civ-dna \
-    html-civ-dna-encephalitis \
-    html-civ-dna-large \
-    html-civ-dna-large-encephalitis \
-    html-civ-rna \
-    html-civ-rna-encephalitis \
-    html-civ-rna-hcov
+	preamble \
+	html-civ-dna \
+	html-civ-dna-encephalitis \
+	html-civ-dna-large \
+	html-civ-dna-large-encephalitis \
+	html-civ-rna \
+	html-civ-rna-encephalitis \
+	html-civ-rna-hcov
 
 tar: tar-civ-dna \
-     tar-civ-dna-encephalitis \
-     tar-civ-dna-large \
-     tar-civ-dna-large-encephalitis \
-     tar-civ-rna \
-     tar-civ-rna-encephalitis \
-     tar-civ-rna-hcov
+	 tar-civ-dna-encephalitis \
+	 tar-civ-dna-large \
+	 tar-civ-dna-large-encephalitis \
+	 tar-civ-rna \
+	 tar-civ-rna-encephalitis \
+	 tar-civ-rna-hcov
 
 html-civ-dna:
 	find $(DIRS) -name summary-proteins | \
-        grep 04-panel-civ-dna/ | \
-        proteins-to-pathogens-civ.py \
-            --html \
-            --title "Summary of small DNA viruses for run $(RUNID)" \
-            --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
-            --taxonomyDatabase $(TAXONOMY_DB) \
-            --format fastq \
-            --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes.</p>" \
-            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
-            --pathogenType viral \
-            --pathogenPanelFilename virus-civ-dna.png \
-            --sampleIndexFilename samples-civ-dna.index \
-            --pathogenDataDir pathogen-data-civ-dna \
-            --bootstrapTreeviewDir .. \
-            $(READ_COUNT_COLORS) \
-            > index-civ-dna.html
+		grep 04-panel-civ-dna/ | \
+		proteins-to-pathogens-civ.py \
+			--html \
+			--title "Summary of small DNA viruses for run $(RUNID)" \
+			--proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
+			--taxonomyDatabase $(TAXONOMY_DB) \
+			--format fastq \
+			--preamble $(PREAMBLE_FILE) \
+			--preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes.</p>" \
+			--sampleNameRegex $(SAMPLE_NAME_REGEX) \
+			--pathogenType viral \
+			--pathogenPanelFilename virus-civ-dna.png \
+			--sampleIndexFilename samples-civ-dna.index \
+			--pathogenDataDir pathogen-data-civ-dna \
+			--bootstrapTreeviewDir .. \
+			$(READ_COUNT_COLORS) \
+			> index-civ-dna.html
 
 html-civ-dna-large:
 	find $(DIRS) -name summary-proteins | \
-        grep 04-panel-civ-dna-large/ | \
-        proteins-to-pathogens-civ.py \
-            --html \
-            --title "Summary of large DNA viruses for run $(RUNID)" \
-            --minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
-            --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
-            --taxonomyDatabase $(TAXONOMY_DB) \
-            --format fastq \
-            --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes.</p>" \
-            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
-            --pathogenType viral \
-            --pathogenPanelFilename virus-civ-dna-large.png \
-            --sampleIndexFilename samples-civ-dna-large.index \
-            --pathogenDataDir pathogen-data-civ-dna-large \
-            --bootstrapTreeviewDir .. \
-            $(READ_COUNT_COLORS) \
-            > index-civ-dna-large.html
+		grep 04-panel-civ-dna-large/ | \
+		proteins-to-pathogens-civ.py \
+			--html \
+			--title "Summary of large DNA viruses for run $(RUNID)" \
+			--minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
+			--proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
+			--taxonomyDatabase $(TAXONOMY_DB) \
+			--format fastq \
+			--preamble $(PREAMBLE_FILE) \
+			--preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes.</p>" \
+			--sampleNameRegex $(SAMPLE_NAME_REGEX) \
+			--pathogenType viral \
+			--pathogenPanelFilename virus-civ-dna-large.png \
+			--sampleIndexFilename samples-civ-dna-large.index \
+			--pathogenDataDir pathogen-data-civ-dna-large \
+			--bootstrapTreeviewDir .. \
+			$(READ_COUNT_COLORS) \
+			> index-civ-dna-large.html
 
 html-civ-rna:
 	if test -n "$(STANDARD_DIRS)"; then \
 	find $(STANDARD_DIRS) -name summary-proteins | \
-        grep 04-panel-civ-rna/ | \
-        proteins-to-pathogens-civ.py \
-            --html \
-            --title "Summary of RNA viruses for run $(RUNID)" \
-            --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
-            --taxonomyDatabase $(TAXONOMY_DB) \
-            --format fastq \
-            --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
-            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
-            --pathogenType viral \
-            --pathogenPanelFilename virus-civ-rna.png \
-            --sampleIndexFilename samples-civ-rna.index \
-            --pathogenDataDir pathogen-data-civ-rna \
-            --bootstrapTreeviewDir .. \
-            $(READ_COUNT_COLORS) \
-            > index-civ-rna.html; \
-        fi
+		grep 04-panel-civ-rna/ | \
+		proteins-to-pathogens-civ.py \
+			--html \
+			--title "Summary of RNA viruses for run $(RUNID)" \
+			--proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
+			--taxonomyDatabase $(TAXONOMY_DB) \
+			--format fastq \
+			--preamble $(PREAMBLE_FILE) \
+			--preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
+			--sampleNameRegex $(SAMPLE_NAME_REGEX) \
+			--pathogenType viral \
+			--pathogenPanelFilename virus-civ-rna.png \
+			--sampleIndexFilename samples-civ-rna.index \
+			--pathogenDataDir pathogen-data-civ-rna \
+			--bootstrapTreeviewDir .. \
+			$(READ_COUNT_COLORS) \
+			> index-civ-rna.html; \
+		fi
 
 html-civ-dna-encephalitis:
 	find $(DIRS) -name summary-proteins | \
-        grep 04-panel-civ-dna-encephalitis/ | \
-        proteins-to-pathogens-civ.py \
-            --html \
-            --title "Summary of small DNA encephalitis-causing viruses for run $(RUNID)" \
-            --proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
-            --taxonomyDatabase $(TAXONOMY_DB) \
-            --format fastq \
-            --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
-            --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
-            --pathogenType viral \
-            --pathogenPanelFilename $(DNA_ENCEPHALITIS_PNG_FILE) \
-            --sampleIndexFilename samples-civ-dna-encephalitis.index \
-            --pathogenDataDir pathogen-data-civ-dna-encephalitis \
-            --bootstrapTreeviewDir .. \
-            $(READ_COUNT_COLORS) \
-            > index-civ-dna-encephalitis.html
+		grep 04-panel-civ-dna-encephalitis/ | \
+		proteins-to-pathogens-civ.py \
+			--html \
+			--title "Summary of small DNA encephalitis-causing viruses for run $(RUNID)" \
+			--proteinGenomeDatabase $(DNA_PROTEIN_GENOME_DB) \
+			--taxonomyDatabase $(TAXONOMY_DB) \
+			--format fastq \
+			--preamble $(PREAMBLE_FILE) \
+			--preamble "<p>Database: Charit&eacute; custom DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
+			--titleRegex $(ENCEPHALITIS_REGEX) \
+			--sampleNameRegex $(SAMPLE_NAME_REGEX) \
+			--pathogenType viral \
+			--pathogenPanelFilename $(DNA_ENCEPHALITIS_PNG_FILE) \
+			--sampleIndexFilename samples-civ-dna-encephalitis.index \
+			--pathogenDataDir pathogen-data-civ-dna-encephalitis \
+			--bootstrapTreeviewDir .. \
+			$(READ_COUNT_COLORS) \
+			> index-civ-dna-encephalitis.html
 
 html-civ-dna-large-encephalitis:
 	find $(DIRS) -name summary-proteins | \
-        grep 04-panel-civ-dna-large-encephalitis/ | \
-        proteins-to-pathogens-civ.py \
-            --html \
-            --title "Summary of large DNA encephalitis-causing viruses for run $(RUNID)" \
-            --minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
-            --proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
-            --taxonomyDatabase $(TAXONOMY_DB) \
-            --format fastq \
-            --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
-            --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
-            --pathogenType viral \
-            --pathogenPanelFilename $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
-            --sampleIndexFilename samples-civ-dna-large-encephalitis.index \
-            --pathogenDataDir pathogen-data-civ-dna-large-encephalitis \
-            --bootstrapTreeviewDir .. \
-            $(READ_COUNT_COLORS) \
-            > index-civ-dna-large-encephalitis.html
+		grep 04-panel-civ-dna-large-encephalitis/ | \
+		proteins-to-pathogens-civ.py \
+			--html \
+			--title "Summary of large DNA encephalitis-causing viruses for run $(RUNID)" \
+			--minProteinCount $(DNA_LARGE_MIN_PROTEIN_COUNT) \
+			--proteinGenomeDatabase $(DNA_LARGE_PROTEIN_GENOME_DB) \
+			--taxonomyDatabase $(TAXONOMY_DB) \
+			--format fastq \
+			--preamble $(PREAMBLE_FILE) \
+			--preamble "<p>Database: Charit&eacute; custom large DNA protein database from the NCBI refseq virus genomes, filtered for encephalitis-causing viruses.</p>" \
+			--titleRegex $(ENCEPHALITIS_REGEX) \
+			--sampleNameRegex $(SAMPLE_NAME_REGEX) \
+			--pathogenType viral \
+			--pathogenPanelFilename $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
+			--sampleIndexFilename samples-civ-dna-large-encephalitis.index \
+			--pathogenDataDir pathogen-data-civ-dna-large-encephalitis \
+			--bootstrapTreeviewDir .. \
+			$(READ_COUNT_COLORS) \
+			> index-civ-dna-large-encephalitis.html
 
 html-civ-rna-encephalitis:
 	find $(DIRS) -name summary-proteins | \
-        grep 04-panel-civ-rna-encephalitis/ | \
-        proteins-to-pathogens-civ.py \
-            --html \
-            --title "Summary of RNA encephalitis-causing viruses for run $(RUNID)" \
-            --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
-            --taxonomyDatabase $(TAXONOMY_DB) \
-            --format fastq \
-            --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses.</p>" \
-            --titleRegex $(ENCEPHALITIS_REGEX) \
-            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
-            --pathogenType viral \
-            --pathogenPanelFilename $(RNA_ENCEPHALITIS_PNG_FILE) \
-            --sampleIndexFilename samples-civ-rna-encephalitis.index \
-            --pathogenDataDir pathogen-data-civ-rna-encephalitis \
-            --bootstrapTreeviewDir .. \
-            $(READ_COUNT_COLORS) \
-            > index-civ-rna-encephalitis.html
+		grep 04-panel-civ-rna-encephalitis/ | \
+		proteins-to-pathogens-civ.py \
+			--html \
+			--title "Summary of RNA encephalitis-causing viruses for run $(RUNID)" \
+			--proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
+			--taxonomyDatabase $(TAXONOMY_DB) \
+			--format fastq \
+			--preamble $(PREAMBLE_FILE) \
+			--preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes, sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes, filtered for encephalitis-causing viruses.</p>" \
+			--titleRegex $(ENCEPHALITIS_REGEX) \
+			--sampleNameRegex $(SAMPLE_NAME_REGEX) \
+			--pathogenType viral \
+			--pathogenPanelFilename $(RNA_ENCEPHALITIS_PNG_FILE) \
+			--sampleIndexFilename samples-civ-rna-encephalitis.index \
+			--pathogenDataDir pathogen-data-civ-rna-encephalitis \
+			--bootstrapTreeviewDir .. \
+			$(READ_COUNT_COLORS) \
+			> index-civ-rna-encephalitis.html
 
 # Note that we don't need to pass --negativeTitleRegex
 # "$(CORONAVIRUS_REGEX)" in the following. That's because that has already
@@ -252,184 +260,184 @@ html-civ-rna-encephalitis:
 html-civ-rna-hcov:
 	if test -n "$(HCOV_DIRS)"; then \
 	find $(HCOV_DIRS) -name summary-proteins | \
-        grep 04-panel-civ-rna-hcov/ | \
-        proteins-to-pathogens-civ.py \
-            --html \
-            --title "Summary of RNA viruses (one CoV) for run $(RUNID)" \
-            --proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
-            --taxonomyDatabase $(TAXONOMY_DB) \
-            --format fastq \
-            --preamble $(PREAMBLE_FILE) \
-            --preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes (no CoV), the SARS-CoV-2 reference (MN908947.3), sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
-            --sampleNameRegex $(SAMPLE_NAME_REGEX) \
-            --pathogenType viral \
-            --pathogenPanelFilename $(RNA_HCOV_PNG_FILE) \
-            --sampleIndexFilename samples-civ-rna-hcov.index \
-            --pathogenDataDir pathogen-data-civ-rna-hcov \
-            --bootstrapTreeviewDir .. \
-            $(READ_COUNT_COLORS) \
-            > index-civ-rna-hcov.html; \
-        fi
+		grep 04-panel-civ-rna-hcov/ | \
+		proteins-to-pathogens-civ.py \
+			--html \
+			--title "Summary of RNA viruses (one CoV) for run $(RUNID)" \
+			--proteinGenomeDatabase $(RNA_PROTEIN_GENOME_DB) \
+			--taxonomyDatabase $(TAXONOMY_DB) \
+			--format fastq \
+			--preamble $(PREAMBLE_FILE) \
+			--preamble "<p>Database: Charit&eacute; custom RNA protein database: NCBI refseq virus genomes (no CoV), the SARS-CoV-2 reference (MN908947.3), sequences from three Chinese papers, and the RdRp protein (or fragment thereof) from OKIAV genomes.</p>" \
+			--sampleNameRegex $(SAMPLE_NAME_REGEX) \
+			--pathogenType viral \
+			--pathogenPanelFilename $(RNA_HCOV_PNG_FILE) \
+			--sampleIndexFilename samples-civ-rna-hcov.index \
+			--pathogenDataDir pathogen-data-civ-rna-hcov \
+			--bootstrapTreeviewDir .. \
+			$(READ_COUNT_COLORS) \
+			> index-civ-rna-hcov.html; \
+		fi
 
 tar-civ-dna:
 	tar cfj results-civ-dna.tar.bz2 \
-            index-civ-dna.html \
-            $(DNA_PANEL_OUT_DIRS) \
-            $(DNA_PNG_FILE) \
-            samples-civ-dna.index \
-            pathogen-data-civ-dna
+			index-civ-dna.html \
+			$(DNA_PANEL_OUT_DIRS) \
+			$(DNA_PNG_FILE) \
+			samples-civ-dna.index \
+			pathogen-data-civ-dna
 
 tar-civ-dna-large:
 	tar cfj results-civ-dna-large.tar.bz2 \
-            index-civ-dna-large.html \
-            $(DNA_LARGE_PANEL_OUT_DIRS) \
-            $(DNA_LARGE_PNG_FILE) \
-            samples-civ-dna-large.index \
-            pathogen-data-civ-dna-large
+			index-civ-dna-large.html \
+			$(DNA_LARGE_PANEL_OUT_DIRS) \
+			$(DNA_LARGE_PNG_FILE) \
+			samples-civ-dna-large.index \
+			pathogen-data-civ-dna-large
 
 tar-civ-rna:
 	if test -n "$(STANDARD_DIRS)"; then \
 	tar cfj results-civ-rna.tar.bz2 \
-            index-civ-rna.html \
-            $(RNA_PANEL_OUT_DIRS) \
-            $(RNA_PNG_FILE) \
-            samples-civ-rna.index \
-            pathogen-data-civ-rna; \
-        fi
+			index-civ-rna.html \
+			$(RNA_PANEL_OUT_DIRS) \
+			$(RNA_PNG_FILE) \
+			samples-civ-rna.index \
+			pathogen-data-civ-rna; \
+		fi
 
 tar-civ-dna-encephalitis:
 	tar cfj results-civ-dna-encephalitis.tar.bz2 \
-            index-civ-dna-encephalitis.html \
-            $(DNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
-            $(DNA_ENCEPHALITIS_PNG_FILE) \
-            samples-civ-dna-encephalitis.index \
-            pathogen-data-civ-dna-encephalitis
+			index-civ-dna-encephalitis.html \
+			$(DNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
+			$(DNA_ENCEPHALITIS_PNG_FILE) \
+			samples-civ-dna-encephalitis.index \
+			pathogen-data-civ-dna-encephalitis
 
 tar-civ-dna-large-encephalitis:
 	tar cfj results-civ-dna-large-encephalitis.tar.bz2 \
-            index-civ-dna-large-encephalitis.html \
-            $(DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS) \
-            $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
-            samples-civ-dna-large-encephalitis.index \
-            pathogen-data-civ-dna-large-encephalitis
+			index-civ-dna-large-encephalitis.html \
+			$(DNA_LARGE_ENCEPHALITIS_PANEL_OUT_DIRS) \
+			$(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
+			samples-civ-dna-large-encephalitis.index \
+			pathogen-data-civ-dna-large-encephalitis
 
 tar-civ-rna-encephalitis:
 	tar cfj results-civ-rna-encephalitis.tar.bz2 \
-            index-civ-rna-encephalitis.html \
-            $(RNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
-            $(RNA_ENCEPHALITIS_PNG_FILE) \
-            samples-civ-rna-encephalitis.index \
-            pathogen-data-civ-rna-encephalitis
+			index-civ-rna-encephalitis.html \
+			$(RNA_ENCEPHALITIS_PANEL_OUT_DIRS) \
+			$(RNA_ENCEPHALITIS_PNG_FILE) \
+			samples-civ-rna-encephalitis.index \
+			pathogen-data-civ-rna-encephalitis
 
 tar-civ-rna-hcov:
 	if test -n "$(HCOV_DIRS)"; then \
 	tar cfj results-civ-rna-hcov.tar.bz2 \
-            index-civ-rna-hcov.html \
-            $(RNA_HCOV_PANEL_OUT_DIRS) \
-            $(RNA_HCOV_PNG_FILE) \
-            samples-civ-rna-hcov.index \
-            pathogen-data-civ-rna-hcov; \
-        fi
+			index-civ-rna-hcov.html \
+			$(RNA_HCOV_PANEL_OUT_DIRS) \
+			$(RNA_HCOV_PNG_FILE) \
+			samples-civ-rna-hcov.index \
+			pathogen-data-civ-rna-hcov; \
+		fi
 
 zip:
 	if test -n "$(HCOV_DIRS)"; then \
 	../csd3-pipeline/bin/zip-hcov.sh; \
-        fi
+		fi
 
 # The following is unused (see tar-hcov).
 zip-hcov-individual:
 	if test -n "$(HCOV_DIRS)"; then \
 	tar cfj results-hcov.tar.bz2 \
-            [DW]_*/pipelines/standard/006-hcov/*.bam \
-            [DW]_*/pipelines/standard/006-hcov/*.bam.bai \
-            [DW]_*/pipelines/standard/006-hcov/*.vcf.gz \
-            [DW]_*/pipelines/standard/006-hcov/*.vcf.gz.tbi \
-            [DW]_*/pipelines/standard/006-hcov/*.txt \
-            [DW]_*/pipelines/standard/006-hcov/*-consensus.fasta \
-            [DW]_*/pipelines/standard/006-hcov/*-alignment.fasta; \
-        fi
+			[DW]_*/pipelines/standard/006-hcov/*.bam \
+			[DW]_*/pipelines/standard/006-hcov/*.bam.bai \
+			[DW]_*/pipelines/standard/006-hcov/*.vcf.gz \
+			[DW]_*/pipelines/standard/006-hcov/*.vcf.gz.tbi \
+			[DW]_*/pipelines/standard/006-hcov/*.txt \
+			[DW]_*/pipelines/standard/006-hcov/*-consensus.fasta \
+			[DW]_*/pipelines/standard/006-hcov/*-alignment.fasta; \
+		fi
 
 upload:
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'test -d $(UPLOAD_DIR)/$(RUNID) || mkdir -p $(UPLOAD_DIR)/$(RUNID)'"
 	if ls results-*.tar.bz2 >/dev/null 2>&1; then \
-            scp results-*.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
-        fi
+			scp results-*.tar.bz2 $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
+		fi
 	if ls *-hcov.zip >/dev/null 2>&1; then \
-            scp *-hcov.zip $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
-        fi
+			scp *-hcov.zip $(UPLOAD_USERID)@$(UPLOAD_HOST):$(UPLOAD_DIR)/$(RUNID); \
+		fi
 	ssh $(UPLOAD_USERID)@$(UPLOAD_HOST) $(UNTAR_SCRIPT) $(RUNID)
 	ssh -A $(UPLOAD_USERID)@$(UPLOAD_HOST) bash -c "'cd $(REPO_DIR) && git pull'"
 
 clean-civ-dna-results:
 	rm -fr \
-            results-civ-dna.tar.bz2 \
-            samples-civ-dna.index \
-            pathogen-data-civ-dna \
-            virus-civ-dna.png \
-            index-civ-dna.html
+			results-civ-dna.tar.bz2 \
+			samples-civ-dna.index \
+			pathogen-data-civ-dna \
+			virus-civ-dna.png \
+			index-civ-dna.html
 
 clean-civ-dna-large-results:
 	rm -fr \
-            results-civ-dna-large.tar.bz2 \
-            samples-civ-dna-large.index \
-            pathogen-data-civ-dna-large \
-            virus-civ-dna-large.png \
-            index-civ-dna-large.html
+			results-civ-dna-large.tar.bz2 \
+			samples-civ-dna-large.index \
+			pathogen-data-civ-dna-large \
+			virus-civ-dna-large.png \
+			index-civ-dna-large.html
 
 clean-civ-rna-results:
 	rm -fr \
-            results-civ-rna.tar.bz2 \
-            samples-civ-rna.index \
-            pathogen-data-civ-rna \
-            virus-civ-rna.png \
-            index-civ-rna.html
+			results-civ-rna.tar.bz2 \
+			samples-civ-rna.index \
+			pathogen-data-civ-rna \
+			virus-civ-rna.png \
+			index-civ-rna.html
 
 clean-civ-dna-encephalitis-results:
 	rm -fr \
-            results-civ-dna-encephalitis.tar.bz2 \
-            samples-civ-dna-encephalitis.index \
-            pathogen-data-civ-dna-encephalitis \
-            $(DNA_ENCEPHALITIS_PNG_FILE) \
-            index-civ-dna-encephalitis.html
+			results-civ-dna-encephalitis.tar.bz2 \
+			samples-civ-dna-encephalitis.index \
+			pathogen-data-civ-dna-encephalitis \
+			$(DNA_ENCEPHALITIS_PNG_FILE) \
+			index-civ-dna-encephalitis.html
 
 clean-civ-dna-large-encephalitis-results:
 	rm -fr \
-            results-civ-dna-large-encephalitis.tar.bz2 \
-            samples-civ-dna-large-encephalitis.index \
-            pathogen-data-civ-dna-large-encephalitis \
-            $(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
-            index-civ-dna-large-encephalitis.html
+			results-civ-dna-large-encephalitis.tar.bz2 \
+			samples-civ-dna-large-encephalitis.index \
+			pathogen-data-civ-dna-large-encephalitis \
+			$(DNA_LARGE_ENCEPHALITIS_PNG_FILE) \
+			index-civ-dna-large-encephalitis.html
 
 clean-civ-rna-encephalitis-results:
 	rm -fr \
-            results-civ-rna-encephalitis.tar.bz2 \
-            samples-civ-rna-encephalitis.index \
-            pathogen-data-civ-rna-encephalitis \
-            $(RNA_ENCEPHALITIS_PNG_FILE) \
-            index-civ-rna-encephalitis.html
+			results-civ-rna-encephalitis.tar.bz2 \
+			samples-civ-rna-encephalitis.index \
+			pathogen-data-civ-rna-encephalitis \
+			$(RNA_ENCEPHALITIS_PNG_FILE) \
+			index-civ-rna-encephalitis.html
 
 clean-civ-rna-hcov-results:
 	rm -fr \
-            results-civ-rna-hcov.tar.bz2 \
-            samples-civ-rna-hcov.index \
-            pathogen-data-civ-rna-hcov \
-            $(RNA_HCOV_PNG_FILE) \
-            index-civ-rna-hcov.html \
-            $(RUNID)-hcov.zip
+			results-civ-rna-hcov.tar.bz2 \
+			samples-civ-rna-hcov.index \
+			pathogen-data-civ-rna-hcov \
+			$(RNA_HCOV_PNG_FILE) \
+			index-civ-rna-hcov.html \
+			$(RUNID)-hcov.zip
 
 clean-results: \
-    clean-civ-dna-results \
-    clean-civ-dna-large-results \
-    clean-civ-dna-encephalitis-results \
-    clean-civ-dna-large-encephalitis-results \
-    clean-civ-rna-results \
-    clean-civ-rna-encephalitis-results \
-    clean-civ-rna-hcov-results
+	clean-civ-dna-results \
+	clean-civ-dna-large-results \
+	clean-civ-dna-encephalitis-results \
+	clean-civ-dna-large-encephalitis-results \
+	clean-civ-rna-results \
+	clean-civ-rna-encephalitis-results \
+	clean-civ-rna-hcov-results
 	rm -f $(PREAMBLE_FILE)
 
 clean-all: \
-    clean-results \
-    clean-stats-on
+	clean-results \
+	clean-stats-on
 
 clean-stats:
 	@for i in $(DIRS); do cd $$i; make $@; cd ../../..; done
@@ -494,6 +502,9 @@ print-standard:
 
 print-hcov:
 	@for i in $(HCOV_DIRS); do echo $$i; done
+
+print-medmuseum:
+	@for i in $(MEDMUSEUM_DIRS); do echo $$i; done
 
 sample-ids:
 	@for i in $(DIRS); do echo "$$(echo $$i | cut -f1 -d/)	" $$(sample-id-for-case.py --sampleNumber $$(echo $$i | cut -f5 -d_) "$$(echo $$i | cut -c1)$$(echo $$i | cut -f4 -d_)"); done

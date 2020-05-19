@@ -11,8 +11,9 @@ case $# in
 esac
 
 case $sampletype in
-    hcov|standard) ;;
-    *) echo "Unknown sample type '$sampletype'. Known are 'hcov' and 'standard'." >&2; exit 1;;
+    hcov|standard|medmuseum) ;;
+    *) echo "Unknown sample type '$sampletype'. Known are 'hcov', standard' and"\
+            "medmuseum'." >&2; exit 1;;
 esac
 
 for dir in "$@"

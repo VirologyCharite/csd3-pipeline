@@ -90,6 +90,12 @@ To set a sample run to run the HCoV pipeline:
 $ ./set-sample-type.sh hcov DIRNAME [DIRNAME...]
 ```
 
+Or to set a sample run to run the medmuseum pipeline:
+
+```sh
+$ ./set-sample-type.sh medmuseum DIRNAME [DIRNAME...]
+```
+
 Or to set a sample run to run the standard pipeline:
 
 ```sh
@@ -103,6 +109,7 @@ You can see the run types for all sub-directories via
 ```sh
 $ make print-standard
 $ make print-hcov
+$ make print-medmuseum
 ```
 
 You should do this to check that the samples you expect to be run using the
