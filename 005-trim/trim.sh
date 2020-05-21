@@ -35,6 +35,7 @@ function doTrim()
     AdapterRemoval --file1 $fastq --file2 $fastq2 --output1 $out --output2 $out2 \
                    --threads $(nproc --all) \
                    --singleton $singletons --gzip --trimns --minlength 30 \
+                   --trim5p $toTrim --trim3p $toTrim \
                    --trimqualities --minquality 2 --settings $task.settings \
                    --discarded /dev/null > $task.out 2>&1
 }

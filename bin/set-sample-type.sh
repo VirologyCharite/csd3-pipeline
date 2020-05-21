@@ -11,7 +11,7 @@ case $# in
 esac
 
 case $sampletype in
-    hcov|standard) ;;
+    hcov|standard|trim) ;;
     *) echo "Unknown sample type '$sampletype'. Known are 'hcov' and 'standard'." >&2; exit 1;;
 esac
 
@@ -31,7 +31,11 @@ do
             chmod g+rw $settings
         fi
 
-        echo "sampleType=$sampletype" >> $settings
+        if [ $sampletype = "trim"]
+        then
+            echo "toTrim=29" >> $ settings
+        else
+            echo "sampleType=$sampletype" >> $settings
     else
         echo "Target directory '$dir' does not exist! Exiting." >&2
         exit 1
