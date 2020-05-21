@@ -358,6 +358,11 @@ sampleType=standard
 # files of dark-matter reads for further analysis.
 collectUnmapped=0
 
+# This sets the number of bases AdapterRemoval will trim from the 3prime and
+# 5prime end of the reads (using the --trim3p and --trim5p options). This
+# This variable can be overridden if changed in the sample-settings.sh file.
+toTrim=0
+
 # Check for per-run and per-sample settings. There is a specificity here
 # due to the ordering: the run settings will override the settings in this
 # file and the sample settings will override them both.

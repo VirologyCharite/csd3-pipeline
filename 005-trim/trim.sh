@@ -32,9 +32,16 @@ function doTrim()
     # some reason (e.g., a bad option name or AdapterRemoval not found).
     rm -f $out $out2
 
+    if [ $toTrim -eq 0 ]
+    then
+        trimArgs=
+    else
+        trimArgs="--trim5p $toTrim --trim3p $totrim"
+    fi
+
     AdapterRemoval --file1 $fastq --file2 $fastq2 --output1 $out --output2 $out2 \
                    --threads $(nproc --all) \
-                   --singleton $singletons --gzip --trimns --minlength 30 \
+                   --singleton $singletons --gzip --trimns --minlength 30 $trimArgs \
                    --trimqualities --minquality 2 --settings $task.settings \
                    --discarded /dev/null > $task.out 2>&1
 }
