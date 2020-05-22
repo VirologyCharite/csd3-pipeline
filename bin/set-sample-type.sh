@@ -33,7 +33,7 @@ do
 
         if [ $sampletype = "trim"]
         then
-            echo "toTrim=29" >> $ settings
+            echo "toTrim=29" >> $settings
         else
             echo "sampleType=$sampletype" >> $settings
     else
