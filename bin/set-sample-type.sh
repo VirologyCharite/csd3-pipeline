@@ -36,6 +36,7 @@ do
             echo "toTrim=29" >> $settings
         else
             echo "sampleType=$sampletype" >> $settings
+        fi
     else
         echo "Target directory '$dir' does not exist! Exiting." >&2
         exit 1
