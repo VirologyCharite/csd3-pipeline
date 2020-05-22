@@ -31,7 +31,7 @@ do
             chmod g+rw $settings
         fi
 
-        if [ $sampletype = "trim"]
+        if [ $sampletype = "trim" ]
         then
             echo "toTrim=29" >> $settings
         else
