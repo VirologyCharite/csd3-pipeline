@@ -36,7 +36,7 @@ function doTrim()
     then
         trimArgs=
     else
-        trimArgs="--trim5p $toTrim --trim3p $totrim"
+        trimArgs="--trim5p $toTrim --trim3p $toTrim"
     fi
 
     AdapterRemoval --file1 $fastq --file2 $fastq2 --output1 $out --output2 $out2 \
