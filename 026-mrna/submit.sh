@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -J rrna-civ
+#SBATCH -J mrna-civ
 #SBATCH -A ACORG-SL2-CPU
 #SBATCH -o slurm-%A.out
 #SBATCH -p skylake

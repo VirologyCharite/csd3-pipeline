@@ -30,6 +30,12 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "mrna",
+            "dependencies": ["flash"],
+            "cwd": "026-mrna",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "map",
             "dependencies": ["flash"],
             "cwd": "02-map",
@@ -39,12 +45,6 @@
             "name": "dedup",
             "dependencies": ["map"],
             "cwd": "025-dedup",
-            "script": "./sbatch.sh"
-        },
-        {
-            "name": "mrna",
-            "dependencies": ["dedup"],
-            "cwd": "026-mrna",
             "script": "./sbatch.sh"
         },
         {
