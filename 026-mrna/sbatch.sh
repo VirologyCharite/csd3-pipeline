@@ -7,7 +7,7 @@ set -Eeuo pipefail
 task=$1
 log=$logDir/sbatch.log
 
-# NOTE!! The following must have the identical value set and used in rrna.sh
+# NOTE!! The following must have the identical value set and used in mrna.sh
 out=$task.done
 
 
@@ -42,7 +42,7 @@ then
     if [ "$SP_SIMULATE" = "1" -o "$SP_SKIP" = "1" ]
     then
         echo "  Simulating or skipping." >> $log
-        ./rrna.sh $task
+        ./mrna.sh $task
         echo "TASK: $task"
     else
         # Get an exclusive machine so bowtie2 and MAFFT can use all threads.

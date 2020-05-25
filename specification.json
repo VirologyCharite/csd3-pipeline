@@ -42,6 +42,12 @@
             "script": "./sbatch.sh"
         },
         {
+            "name": "mrna",
+            "dependencies": ["dedup"],
+            "cwd": "026-mrna",
+            "script": "./sbatch.sh"
+        },
+        {
             "name": "diamond-civ-dna",
             "dependencies": ["dedup"],
             "cwd": "03-diamond-civ-dna",
