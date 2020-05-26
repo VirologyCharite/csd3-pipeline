@@ -26,7 +26,7 @@ cat $fastq2 >> $trimmed
 cat $singletons >> $trimmed
 
 bwaDatabaseRoot="$root/share/bwa-indices"
-bwaDatabaseNames="yyy"
+bwaDatabaseNames="45srRNA"
 outUncompressed=$task.rrna.out
 out=$outUncompressed.gz
 
@@ -34,10 +34,69 @@ logStepStart $log
 logTaskToSlurmOutput $task $log
 checkFastq $fastq $log
 
+function skip()
+{
+    # Copy our input FASTQ to our output unchanged.
+    cp $fastq $out
+}
+
+# Could delete the loops - there is only one database here!
 function rrna()
 {
 	local sam=$task.sam
     nproc=$(nproc --all)
 
     rmFileAndLink $out $outUncompressed $sam
+
+    # Fail quickly if there is a missing database.
+    for bwaDatabaseName in $bwaDatabaseNames
+    do
+        bwaDatabase=$bwaDatabaseRoot/$bwaDatabaseName.bwt
+
+        if [ ! -f $bwaDatabase ]
+        then
+            echo "  BWA database file '$bwaDatabase' does not exist." >> $log
+            logStepStop $log
+            exit 1
+        fi
+    done
+
+    # Now loop again and do the actual mapping work.
+    for bwaDatabaseName in $bwaDatabaseNames
+    do
+        bwaDatabase=$bwaDatabaseRoot/$bwaDatabaseName
+
+        # Map FASTQ to database.
+        echo "  bwa mem (against $bwaDatabaseName) started at $(date)" >> $log
+        bwa mem -t $nproc $bwaDatabase $fastq > $sam
+        echo "  bwa mem (against $bwaDatabaseName) stopped at $(date)" >> $log
+
+        samtools quickcheck $sam
+    done
 }
+
+if [ $SP_SIMULATE = "1" ]
+then
+    echo "  This is a simulation." >> $log
+else
+    echo "  This is not a simulation." >> $log
+    if [ $SP_SKIP = "1" ]
+    then
+        echo "  rRna analysis is being skipped on this run." >> $log
+        skip
+    elif [ -f $out ]
+    then
+        if [ $SP_FORCE = "1" ]
+        then
+            echo "  Pre-existing output file $out exists, but --force was used. Overwriting." >> $log
+            rrna
+        else
+            echo "  Will not overwrite pre-existing output file $out. Use --force to make me." >> $log
+        fi
+    else
+        echo "  Pre-existing output file $out does not exist. Doing rRna analysis." >> $log
+        rrna
+    fi
+fi
+
+logStepStop $log
