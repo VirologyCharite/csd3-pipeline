@@ -88,7 +88,7 @@ else
         fi
     else
         echo "  Pre-existing output file $out does not exist. Doing mRna analysis." >> $log
-        mna
+        mrna
     fi
 fi
 

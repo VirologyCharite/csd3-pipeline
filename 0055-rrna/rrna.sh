@@ -72,6 +72,12 @@ function rrna()
         echo "  bwa mem (against $bwaDatabaseName) stopped at $(date)" >> $log
 
         samtools quickcheck $sam
+
+        # Extract info from samfile.
+        echo "  extracting info from rrna samfile started at $(date)" >> $log
+        rrna.py --samFile $sam --outFile $task.rrnainfo
+        echo "  extracting info from rrna samfile stopped at $(date)" >> $log
+
     done
 }
 
