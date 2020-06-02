@@ -32,7 +32,7 @@
         {
             "name": "mrna",
             "dependencies": ["flash"],
-            "cwd": "026-mrna",
+            "cwd": "0075-mrna",
             "script": "./sbatch.sh"
         },
         {
