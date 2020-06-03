@@ -22,11 +22,11 @@ samfile = pysam.AlignmentFile(args.samFile, 'r')
 outfile = args.outFile
 
 # The Lengths below are measured in bp, taken from NR_146117 genbank annotation
-45sExonLength = 13502
-18sRrnaLength = 1872
-5sRrnaLength = 156
-28sRrnaLength = 5195
-45sDnaLength = 45sExonLength - 18sRrnaLength - 5sRrnaLength - 28sRrnaLength
+#45sExonLength = 13502
+#18sRrnaLength = 1872
+#5sRrnaLength = 156
+#28sRrnaLength = 5195
+#45sDnaLength = 45sExonLength - 18sRrnaLength - 5sRrnaLength - 28sRrnaLength
 
 # These are the positions, 0-based
 18sRrna = (3659, 5531)
