@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import argparse
-import pysam
+
+from dark.fastq import FastqReads
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -9,7 +10,11 @@ parser = argparse.ArgumentParser(
     			' rRNA.')
 
 parser.add_argument(
-    '--samFile', required=True, metavar='FILENAME',
+    '--mappedFile', required=True, metavar='FILENAME',
+    help='The filename of the samfile given by bwa mapping against rRNA.')
+
+parser.add_argument(
+    '--unmappedFile', required=True, metavar='FILENAME',
     help='The filename of the samfile given by bwa mapping against rRNA.')
 
 parser.add_argument(
@@ -18,54 +23,51 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-samfile = pysam.AlignmentFile(args.samFile, 'r')
+mappedReads = FastqReads(args.mappedFile)
+unmappedReads = FastqReads(args.unmappedFile)
 outfile = args.outFile
 
 # The Lengths below are measured in bp, taken from NR_146117 genbank annotation
-#45sExonLength = 13502
-#18sRrnaLength = 1872
-#5sRrnaLength = 156
-#28sRrnaLength = 5195
-#45sDnaLength = 45sExonLength - 18sRrnaLength - 5sRrnaLength - 28sRrnaLength
+sExonLength45 = 13502
+sRrnaLength18 = 1872
+sRrnaLength5 = 156
+sRrnaLength28 = 5195
+sDnaLength45 = sExonLength45 - sRrnaLength18 - sRrnaLength5 - sRrnaLength28
 
 # These are the positions, 0-based
-18sRrna = (3659, 5531)
-5sRrna = (6615, 6771)
-28sRrna = (7942, 13137)
-45sRna = [18sRrna, 5sRrna, 28sRrna]
-45sDna = [(0,3659), (5531, 6615), (6771, 7942), (13137, 13502)]
+sRrna18 = (3659, 5531)
+sRrna5 = (6615, 6771)
+sRrna28 = (7942, 13137)
+sRna45 = [sRrna18, sRrna5, sRrna28]
+sDna45 = [(0,3659), (5531, 6615), (6771, 7942), (13137, 13502)]
 
-def percentMapped(samfile):
+
+def countReads(reads):
 	"""
-	Given a sam file, calculate the percentage of reads that mapped overall.
+	Given a reads instance, count the number of reads.
 
-	@param samfile: A sam file given by bwa.
-	@return: A C{float} of the mapped read percentage. 
+	@param reads: A darkmatter reads instance.
+	@return: A C{float} of the number of reads.
 	"""
-	mapped, unmapped, total = samfile.get_index_statistics()
-	percentage = mapped / total * 100
+	count = 0
+	for read in reads:
+		count += 1
 
-	return mapped, unmapped, total
+	return count
 
-with open(outfile) as fp:
-	fp.write(percentMapped(samfile))
 
-#def calculateAvgCoverage(alignment, region):
+def calcPercent(number1, number2):
 	"""
-	Given an alignment and certain regions within the alignment,
-	this function gives back a float with one decimal position describing
-	the average coverage across that region or these regions.
+	Given two numbers, give the percentage.
 
-	@param
-	@param
-	@return
+	@param number1: Number of to divide.
+	@param number2: Number of.total.
+	@return: A C{float} giving the %.
 	"""
+	return number1 / number2 * 100
 
-	# how to do this?
+nbMapped = countReads(mappedReads)
+nbAll = nbMapped + countReads(unmappedReads)
 
-
-
-#rDNAcoverage = calculateAvgCoverage(alignment, 45sDna)
-#rRNAcoverage = calculateAvgCoverage(alignment, 45sRna)
-
-#rRNA = (rDNAcoverage - rRNAcoverage)
+with open(outfile, 'w') as fp:
+	fp.write(str(calcPercent(nbMapped, nbAll)) + '%\n')

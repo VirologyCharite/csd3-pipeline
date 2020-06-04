@@ -44,6 +44,7 @@ function skip()
 function rrna()
 {
 	local sam=$task.sam
+	local bam=$task.bam
     nproc=$(nproc --all)
 
     rmFileAndLink $out $outUncompressed $sam
@@ -73,11 +74,15 @@ function rrna()
 
         samtools quickcheck $sam
 
-        # Extract info from samfile.
-        echo "  extracting info from rrna samfile started at $(date)" >> $log
-        rrna.py --samFile $sam --outFile $task.rrnainfo
-        echo "  extracting info from rrna samfile stopped at $(date)" >> $log
+        # Convert sam file to bam file.
+        samtools view -S -b $sam > $bam
 
+        # Extract mapped and unmapped from samfile.
+        samtools fastq -f 4 $sam > $task.unmapped
+        samtools fastq -F 4 $sam > $task.mapped
+
+        # Calculate percentage mapped.
+        rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped --outfile $outUncompressed
     done
 }
 
