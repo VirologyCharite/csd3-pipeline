@@ -82,7 +82,7 @@ function rrna()
         samtools fastq -F 4 $sam > $task.mapped
 
         # Calculate percentage mapped.
-        rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped --outfile $outUncompressed
+        rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped --outFile $outUncompressed
     done
 }
 
