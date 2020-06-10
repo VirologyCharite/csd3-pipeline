@@ -19,8 +19,9 @@ parser.add_argument(
     help='The filename of fastq reads that did not map against rRNA.')
 
 parser.add_argument(
-    '--samFile', required=True, metavar='FILENAME',
-    help='The filename of the samfile given by bwa mapping against rRNA.')
+    '--bamFile', required=True, metavar='FILENAME',
+    help='The filename of the sorted and indexed bam file given by bwa mapping'
+    	 ' against rRNA.')
 
 parser.add_argument(
     '--outFile', required=True, metavar='FILENAME',
@@ -30,7 +31,7 @@ args = parser.parse_args()
 
 mappedReads = FastqReads(args.mappedFile)
 unmappedReads = FastqReads(args.unmappedFile)
-samfile = args.samFile
+samfile = args.bamFile
 outfile = args.outFile
 
 # The Lengths below are measured in bp, taken from NR_146117 genbank annotation

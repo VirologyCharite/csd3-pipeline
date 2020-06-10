@@ -85,7 +85,8 @@ function rrna()
         samtools fastq -F 4 $sam > $task.mapped
 
         # Calculate percentage mapped.
-        rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped --outFile $outUncompressed
+        rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped \
+                --outFile $outUncompressed --bamFile $sortedbam
     
         # Try sam-coverage-depth.py
         sam-coverage-depth.py $sortedbam > task.coveragedepth
