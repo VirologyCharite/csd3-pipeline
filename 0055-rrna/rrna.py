@@ -98,6 +98,6 @@ nbAll = nbMapped + countReads(unmappedReads)
 with open(outfile, 'w') as fp:
 	fp.write(str(calcPercent(nbMapped, nbAll)) + '%\n')
 	for rRNA in sRna45:
-		fp.write(str(extractMappingCoverage(coverageDepth, rRNA) + rRNA + '\n')
+		fp.write(str(extractMappingCoverage(coverageDepth, rRNA) + rRNA + '\n'))
 	for rDNA in sDna45:
-		fp.write(str(extractMappingCoverage(coverageDepth, rDNA) + rDNA + '\n')
+		fp.write(str(extractMappingCoverage(coverageDepth, rDNA) + rDNA + '\n'))
