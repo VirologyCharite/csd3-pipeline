@@ -86,7 +86,7 @@ def extractMappingCoverage(coverageDepth, region):
 		depthList = []
 		for line in cd:
 			for index in range(region[0], region[1]):
-				if index in line:
+				if str(index) in line:
 					depthList.append(line.split()[1])
 
 		return sum(depthList) / len(depthList)
