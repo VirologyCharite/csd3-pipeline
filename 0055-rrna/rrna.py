@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import pysam
 
 from dark.fastq import FastqReads
 
@@ -11,10 +12,14 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument(
     '--mappedFile', required=True, metavar='FILENAME',
-    help='The filename of the samfile given by bwa mapping against rRNA.')
+    help='The filename of fastq reads that mapped against rRNA.')
 
 parser.add_argument(
     '--unmappedFile', required=True, metavar='FILENAME',
+    help='The filename of fastq reads that did not map against rRNA.')
+
+parser.add_argument(
+    '--samFile', required=True, metavar='FILENAME',
     help='The filename of the samfile given by bwa mapping against rRNA.')
 
 parser.add_argument(
@@ -25,6 +30,7 @@ args = parser.parse_args()
 
 mappedReads = FastqReads(args.mappedFile)
 unmappedReads = FastqReads(args.unmappedFile)
+samfile = args.samFile
 outfile = args.outFile
 
 # The Lengths below are measured in bp, taken from NR_146117 genbank annotation
@@ -65,6 +71,17 @@ def calcPercent(number1, number2):
 	@return: A C{float} giving the %.
 	"""
 	return number1 / number2 * 100
+
+def extractMappingCoverage(samfile, region):
+	"""
+	Given a samfile and a list of regions, give the average (depth) coverage
+	over those regions.
+
+	@param samfile: samfile as opened with pysam.
+	@param region: a C{list} with C{tuples} of ranges of interest.
+	@return: A C{float} giving the average coverage depth.
+	"""
+	return None
 
 nbMapped = countReads(mappedReads)
 nbAll = nbMapped + countReads(unmappedReads)
