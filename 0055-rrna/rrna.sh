@@ -46,6 +46,7 @@ function rrna()
 	local sam=$task.sam
 	local bam=$task.bam
     local sortedbam=$task.sorted.bam
+    local coveragedepth=$task.coveragedepth
     nproc=$(nproc --all)
 
     rmFileAndLink $out $outUncompressed $sam
@@ -84,12 +85,12 @@ function rrna()
         samtools fastq -f 4 $sam > $task.unmapped
         samtools fastq -F 4 $sam > $task.mapped
 
+        # Try sam-coverage-depth.py
+        sam-coverage-depth.py $sortedbam > $coveragedepth
+
         # Calculate percentage mapped.
         rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped \
-                --outFile $outUncompressed --bamFile $sortedbam
-    
-        # Try sam-coverage-depth.py
-        sam-coverage-depth.py $sortedbam > task.coveragedepth
+                --outFile $outUncompressed --coverageDepth $coveragedepth
     done
 }
 

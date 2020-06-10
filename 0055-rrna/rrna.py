@@ -19,9 +19,9 @@ parser.add_argument(
     help='The filename of fastq reads that did not map against rRNA.')
 
 parser.add_argument(
-    '--bamFile', required=True, metavar='FILENAME',
-    help='The filename of the sorted and indexed bam file given by bwa mapping'
-    	 ' against rRNA.')
+    '--coverageDepth', required=True, metavar='FILENAME',
+    help='The filename of the output of sam-coverage-depth.py, inputting the'
+    	 ' sorted and indexed bam file given by bwa mapping against rRNA.')
 
 parser.add_argument(
     '--outFile', required=True, metavar='FILENAME',
@@ -31,7 +31,7 @@ args = parser.parse_args()
 
 mappedReads = FastqReads(args.mappedFile)
 unmappedReads = FastqReads(args.unmappedFile)
-samfile = args.bamFile
+coverageDepth = args.coverageDepth
 outfile = args.outFile
 
 # The Lengths below are measured in bp, taken from NR_146117 genbank annotation
@@ -73,16 +73,25 @@ def calcPercent(number1, number2):
 	"""
 	return number1 / number2 * 100
 
-def extractMappingCoverage(samfile, region):
+def extractMappingCoverage(coverageDepth, region):
 	"""
-	Given a samfile and a list of regions, give the average (depth) coverage
-	over those regions.
+	Given an outputfile from sam-coverage-depth.py and a list of regions, give
+	the average coverage-depth over those regions.
 
-	@param samfile: samfile as opened with pysam.
-	@param region: a C{list} with C{tuples} of ranges of interest.
-	@return: A C{float} giving the average coverage depth.
+	@param coverageDepth: sam-coverage-depth outfile.
+	@param region: a C{tuples} with a range of interest.
+	@return: A C{float} giving the average coverage depth across the range.
 	"""
-	return None
+	with open(coverageDepth) as cd:
+		depthList = []
+		for line in cd:
+			for index in range(region):
+				if index in line:
+					depthList.append(line.split()[1])
+
+		return sum(depthList) / len(depthList)
+
+print(extractMappingCoverage(coverageDepth, (4080, 4100)))
 
 nbMapped = countReads(mappedReads)
 nbAll = nbMapped + countReads(unmappedReads)
