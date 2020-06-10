@@ -63,15 +63,15 @@ def countReads(reads):
 	return count
 
 
-def calcPercent(number1, number2):
+def calcPercent(partial, total):
 	"""
 	Given two numbers, give the percentage.
 
-	@param number1: Number of to divide.
-	@param number2: Number of.total.
+	@param partial: Number of to divide.
+	@param total: Number of.total.
 	@return: A C{float} giving the %.
 	"""
-	return number1 / number2 * 100
+	return partial / total * 100
 
 def extractMappingCoverage(coverageDepth, region):
 	"""
@@ -92,10 +92,12 @@ def extractMappingCoverage(coverageDepth, region):
 		averageCoverage = sum(depthList) / len(depthList)
 		return averageCoverage
 
-print(extractMappingCoverage(coverageDepth, (4080, 4100)))
-
 nbMapped = countReads(mappedReads)
 nbAll = nbMapped + countReads(unmappedReads)
 
 with open(outfile, 'w') as fp:
 	fp.write(str(calcPercent(nbMapped, nbAll)) + '%\n')
+	for rRNA in sRna45:
+		fp.write(str(extractMappingCoverage(coverageDepth, rRNA) + rRNA + '\n')
+	for rDNA in sDna45:
+		fp.write(str(extractMappingCoverage(coverageDepth, rDNA) + rDNA + '\n')
