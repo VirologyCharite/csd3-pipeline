@@ -86,7 +86,7 @@ def averageCoverageDepth(coverageDepth, region):
 		depthList = []
 		for line in cd:
 			for index in range(region[0], region[1]):
-				if str(index) in line.split()[0]:
+				if str(index) == line.split(':')[0]:
 					depthList.append(int(line.split()[1]))
 		if len(depthList) == 0:
 			averageCoverage = 0
@@ -113,11 +113,11 @@ with open(outfile, 'w') as fp:
 		averageRdna = sum(allRdna) / len(allRdna)
 
 	correctionCoefficient = averageRdna / averageRrna
-	fp.write(str(allRrna))
-	fp.write(str(allRdna))
-	fp.write(str(correctionCoefficient))
+	fp.write(str(allRrna) + '%\n')
+	fp.write(str(allRdna) + '%\n')
+	fp.write(str(correctionCoefficient) + '%\n')
 
-	fp.write('Mapped reads corrected for ribosomal DNA mapping:')
+	fp.write('Mapped reads corrected for ribosomal DNA mapping:\n')
 	fp.write(str(mappedPercent - mappedPercent * correctionCoefficient) + '%\n')
 
 
