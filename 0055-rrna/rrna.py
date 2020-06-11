@@ -89,7 +89,7 @@ def averageCoverageDepth(coverageDepth, region):
 				if str(index) in line.split()[0]:
 					depthList.append(int(line.split()[1]))
 		if len(depthList) == 0:
-			averageCoverage = 'No coverage in the given range'
+			averageCoverage = 0
 		else:
 			averageCoverage = sum(depthList) / len(depthList)
 		return averageCoverage
@@ -98,8 +98,27 @@ nbMapped = countReads(mappedReads)
 nbAll = nbMapped + countReads(unmappedReads)
 
 with open(outfile, 'w') as fp:
-	fp.write(str(calcPercent(nbMapped, nbAll)) + '%\n')
+	mappedPercent = calcPercent(nbMapped, nbAll)
+	fp.write(str(mappedPercent) + '% mapped reads\n')
+
+	allRrna = []
+	allRdna = []
 	for rRNA in sRna45:
-		fp.write(str(averageCoverageDepth(coverageDepth, rRNA)) + str(rRNA) + '\n')
+		allRrna.append(averageCoverageDepth(coverageDepth, rRNA))
+	if len(allRrna) != 0:
+		averageRrna = sum(allRrna) / len(allRrna)
 	for rDNA in sDna45:
-		fp.write(str(averageCoverageDepth(coverageDepth, rDNA)) + str(rDNA) + '\n')
+		allRdna.append(averageCoverageDepth(coverageDepth, rDNA))
+	if len(allRdna) != 0:
+		averageRdna = sum(allRdna) / len(allRdna)
+
+	correctionCoefficient = averageRdna / averageRrna
+	fp.write(str(allRrna))
+	fp.write(str(allRdna))
+	fp.write(str(correctionCoefficient))
+
+	fp.write('Mapped reads corrected for ribosomal DNA mapping:')
+	fp.write(str(mappedPercent - mappedPercent * correctionCoefficient) + '%\n')
+
+
+
