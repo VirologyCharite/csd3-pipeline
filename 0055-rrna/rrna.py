@@ -73,7 +73,7 @@ def calcPercent(partial, total):
 	"""
 	return partial / total * 100
 
-def extractMappingCoverage(coverageDepth, region):
+def averageCoverageDepth(coverageDepth, region):
 	"""
 	Given an outputfile from sam-coverage-depth.py and a list of regions, give
 	the average coverage-depth over those regions.
@@ -98,6 +98,6 @@ nbAll = nbMapped + countReads(unmappedReads)
 with open(outfile, 'w') as fp:
 	fp.write(str(calcPercent(nbMapped, nbAll)) + '%\n')
 	for rRNA in sRna45:
-		fp.write(str(extractMappingCoverage(coverageDepth, rRNA)) + rRNA + '\n')
+		fp.write(str(averageCoverageDepth(coverageDepth, rRNA)) + str(rRNA) + '\n')
 	for rDNA in sDna45:
-		fp.write(str(extractMappingCoverage(coverageDepth, rDNA)) + rDNA + '\n')
+		fp.write(str(averageCoverageDepth(coverageDepth, rDNA)) + str(rDNA) + '\n')
