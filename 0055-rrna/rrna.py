@@ -34,7 +34,7 @@ unmappedReads = FastqReads(args.unmappedFile)
 coverageDepth = args.coverageDepth
 outfile = args.outFile
 
-# The Lengths below are measured in bp, taken from NR_146117 genbank annotation
+# The Lengths below are measured in bp, taken from NR_146117 genbank annotation.
 sExonLength45 = 13502
 sRrnaLength18 = 1872
 sRrnaLength5 = 156
