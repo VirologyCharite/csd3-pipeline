@@ -11,9 +11,9 @@ case $# in
 esac
 
 case $sampletype in
-    hcov|standard|medmuseum) ;;
-    *) echo "Unknown sample type '$sampletype'. Known are 'hcov', standard' and"\
-            "medmuseum'." >&2; exit 1;;
+
+    hcov|medmuseum|standard|trim) ;;
+    *) echo "Unknown sample type '$sampletype'. Known are 'hcov', 'medmuseum', 'standard' and 'trim'." >&2; exit 1;;
 esac
 
 for dir in "$@"
@@ -32,7 +32,12 @@ do
             chmod g+rw $settings
         fi
 
-        echo "sampleType=$sampletype" >> $settings
+        if [ $sampletype = "trim" ]
+        then
+            echo "toTrim=29" >> $settings
+        else
+            echo "sampleType=$sampletype" >> $settings
+        fi
     else
         echo "Target directory '$dir' does not exist! Exiting." >&2
         exit 1

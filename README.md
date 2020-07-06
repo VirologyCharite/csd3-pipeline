@@ -115,6 +115,17 @@ $ make print-medmuseum
 You should do this to check that the samples you expect to be run using the
 hcov pipeline are recognized as such.
 
+In addition to the `standard` and `hcov` sample types that you can set, you
+can also specify if the reads should be trimmed by 29 bases on the 3prime
+and 5 prime end. To do this use
+
+```sh
+$ ./set-sample-type.sh trim DIRNAME [DIRNAME...]
+```
+
+The 29 base cut-off is used based on the length of the primers for SARS-CoV-2
+amplification by Julia Schneider.
+
 ### Put reference files in place for HCoV processing
 
 For runs that are of type `hcov`, a reference coronavirus sequence is
