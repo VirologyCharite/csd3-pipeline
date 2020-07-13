@@ -128,7 +128,7 @@ function hcov()
     run-bowtie2.py \
         $bt2IndexArgs \
         --reference $hcovReference \
-        --callHaplotypesGATK --out $prefix.bam --markDuplicatesGATK \
+        --callHaplotypesBcftools --out $prefix.bam --markDuplicatesGATK \
         --vcfFile $prefix.vcf.gz --fastq1 $fastq --fastq2 $fastq2 \
         --bowtie2Args '--no-unal --local' \
         --removeDuplicates --tempdir tmp --verbose --log 2>> $log
