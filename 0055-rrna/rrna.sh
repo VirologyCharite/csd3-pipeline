@@ -21,10 +21,6 @@ trimmed=$task.trimmed.fastq.gz
 
 log=$logDir/$task.log
 
-cat $fastq >> $trimmed
-cat $fastq2 >> $trimmed
-cat $singletons >> $trimmed
-
 bwaDatabaseRoot="$root/share/bwa-indices"
 bwaDatabaseNames="45srRNA"
 outUncompressed=$task.rrna.out
@@ -48,6 +44,8 @@ function rrna()
     local sortedbam=$task.sorted.bam
     local coveragedepth=$task.coveragedepth
     nproc=$(nproc --all)
+
+    cat $fastq $fastq2 $singletons > $trimmed
 
     rmFileAndLink $out $outUncompressed $sam
 
@@ -86,11 +84,11 @@ function rrna()
         samtools fastq -F 4 $sam > $task.mapped
 
         # Try sam-coverage-depth.py
-        sam-coverage-depth.py $sortedbam > $coveragedepth
+        sam-coverage-depth.py --noFilter $sortedbam > $coveragedepth
 
         # Calculate percentage mapped.
         rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped \
-                --outFile $outUncompressed --coverageDepth $coveragedepth
+                --outFile $outUncompressed --coverageDepthFile $coveragedepth
     done
 }
 
