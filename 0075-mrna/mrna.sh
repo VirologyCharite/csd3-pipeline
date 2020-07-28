@@ -36,7 +36,7 @@ function skip()
 # Could delete the loops - there is only one database here!
 function mrna()
 {
-	local sam=$task.sam
+    local sam=$task.sam
     nproc=$(nproc --all)
 
     rmFileAndLink $out $outUncompressed $sam

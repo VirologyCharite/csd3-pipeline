@@ -23,8 +23,7 @@ log=$logDir/$task.log
 
 bwaDatabaseRoot="$root/share/bwa-indices"
 bwaDatabaseNames="45srRNA"
-outUncompressed=$task.rrna.out
-out=$outUncompressed.gz
+out=$task.rrna.out
 
 logStepStart $log
 logTaskToSlurmOutput $task $log
@@ -32,22 +31,21 @@ checkFastq $fastq $log
 
 function skip()
 {
-    # Copy our input FASTQ to our output unchanged.
-    cp $fastq $out
+    echo "Skipped - coverage not calculated" > $out
 }
 
 # Could delete the loops - there is only one database here!
 function rrna()
 {
-	local sam=$task.sam
-	local bam=$task.bam
+    local sam=$task.sam
+    local bam=$task.bam
     local sortedbam=$task.sorted.bam
     local coveragedepth=$task.coveragedepth
     nproc=$(nproc --all)
 
     cat $fastq $fastq2 $singletons > $trimmed
 
-    rmFileAndLink $out $outUncompressed $sam
+    rmFileAndLink $out $sam
 
     # Fail quickly if there is a missing database.
     for bwaDatabaseName in $bwaDatabaseNames
@@ -77,18 +75,18 @@ function rrna()
         # Convert sam file to bam file, sort, index.
         samtools view -S -b $sam > $bam
         samtools sort $bam > $sortedbam
+        rm §bam
         samtools index $sortedbam
 
         # Extract mapped and unmapped from samfile.
         samtools fastq -f 4 $sam > $task.unmapped
         samtools fastq -F 4 $sam > $task.mapped
 
-        # Try sam-coverage-depth.py
         sam-coverage-depth.py --noFilter $sortedbam > $coveragedepth
 
         # Calculate percentage mapped.
-        rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped \
-                --outFile $outUncompressed --coverageDepthFile $coveragedepth
+        ./rrna.py --mappedFile $task.mapped --unmappedFile $task.unmapped \
+                --outFile $out --coverageDepthFile $coveragedepth
     done
 }
 

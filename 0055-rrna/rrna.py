@@ -97,22 +97,22 @@ def averageCoverageDepth(coverageDepthFile, region):
 nbMapped = countReads(mappedReads)
 nbAll = nbMapped + countReads(unmappedReads)
 
+mappedPercent = calcPercent(nbMapped, nbAll)
+
+allRrna = [averageCoverageDepth(coverageDepthFile, rRNA)
+           for rRNA in sRna45]
+averageRrna = sum(allRrna) / len(allRrna) if allRrna else 0.0
+
+allRdna = [averageCoverageDepth(coverageDepthFile, rDNA)
+           for rDNA in sDna45]
+averageRdna = sum(allRdna) / len(allRdna) if allRdna else 0.0
+
+if averageRrna == 0:
+    print('No reads mapped against rRNA! Exiting...', file=sys.stderr)
+    exit()
+
+correctionCoeff = averageRdna / averageRrna
+
 with open(outfile, 'w') as fp:
-    mappedPercent = calcPercent(nbMapped, nbAll)
-
-    allRrna = [averageCoverageDepth(coverageDepthFile, rRNA)
-               for rRNA in sRna45]
-    averageRrna = sum(allRrna) / len(allRrna) if allRrna else 0.0
-
-    allRdna = [averageCoverageDepth(coverageDepthFile, rDNA)
-               for rDNA in sDna45]
-    averageRdna = sum(allRdna) / len(allRdna) if allRdna else 0.0
-
-    if averageRrna == 0:
-        print('No reads mapped against rRNA! Exiting...', file=sys.stderr)
-        exit()
-
-    correctionCoeff = averageRdna / averageRrna
-
     print('Percent of mapped reads, corrected for rDNA mapping:', file=fp)
     print('%s%%' % (mappedPercent - mappedPercent * correctionCoeff), file=fp)

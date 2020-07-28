@@ -8,7 +8,7 @@ task=$1
 log=$logDir/sbatch.log
 
 # NOTE!! The following must have the identical value set and used in rrna.sh
-out=$task.done
+out=$task.rrna.out
 
 
 echo "$(basename $(pwd)) sbatch.sh running at $(date)" >> $log
