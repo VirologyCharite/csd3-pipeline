@@ -83,17 +83,15 @@ def averageCoverageDepth(coverageDepthFile, region):
     @param region: a C{tuples} with a range of interest.
     @return: A C{float} giving the average coverage depth across the range.
     """
+    depthList = []
     with open(coverageDepthFile) as cd:
-        depthList = []
         for line in cd:
             for index in range(region[0], region[1]):
                 if str(index) == line.split(':')[0]:
                     depthList.append(int(line.split()[1]))
-        if len(depthList) == 0:
-            averageCoverage = 0
-        else:
-            averageCoverage = sum(depthList) / len(depthList)
-        return averageCoverage
+                    break  # Right?
+
+    return sum(depthList) / len(depthList) if depthList else 0
 
 
 nbMapped = countReads(mappedReads)
