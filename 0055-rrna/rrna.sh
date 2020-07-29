@@ -75,7 +75,7 @@ function rrna()
         # Convert sam file to bam file, sort, index.
         samtools view -S -b $sam > $bam
         samtools sort $bam > $sortedbam
-        rm §bam
+        rm $bam
         samtools index $sortedbam
 
         # Extract mapped and unmapped from samfile.
