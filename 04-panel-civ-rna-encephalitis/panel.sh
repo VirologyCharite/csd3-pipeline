@@ -66,6 +66,19 @@ function panel()
     fi
     rm -fr $outputDir summary-proteins $out
 
+    if [ $sampleType = hcov ]
+    then
+        echo "  Removing OC43 from encephalitis regex for hcov run at $(date)" >> $log
+        if echo $ENCEPHALITIS_REGEX | grep -q 'human coronavirus oc43|'
+        then
+           ENCEPHALITIS_REGEX=$(echo "$ENCEPHALITIS_REGEX" | sed -e 's/human coronavirus oc43|//')
+        else
+            echo "  'human coronavirus oc43|' not found in encephalitis regex '$ENCEPHALITIS_REGEX' at $(date). Exiting." >> $log
+            exit 1
+        fi
+        echo "  Removed OC43 from encephalitis regex for hcov run at $(date)" >> $log
+    fi
+
     alignment-panel-civ.py \
       --proteinGenomeDatabase $rnaProteinGenomeDB \
       --json $allJSON \
